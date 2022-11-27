@@ -8,6 +8,7 @@ import scootersProjectJSON_import from './sampleData/curriculum/SelfPropelledVeh
 import twoStepsProjectJSON_import from './sampleData/curriculum/TwoSteps.project.json';
 import { PeerGrouping } from '../domain/peerGrouping';
 import { StudentTeacherCommonServicesModule } from '../student-teacher-common-services.module';
+import { EmbeddedContent } from '../../assets/wise5/components/embedded/EmbeddedContent';
 
 const projectIdDefault = 1;
 const projectBaseURL = 'http://localhost:8080/curriculum/12345/';
@@ -44,30 +45,23 @@ describe('ProjectService', () => {
   shouldReturnTheStartNodeOfTheProject();
   shouldReturnTheNodeByNodeId();
   shouldReturnTheNodeTitleByNodeId();
-  shouldGetTheComponentByNodeIdAndComponentId();
-  shouldGetTheComponentPositionByNodeIdAndComonentId();
+  shouldGetTheComponent();
   shouldGetTheComponentsByNodeId();
   shouldCheckOrderBetweenStepGroupAndStepGroup();
   shouldIdentifyBranchStartAndMergePoints();
-  shouldGetPaths();
   calculateNodeOrder();
   getGroupNodesIdToOrder();
   getTags();
   getAllPaths();
-  consolidatePaths();
   getParentGroup();
   getMaxScoreForComponent();
   getMaxScoreForNode();
   getPeerGrouping();
   // TODO: add test for service.getFlattenedProjectAsNodeIds()
-  // TODO: add test for service.consumePathsUntilNodeId()
   // TODO: add test for service.getFirstNodeIdInPathAtIndex()
   // TODO: add test for service.removeNodeIdFromPaths()
   // TODO: add test for service.removeNodeIdFromPath()
   // TODO: add test for service.areFirstNodeIdsInPathsTheSame()
-  // TODO: add test for service.arePathsEmpty()
-  // TODO: add test for service.getPathsThatContainNodeId()
-  // TODO: add test for service.getNonEmptyPathIndex()
   // TODO: add test for service.getBranches()
   // TODO: add test for service.findBranches()
   // TODO: add test for service.findNextCommonNodeId()
@@ -85,7 +79,7 @@ describe('ProjectService', () => {
   // TODO: add test for service.insertNodeInsideInGroups()
   // TODO: add test for service.insertNodeInsideOnlyUpdateTransitions()
   // MARK: Tests for Node and Group Id functions
-  // TODO: add test for service.getNodePositionAndTitleByNodeId()
+  // TODO: add test for service.getNodePositionAndTitle()
   // TODO: add test for service.deconsteNode()
   // TODO: add test for service.removeNodeIdFromTransitions()
   // TODO: add test for service.removeNodeIdFromGroups()
@@ -205,97 +199,56 @@ function shouldReturnTheNodeByNodeId() {
 function shouldReturnTheNodeTitleByNodeId() {
   it('should return the node title by nodeId', () => {
     service.setProject(scootersProjectJSON);
-    const node1Title = service.getNodeTitleByNodeId('node1');
+    const node1Title = service.getNodeTitle('node1');
     expect(node1Title).toEqual('Introduction to Newton Scooters');
 
     // Test node that doesn't exist in project and make sure the function returns null
-    const nodeTitleNE = service.getNodeTitleByNodeId('node999');
+    const nodeTitleNE = service.getNodeTitle('node999');
     expect(nodeTitleNE).toBeNull();
   });
 }
 
-function shouldGetTheComponentByNodeIdAndComponentId() {
+function shouldGetTheComponent() {
   it('should get the component by node id and component id', () => {
     service.setProject(scootersProjectJSON);
-    const nullNodeIdResult = service.getComponentByNodeIdAndComponentId(null, '57lxhwfp5r');
+    const nullNodeIdResult = service.getComponent(null, '57lxhwfp5r');
     expect(nullNodeIdResult).toBeNull();
 
-    const nullComponentIdResult = service.getComponentByNodeIdAndComponentId('node13', null);
+    const nullComponentIdResult = service.getComponent('node13', null);
     expect(nullComponentIdResult).toBeNull();
 
-    const nodeIdDNEResult = service.getComponentByNodeIdAndComponentId('badNodeId', '57lxhwfp5r');
+    const nodeIdDNEResult = service.getComponent('badNodeId', '57lxhwfp5r');
     expect(nodeIdDNEResult).toBeNull();
 
-    const componentIdDNEResult = service.getComponentByNodeIdAndComponentId(
-      'node13',
-      'badComponentId'
-    );
+    const componentIdDNEResult = service.getComponent('node13', 'badComponentId');
     expect(componentIdDNEResult).toBeNull();
 
-    const componentExists = service.getComponentByNodeIdAndComponentId('node13', '57lxhwfp5r');
+    const componentExists = service.getComponent('node13', '57lxhwfp5r');
     expect(componentExists).not.toBe(null);
     expect(componentExists.type).toEqual('HTML');
 
-    const componentExists2 = service.getComponentByNodeIdAndComponentId('node9', 'mnzx68ix8h');
+    const componentExists2 = service.getComponent('node9', 'mnzx68ix8h') as EmbeddedContent;
     expect(componentExists2).not.toBe(null);
     expect(componentExists2.type).toEqual('embedded');
     expect(componentExists2.url).toEqual('NewtonScooters-potential-kinetic.html');
   });
 }
 
-function shouldGetTheComponentPositionByNodeIdAndComonentId() {
-  it('should get the component position by node id and comonent id', () => {
-    service.setProject(scootersProjectJSON);
-    const nullNodeIdResult = service.getComponentPositionByNodeIdAndComponentId(null, '57lxhwfp5r');
-    expect(nullNodeIdResult).toEqual(-1);
-
-    const nullComponentIdResult = service.getComponentPositionByNodeIdAndComponentId(
-      'node13',
-      null
-    );
-    expect(nullComponentIdResult).toEqual(-1);
-
-    const nodeIdDNEResult = service.getComponentPositionByNodeIdAndComponentId(
-      'badNodeId',
-      '57lxhwfp5r'
-    );
-    expect(nodeIdDNEResult).toEqual(-1);
-
-    const componentIdDNEResult = service.getComponentPositionByNodeIdAndComponentId(
-      'node13',
-      'badComponentId'
-    );
-    expect(componentIdDNEResult).toEqual(-1);
-
-    const componentExists = service.getComponentPositionByNodeIdAndComponentId(
-      'node13',
-      '57lxhwfp5r'
-    );
-    expect(componentExists).toEqual(0);
-
-    const componentExists2 = service.getComponentPositionByNodeIdAndComponentId(
-      'node9',
-      'mnzx68ix8h'
-    );
-    expect(componentExists2).toEqual(1);
-  });
-}
-
 function shouldGetTheComponentsByNodeId() {
   it('should get the components by node id', () => {
     service.setProject(scootersProjectJSON);
-    const nullNodeIdResult = service.getComponentsByNodeId(null);
+    const nullNodeIdResult = service.getComponents(null);
     expect(nullNodeIdResult).toEqual([]);
-    const nodeIdDNEResult = service.getComponentsByNodeId('badNodeId');
+    const nodeIdDNEResult = service.getComponents('badNodeId');
     expect(nodeIdDNEResult).toEqual([]);
-    const nodeWithNullComponentResult = service.getComponentsByNodeId('nodeWithNoComponents');
+    const nodeWithNullComponentResult = service.getComponents('nodeWithNoComponents');
     expect(nodeWithNullComponentResult).toEqual([]);
-    const nodeExistsResult = service.getComponentsByNodeId('node13');
+    const nodeExistsResult = service.getComponents('node13');
     expect(nodeExistsResult).not.toBe(null);
     expect(nodeExistsResult.length).toEqual(1);
     expect(nodeExistsResult[0].id).toEqual('57lxhwfp5r');
 
-    const nodeExistsResult2 = service.getComponentsByNodeId('node9');
+    const nodeExistsResult2 = service.getComponents('node9');
     expect(nodeExistsResult2).not.toBe(null);
     expect(nodeExistsResult2.length).toEqual(7);
     expect(nodeExistsResult2[2].id).toEqual('nm080ntk8e');
@@ -331,31 +284,6 @@ function expectFunctionCallToReturnValue(func, nodeIdArray, expectedValue) {
   nodeIdArray.forEach((nodeId) => {
     expect(service[func](nodeId)).toEqual(expectedValue);
   });
-}
-
-function shouldGetPaths() {
-  const paths1 = [['node1', 'node2', 'node3', 'node4', 'node5']];
-  const paths2 = [
-    ['node1', 'node2', 'node3', 'node4', 'node5'],
-    ['node1', 'node2', 'node4', 'node3', 'node5']
-  ];
-  it('should get path when nodeId is found', () => {
-    expectPaths(paths1, 'node3', ['node1', 'node2']);
-    expectPaths(paths2, 'node3', ['node1', 'node2', 'node4']);
-  });
-  it('should get path when nodeId is found as first', () => {
-    expectPaths(paths1, 'node1', []);
-    expectPaths(paths2, 'node1', []);
-  });
-  it('should get path when nodeId is not found', () => {
-    expectPaths(paths1, 'node6', []);
-    expectPaths(paths2, 'node6', []);
-  });
-}
-
-function expectPaths(paths, nodeId, expectedPath) {
-  const subPath = service.consumePathsUntilNodeId(paths, nodeId);
-  expect(subPath).toEqual(expectedPath);
 }
 
 function calculateNodeOrder() {
@@ -431,27 +359,6 @@ function getAllPaths() {
   });
 }
 
-function consolidatePaths() {
-  describe('consolidatePaths()', () => {
-    it('should consolidate all the paths into a linear list of node ids', () => {
-      service.setProject(oneBranchTwoPathsProjectJSON);
-      const allPaths = service.getAllPaths([], service.getStartNodeId(), true);
-      const consolidatedPaths = service.consolidatePaths(allPaths);
-      expect(consolidatedPaths).toEqual([
-        'group1',
-        'node1',
-        'node2',
-        'node3',
-        'node4',
-        'node5',
-        'node6',
-        'node7',
-        'node8'
-      ]);
-    });
-  });
-}
-
 function getParentGroup() {
   describe('getParentGroup()', () => {
     beforeEach(() => {
@@ -483,7 +390,7 @@ function getMaxScoreForNode_noExcludedComponents_returnSumOfComponentMaxScores()
 function getMaxScoreForNode_excludeComponentFromTotalScore_returnExcludedScore() {
   it('should return sum of component max scores that are not excluded', () => {
     service.setProject(demoProjectJSON);
-    service.getComponentByNodeIdAndComponentId('node10', '2upmb3om1q').excludeFromTotalScore = true;
+    service.getComponent('node10', '2upmb3om1q').excludeFromTotalScore = true;
     expect(service.getMaxScoreForNode('node10')).toEqual(6);
   });
 }
@@ -497,7 +404,7 @@ function getMaxScoreForComponent() {
 function getMaxScoreForComponent_excludeFromTotalScore_returnNull() {
   it('should return null if component is excluded from total score', () => {
     service.setProject(demoProjectJSON);
-    service.getComponentByNodeIdAndComponentId('node2', '7edwu1p29b').excludeFromTotalScore = true;
+    service.getComponent('node2', '7edwu1p29b').excludeFromTotalScore = true;
     expect(service.getMaxScoreForComponent('node2', '7edwu1p29b')).toBeNull();
   });
 }

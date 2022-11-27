@@ -42,9 +42,11 @@ export class TableStudent extends ComponentStudent {
   notebookConfig: any;
   numDataExplorerSeries: number;
   selectedRowIndices: number[] = [];
+  sortOrder: number[] = [];
   tableData: any;
   tableId: string;
   tabulatorData: TabulatorData;
+  tabulatorSorters: any[] = [];
 
   constructor(
     protected AnnotationService: AnnotationService,
@@ -108,13 +110,13 @@ export class TableStudent extends ComponentStudent {
     ) {
       // the student has work so we will populate the work into this component
       this.setStudentWork(this.componentState);
-    } else if (this.UtilService.hasConnectedComponent(this.componentContent)) {
+    } else if (this.component.hasConnectedComponent()) {
       // we will import work from another component
       this.handleConnectedComponents();
     } else if (this.componentState == null) {
       // check if we need to import work
 
-      if (this.UtilService.hasConnectedComponent(this.componentContent)) {
+      if (this.component.hasConnectedComponent()) {
         /*
          * the student does not have any work and there are connected
          * components so we will get the work from the connected
@@ -319,7 +321,7 @@ export class TableStudent extends ComponentStudent {
    * Reset the table data to its initial state from the component content
    */
   resetTable() {
-    if (this.UtilService.hasConnectedComponent(this.componentContent)) {
+    if (this.component.hasConnectedComponent()) {
       // this component imports work so we will import the work again
       this.tableData = this.getCopyOfTableData(this.componentContent.tableData);
       this.handleConnectedComponents();
@@ -377,6 +379,10 @@ export class TableStudent extends ComponentStudent {
           ? studentData.selectedRowIndices
           : [];
 
+        this.sortOrder = studentData.sortOrder ? studentData.sortOrder : [];
+
+        this.tabulatorSorters = studentData.tabulatorSorters ? studentData.tabulatorSorters : [];
+
         this.processLatestStudentWork();
       }
     }
@@ -393,6 +399,8 @@ export class TableStudent extends ComponentStudent {
     const studentData: any = {};
     studentData.tableData = this.getCopyOfTableData(this.tableData);
     studentData.selectedRowIndices = this.getSelectedRowIndices();
+    studentData.sortOrder = this.sortOrder;
+    studentData.tabulatorSorters = this.tabulatorSorters;
     studentData.isDataExplorerEnabled = this.isDataExplorerEnabled;
     studentData.dataExplorerGraphType = this.dataExplorerGraphType;
     studentData.dataExplorerXAxisLabel = this.dataExplorerXAxisLabel;
@@ -1193,5 +1201,11 @@ export class TableStudent extends ComponentStudent {
 
   private getSelectedRowIndices(): number[] {
     return this.componentContent.enableRowSelection ? this.selectedRowIndices : [];
+  }
+
+  tabulatorRowSortChanged(sortData: any): void {
+    this.sortOrder = sortData.sortOrder;
+    this.tabulatorSorters = sortData.tabSorters;
+    this.studentDataChanged();
   }
 }

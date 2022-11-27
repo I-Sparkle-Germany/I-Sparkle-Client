@@ -19,6 +19,7 @@ import {
   moveItemInArray,
   transferArrayItem
 } from '@angular/cdk/drag-drop';
+import { RandomKeyService } from '../../../services/randomKeyService';
 
 @Component({
   selector: 'match-student',
@@ -87,7 +88,7 @@ export class MatchStudent extends ComponentStudent {
       this.MatchService.componentStateHasStudentWork(this.componentState, this.componentContent)
     ) {
       this.setStudentWork(this.componentState);
-    } else if (this.UtilService.hasConnectedComponent(this.componentContent)) {
+    } else if (this.component.hasConnectedComponent()) {
       this.handleConnectedComponents();
     }
     if (this.componentState != null && this.componentState.isSubmit) {
@@ -578,7 +579,7 @@ export class MatchStudent extends ComponentStudent {
     componentState.isSubmit = this.isSubmit;
     const studentData: any = {
       buckets: this.cleanBuckets(
-        this.ProjectService.getComponentByNodeIdAndComponentId(this.nodeId, this.componentId),
+        this.ProjectService.getComponent(this.nodeId, this.componentId),
         this.getDeepCopyOfBuckets()
       ),
       submitCounter: this.submitCounter
@@ -733,7 +734,7 @@ export class MatchStudent extends ComponentStudent {
       .subscribe((result) => {
         if (result) {
           const newChoice = {
-            id: this.UtilService.generateKey(10),
+            id: RandomKeyService.generate(),
             value: result,
             type: 'choice',
             studentCreated: true

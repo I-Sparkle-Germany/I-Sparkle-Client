@@ -3,10 +3,10 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { TeacherProjectService } from '../../../../services/teacherProjectService';
-import { UtilService } from '../../../../services/utilService';
 import { FeedbackRule } from '../FeedbackRule';
 import { MatDialog } from '@angular/material/dialog';
 import { FeedbackRuleHelpComponent } from '../feedback-rule-help/feedback-rule-help.component';
+import { RandomKeyService } from '../../../../services/randomKeyService';
 
 @Component({
   selector: 'edit-feedback-rules',
@@ -14,16 +14,12 @@ import { FeedbackRuleHelpComponent } from '../feedback-rule-help/feedback-rule-h
   styleUrls: ['./edit-feedback-rules.component.scss']
 })
 export class EditFeedbackRulesComponent implements OnInit {
-  @Input() feedbackRules: FeedbackRule[] = [];
+  @Input() feedbackRules: Partial<FeedbackRule>[] = [];
   inputChanged: Subject<string> = new Subject<string>();
   subscriptions: Subscription = new Subscription();
   @Input() version: number = 2;
 
-  constructor(
-    private dialog: MatDialog,
-    private projectService: TeacherProjectService,
-    private utilService: UtilService
-  ) {}
+  constructor(protected dialog: MatDialog, protected projectService: TeacherProjectService) {}
 
   ngOnInit(): void {
     this.subscriptions.add(
@@ -54,25 +50,21 @@ export class EditFeedbackRulesComponent implements OnInit {
     this.projectService.nodeChanged();
   }
 
-  addNewRule(position: string): void {
+  addNewRule(position: number): void {
     const newFeedbackRule = this.createNewFeedbackRule();
-    if (position === 'beginning') {
-      this.feedbackRules.unshift(newFeedbackRule);
-    } else {
-      this.feedbackRules.push(newFeedbackRule);
-    }
+    this.feedbackRules.splice(position, 0, newFeedbackRule);
     this.projectService.nodeChanged();
   }
 
-  private createNewFeedbackRule(): any {
+  protected createNewFeedbackRule(): Partial<FeedbackRule> {
     if (this.version === 1) {
       return { expression: '', feedback: '' };
     } else {
-      return { id: this.utilService.generateKey(10), expression: '', feedback: [''] };
+      return { id: RandomKeyService.generate(), expression: '', feedback: [''] };
     }
   }
 
-  addNewFeedbackToRule(rule: FeedbackRule): void {
+  addNewFeedbackToRule(rule: Partial<FeedbackRule>): void {
     (rule.feedback as string[]).push('');
     this.projectService.nodeChanged();
   }

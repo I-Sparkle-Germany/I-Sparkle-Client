@@ -1,6 +1,3 @@
-<div class="account-menu__caret account-menu__caret--notification" tabindex="0"
-    [ngClass]="{ 'account-menu__caret--notification--with-pause': withPause }">
-</div>
 <div fxLayout="column" class="account-menu--fixed-height account-menu--fixed-width">
   <mat-toolbar class="account-menu__info md-subhead md-whiteframe-1dp"
       fxLayout="row" fxLayoutAlign="space-between center">
@@ -31,14 +28,15 @@
           fxLayoutAlign="start center">
         <div (click)="visitNode(notification)"
             class="notification-message-div"
-            matTooltip="Go to {{ getNodePositionAndTitleByNodeId(notification.nodeId) }}"
+            matTooltip="Go to {{ getNodePositionAndTitle(notification.nodeId) }}"
             matTooltipPosition="left"
             i18n-matTooltip>
           <div class="md-body-1 primary">{{ notification.message }}</div>
           <h4 class="notification-step-title">
-            {{ getNodePositionAndTitleByNodeId(notification.nodeId) }}
+            {{ getNodePositionAndTitle(notification.nodeId) }}
           </h4>
         </div>
+        <div fxFlex></div>
         <button mat-icon-button
             (click)="dismissNotification(notification)"
             fxLayoutAlign="center center"

@@ -1,4 +1,12 @@
-import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  SimpleChanges,
+  ViewEncapsulation
+} from '@angular/core';
 import { ComponentServiceLookupService } from '../../../../services/componentServiceLookupService';
 import { TeacherProjectService } from '../../../../services/teacherProjectService';
 import { UtilService } from '../../../../services/utilService';
@@ -6,7 +14,8 @@ import { UtilService } from '../../../../services/utilService';
 @Component({
   selector: 'step-item',
   templateUrl: './step-item.component.html',
-  styleUrls: ['./step-item.component.scss']
+  styleUrls: ['./step-item.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class StepItemComponent implements OnInit {
   components: any[];
@@ -35,7 +44,7 @@ export class StepItemComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.components = this.projectService.getComponentsByNodeId(this.nodeId).filter((component) => {
+    this.components = this.projectService.getComponents(this.nodeId).filter((component) => {
       return this.projectService.componentHasWork(component);
     });
   }

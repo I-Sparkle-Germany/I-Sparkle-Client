@@ -2,6 +2,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogModule } from '@angular/material/dialog';
 import { StudentTeacherCommonServicesModule } from '../../../../../app/student-teacher-common-services.module';
+import { ComponentContent } from '../../../common/ComponentContent';
 import { ProjectService } from '../../../services/projectService';
 import { TabulatorDataService } from '../tabulatorDataService';
 import { TableShowWorkComponent } from './table-show-work.component';
@@ -17,11 +18,14 @@ describe('TableShowWorkComponent', () => {
     });
     fixture = TestBed.createComponent(TableShowWorkComponent);
     const componentContent = {
-      isDataExplorerEnabled: false
-    };
-    spyOn(TestBed.inject(ProjectService), 'getComponentByNodeIdAndComponentId').and.returnValue(
-      componentContent
-    );
+      id: 'component1',
+      isDataExplorerEnabled: false,
+      nodeId: 'node1',
+      prompt: 'prompt',
+      rubric: 'rubric',
+      type: 'table'
+    } as ComponentContent;
+    spyOn(TestBed.inject(ProjectService), 'getComponent').and.returnValue(componentContent);
     component = fixture.componentInstance;
     component.componentContent = {};
     component.componentState = { studentData: { tableData: [] } };
