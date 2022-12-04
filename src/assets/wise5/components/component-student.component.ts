@@ -2,6 +2,7 @@ import { Directive, EventEmitter, Input, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { SafeHtml } from '@angular/platform-browser';
 import { Subscription } from 'rxjs';
+import { ComponentState } from '../../../app/domain/componentState';
 import { Component } from '../common/Component';
 import { GenerateImageDialogComponent } from '../directives/generate-image-dialog/generate-image-dialog.component';
 import { AnnotationService } from '../services/annotationService';
@@ -19,7 +20,7 @@ import { ComponentStateWrapper } from './ComponentStateWrapper';
 
 @Directive()
 export abstract class ComponentStudent {
-  @Input() componentContent: any;
+  @Input() component: Component;
   @Input() componentState: any;
   @Input() isDisabled: boolean = false;
   @Input() mode: string;
@@ -29,7 +30,7 @@ export abstract class ComponentStudent {
   @Output() starterStateChangedEvent = new EventEmitter<any>();
 
   attachments: any[] = [];
-  component: Component;
+  componentContent: any;
   componentId: string;
   componentType: string;
   prompt: SafeHtml;
@@ -66,7 +67,8 @@ export abstract class ComponentStudent {
   ) {}
 
   ngOnInit(): void {
-    this.component = new Component(this.componentContent, this.nodeId);
+    this.nodeId = this.component.nodeId;
+    this.componentContent = this.component.content;
     this.componentId = this.componentContent.id;
     this.componentType = this.componentContent.type;
     this.isSaveButtonVisible = this.componentContent.showSaveButton;
@@ -813,5 +815,11 @@ export abstract class ComponentStudent {
     if (submitCounter != null) {
       this.submitCounter = submitCounter;
     }
+  }
+
+  createNewComponentState(): Partial<ComponentState> {
+    return {
+      clientSaveTime: new Date().getTime()
+    };
   }
 }
