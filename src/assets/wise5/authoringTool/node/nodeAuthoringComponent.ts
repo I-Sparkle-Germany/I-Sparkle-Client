@@ -14,6 +14,8 @@ import { Directive } from '@angular/core';
 import { Node } from '../../common/Node';
 import { ComponentServiceLookupService } from '../../services/componentServiceLookupService';
 import { ComponentTypeService } from '../../services/componentTypeService';
+import { ComponentContent } from '../../common/ComponentContent';
+import { Component } from '../../common/Component';
 
 @Directive()
 class NodeAuthoringController {
@@ -417,7 +419,7 @@ class NodeAuthoringController {
     }
   }
 
-  insertComponentAfter(componentId) {
+  insertComponentAfter(componentId: string): void {
     if (this.moveComponentMode) {
       this.handleMoveComponent(componentId);
     } else if (this.copyComponentMode) {
@@ -431,9 +433,9 @@ class NodeAuthoringController {
    * id. If the componentId is not provided, we will put the components at the
    * beginning of the step.
    */
-  handleMoveComponent(componentId = null) {
+  private handleMoveComponent(componentId = null): void {
     const selectedComponentIds = this.getSelectedComponentIds();
-    if (selectedComponentIds != null && selectedComponentIds.indexOf(componentId) != -1) {
+    if (selectedComponentIds.indexOf(componentId) != -1) {
       if (selectedComponentIds.length === 1) {
         alert(this.$translate('youAreNotAllowedToInsertTheSelectedItemAfterItself'));
       } else if (selectedComponentIds.length > 1) {
@@ -587,7 +589,8 @@ class NodeAuthoringController {
     return componentObjects;
   }
 
-  showComponentAdvancedAuthoring(component: any) {
+  showComponentAdvancedAuthoring(componentContent: ComponentContent) {
+    const component = new Component(componentContent, this.nodeId);
     this.$mdDialog.show({
       templateUrl: 'assets/wise5/authoringTool/components/edit-component-advanced.html',
       controller: [
