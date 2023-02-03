@@ -10,7 +10,6 @@ import { PeerGroupService } from '../../../services/peerGroupService';
 import { StudentAssetService } from '../../../services/studentAssetService';
 import { StudentDataService } from '../../../services/studentDataService';
 import { StudentWebSocketService } from '../../../services/studentWebSocketService';
-import { UtilService } from '../../../services/utilService';
 import { FeedbackRule } from '../../common/feedbackRule/FeedbackRule';
 import { ComponentStudent } from '../../component-student.component';
 import { ComponentService } from '../../componentService';
@@ -28,7 +27,7 @@ import { PeerGroup } from '../PeerGroup';
 })
 export class PeerChatStudentComponent extends ComponentStudent {
   component: PeerChatComponent;
-  displayedQuestionBankRule: QuestionBankRule;
+  displayedQuestionBankRules: QuestionBankRule[];
   dynamicPrompt: FeedbackRule;
   isPeerChatWorkgroupsResponseReceived: boolean;
   isPeerChatWorkgroupsAvailable: boolean;
@@ -53,8 +52,7 @@ export class PeerChatStudentComponent extends ComponentStudent {
     private peerChatService: PeerChatService,
     protected studentAssetService: StudentAssetService,
     protected studentDataService: StudentDataService,
-    private studentWebSocketService: StudentWebSocketService,
-    protected utilService: UtilService
+    private studentWebSocketService: StudentWebSocketService
   ) {
     super(
       annotationService,
@@ -64,8 +62,7 @@ export class PeerChatStudentComponent extends ComponentStudent {
       nodeService,
       notebookService,
       studentAssetService,
-      studentDataService,
-      utilService
+      studentDataService
     );
   }
 
@@ -167,8 +164,8 @@ export class PeerChatStudentComponent extends ComponentStudent {
     if (this.dynamicPrompt != null) {
       componentState.studentData.dynamicPrompt = this.dynamicPrompt;
     }
-    if (this.displayedQuestionBankRule != null) {
-      componentState.studentData.questionBank = this.displayedQuestionBankRule;
+    if (this.displayedQuestionBankRules != null) {
+      componentState.studentData.questionBank = this.displayedQuestionBankRules;
     }
     componentState.componentType = 'PeerChat';
     componentState.nodeId = this.component.nodeId;

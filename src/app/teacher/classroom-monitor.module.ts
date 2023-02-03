@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { Injector, NgModule } from '@angular/core';
 import { AddTeamButtonComponent } from '../../assets/wise5/classroomMonitor/classroomMonitorComponents/manageStudents/add-team-button/add-team-button.component';
 import { AddTeamDialogComponent } from '../../assets/wise5/classroomMonitor/classroomMonitorComponents/manageStudents/add-team-dialog/add-team-dialog.component';
 import { ChangeStudentPasswordDialogComponent } from '../../assets/wise5/classroomMonitor/classroomMonitorComponents/manageStudents/change-student-password-dialog/change-student-password-dialog.component';
@@ -61,8 +61,15 @@ import { NotebookGradingComponent } from '../../assets/wise5/classroomMonitor/no
 import { StudentGradingComponent } from '../../assets/wise5/classroomMonitor/student-grading/student-grading.component';
 import { ExportStepVisitsComponent } from '../../assets/wise5/classroomMonitor/dataExport/export-step-visits/export-step-visits.component';
 import { DataExportComponent } from '../../assets/wise5/classroomMonitor/dataExport/data-export/data-export.component';
-import { MilestoneModule } from './milestone/milestone.module';
+import { createCustomElement } from '@angular/elements';
+import { MilestoneReportGraphComponent } from './milestone/milestone-report-graph/milestone-report-graph.component';
+import { MilestoneDetailsComponent } from '../../assets/wise5/classroomMonitor/classroomMonitorComponents/milestones/milestone-details/milestone-details.component';
 import { StudentProgressComponent } from '../../assets/wise5/classroomMonitor/student-progress/student-progress.component';
+import { PasswordModule } from '../password/password.module';
+import { ClassroomMonitorComponent } from '../../assets/wise5/classroomMonitor/classroom-monitor.component';
+import { SideMenuComponent } from '../../assets/wise5/common/side-menu/side-menu.component';
+import { MainMenuComponent } from '../../assets/wise5/common/main-menu/main-menu.component';
+import { ShowNodeInfoDialogComponent } from '../classroom-monitor/show-node-info-dialog/show-node-info-dialog.component';
 
 @NgModule({
   declarations: [
@@ -71,6 +78,7 @@ import { StudentProgressComponent } from '../../assets/wise5/classroomMonitor/st
     AlertStatusCornerComponent,
     ChangeStudentPasswordDialogComponent,
     ChangeTeamPeriodDialogComponent,
+    ClassroomMonitorComponent,
     ComponentNewWorkBadgeComponent,
     ComponentSelectComponent,
     DataExportComponent,
@@ -79,6 +87,7 @@ import { StudentProgressComponent } from '../../assets/wise5/classroomMonitor/st
     EditComponentScoreComponent,
     ExportStepVisitsComponent,
     GradingEditComponentMaxScoreComponent,
+    MainMenuComponent,
     ManagePeriodComponent,
     ManageShowStudentInfoComponent,
     ManageStudentsComponent,
@@ -86,8 +95,10 @@ import { StudentProgressComponent } from '../../assets/wise5/classroomMonitor/st
     ManageTeamsComponent,
     ManageUserComponent,
     MilestonesComponent,
+    MilestoneDetailsComponent,
     MilestoneGradingViewComponent,
     MilestoneReportDataComponent,
+    MilestoneReportGraphComponent,
     MilestoneWorkgroupItemComponent,
     MoveUserConfirmDialogComponent,
     NavItemComponent,
@@ -101,7 +112,9 @@ import { StudentProgressComponent } from '../../assets/wise5/classroomMonitor/st
     PauseScreensMenuComponent,
     ProjectProgressComponent,
     RemoveUserConfirmDialogComponent,
+    ShowNodeInfoDialogComponent,
     ShowStudentInfoComponent,
+    SideMenuComponent,
     StatusIconComponent,
     StepInfoComponent,
     StepItemComponent,
@@ -128,10 +141,21 @@ import { StudentProgressComponent } from '../../assets/wise5/classroomMonitor/st
     ComponentStudentModule,
     HighchartsChartModule,
     IntersectionObserverModule,
-    MilestoneModule,
+    PasswordModule,
     PeerGroupGradingModule,
     PreviewComponentModule,
     SelectPeriodModule
   ]
 })
-export class ClassroomMonitorModule {}
+export class ClassroomMonitorModule {
+  constructor(private injector: Injector) {
+    customElements.define(
+      'milestone-report-data',
+      createCustomElement(MilestoneReportDataComponent, { injector: this.injector })
+    );
+    customElements.define(
+      'milestone-report-graph',
+      createCustomElement(MilestoneReportGraphComponent, { injector: this.injector })
+    );
+  }
+}

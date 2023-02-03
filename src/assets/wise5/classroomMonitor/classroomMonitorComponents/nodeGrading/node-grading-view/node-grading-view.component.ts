@@ -5,14 +5,15 @@ import { AnnotationService } from '../../../../services/annotationService';
 import { ClassroomStatusService } from '../../../../services/classroomStatusService';
 import { ConfigService } from '../../../../services/configService';
 import { MilestoneService } from '../../../../services/milestoneService';
-import { NodeInfoService } from '../../../../services/nodeInfoService';
 import { NotificationService } from '../../../../services/notificationService';
 import { TeacherDataService } from '../../../../services/teacherDataService';
 import { TeacherPeerGroupService } from '../../../../services/teacherPeerGroupService';
 import { TeacherProjectService } from '../../../../services/teacherProjectService';
-import { UtilService } from '../../../../services/utilService';
 import { Notification } from '../../../../../../app/domain/notification';
 import { CompletionStatus } from '../../shared/CompletionStatus';
+import { copy } from '../../../../common/object/object';
+import { ShowNodeInfoDialogComponent } from '../../../../../../app/classroom-monitor/show-node-info-dialog/show-node-info-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'node-grading-view',
@@ -46,13 +47,12 @@ export class NodeGradingViewComponent implements OnInit {
     protected annotationService: AnnotationService,
     protected classroomStatusService: ClassroomStatusService,
     protected configService: ConfigService,
+    protected dialog: MatDialog,
     protected milestoneService: MilestoneService,
-    protected nodeInfoService: NodeInfoService,
     protected notificationService: NotificationService,
     protected peerGroupService: TeacherPeerGroupService,
     protected projectService: TeacherProjectService,
-    protected teacherDataService: TeacherDataService,
-    protected utilService: UtilService
+    protected teacherDataService: TeacherDataService
   ) {}
 
   ngOnInit(): void {
@@ -129,9 +129,7 @@ export class NodeGradingViewComponent implements OnInit {
   protected retrieveStudentData(node: Node = this.node): void {
     this.teacherDataService.retrieveStudentDataForNode(node).then(() => {
       this.teacherWorkgroupId = this.configService.getWorkgroupId();
-      this.workgroups = this.utilService.makeCopyOfJSONObject(
-        this.configService.getClassmateUserInfos()
-      );
+      this.workgroups = copy(this.configService.getClassmateUserInfos());
       this.canViewStudentNames = this.configService.getPermissions().canViewStudentNames;
       this.setWorkgroupsById();
       this.sortWorkgroups();
@@ -380,8 +378,11 @@ export class NodeGradingViewComponent implements OnInit {
     return this.teacherDataService.isWorkgroupShown(workgroup);
   }
 
-  showRubric($event: any) {
-    this.nodeInfoService.showNodeInfo(this.nodeId, $event);
+  protected showRubric(): void {
+    this.dialog.open(ShowNodeInfoDialogComponent, {
+      data: this.nodeId,
+      width: '100%'
+    });
   }
 
   setSort(value: string): void {
@@ -416,7 +417,7 @@ export class NodeGradingViewComponent implements OnInit {
   }
 
   onUpdateHiddenComponents(value: any): void {
-    this.hiddenComponents = this.utilService.makeCopyOfJSONObject(value);
+    this.hiddenComponents = copy(value);
   }
 
   onIntersection(

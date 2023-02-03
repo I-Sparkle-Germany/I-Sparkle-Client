@@ -6,12 +6,13 @@ import { NodeService } from '../../../services/nodeService';
 import { NotebookService } from '../../../services/notebookService';
 import { StudentAssetService } from '../../../services/studentAssetService';
 import { StudentDataService } from '../../../services/studentDataService';
-import { UtilService } from '../../../services/utilService';
 import { ComponentStudent } from '../../component-student.component';
 import { ComponentService } from '../../componentService';
 import { EmbeddedService } from '../embeddedService';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { MatDialog } from '@angular/material/dialog';
+import { copy } from '../../../common/object/object';
+import { convertToPNGFile } from '../../../common/canvas/canvas';
 
 @Component({
   selector: 'embedded-student',
@@ -77,8 +78,7 @@ export class EmbeddedStudent extends ComponentStudent {
     protected NotebookService: NotebookService,
     private saniztizer: DomSanitizer,
     protected StudentAssetService: StudentAssetService,
-    protected StudentDataService: StudentDataService,
-    protected UtilService: UtilService
+    protected StudentDataService: StudentDataService
   ) {
     super(
       AnnotationService,
@@ -88,8 +88,7 @@ export class EmbeddedStudent extends ComponentStudent {
       NodeService,
       NotebookService,
       StudentAssetService,
-      StudentDataService,
-      UtilService
+      StudentDataService
     );
   }
 
@@ -340,9 +339,8 @@ export class EmbeddedStudent extends ComponentStudent {
       if (modelElement != null && modelElement.length > 0) {
         modelElement = modelElement[0];
         html2canvas(modelElement).then((canvas) => {
-          const base64Image = canvas.toDataURL('image/png');
-          const imageObject = this.UtilService.getImageObjectFromBase64String(base64Image);
-          this.NotebookService.addNote(this.StudentDataService.getCurrentNodeId(), imageObject);
+          const pngFile = convertToPNGFile(canvas);
+          this.NotebookService.addNote(this.StudentDataService.getCurrentNodeId(), pngFile);
         });
       }
     }
@@ -498,7 +496,7 @@ export class EmbeddedStudent extends ComponentStudent {
       componentId
     );
     if (componentState != null) {
-      componentStates.push(this.UtilService.makeCopyOfJSONObject(componentState));
+      componentStates.push(copy(componentState));
     }
     this.isDisabled = true;
   }
@@ -545,9 +543,7 @@ export class EmbeddedStudent extends ComponentStudent {
     if (mergeFields == null) {
       // there are no merge fields specified so we will get all of the fields
       if (fromComponentState.componentType === 'Embedded') {
-        toComponentState.studentData = this.UtilService.makeCopyOfJSONObject(
-          fromComponentState.studentData
-        );
+        toComponentState.studentData = copy(fromComponentState.studentData);
       }
     } else {
       for (const mergeField of mergeFields) {
