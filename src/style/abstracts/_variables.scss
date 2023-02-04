@@ -4,13 +4,14 @@
 $config: mat-typography-config();
 
 // Custom typography config
-$custom-typography: mat-typography-config(
+$wise-typography: mat-typography-config(
+  $font-family: 'Tahoma, Geneva, Verdana, sans-serif',
   $body-1: mat-typography-level(16px, 22px, 400),
-  $body-2: mat-typography-level(16px, 22px, 500),
+  $body-2: mat-typography-level(16px, 22px, 600),
   $caption: mat-typography-level(14px, 20px, 400),
   $subheading-1: mat-typography-level(17px, 24px, 400),
-  $subheading-2: mat-typography-level(17px, 24px, 500),
-  $headline: mat-typography-level(24px, 32px, 500)
+  $subheading-2: mat-typography-level(17px, 24px, 600),
+  $headline: mat-typography-level(24px, 32px, 600)
 );
 
 // media queries and breakpoints
@@ -37,13 +38,13 @@ $breakpoints: (
   )
 );
 
-$button-border-radius: 4px;
-$card-border-radius: 6px;
-$feature-border-radius: 6px;
+$button-border-radius: 0;
+$card-border-radius: 0;
+$feature-border-radius: 0;
 $header-height: 80px;
 $announcement-height: 40px;
 $toolbar-height: 52px;
 $secondary-toolbar-height: 42px;
-$heading-font-family: Raleway, sans-serif;
+// $heading-font-family: Tahoma, sans-serif;
 $notebook-sidebar-width: 300px;
 $notebook-sidebar-width-gt-xs: 480px;

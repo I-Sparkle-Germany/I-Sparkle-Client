@@ -48,7 +48,7 @@
 @import '@angular/material/theming';
 
 // always include only once per project
-@include mat-core();
+@include mat-core($wise-typography);
 
 // specify common style class eg: <body class="common-styles"> ... </body>
 .common-styles {

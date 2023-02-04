@@ -10,14 +10,12 @@
 
 .header__content {
   min-height: $header-height;
-  font-size: 14px;
   padding: 0 16px;
 }
 
 .header__logo {
-  width: 200px;
-  max-width: 248px;
-  margin-top: 1.5%;
+  width: 180px;
+  max-width: 180px;
 
   @media (min-width: breakpoint('sm.min')) {
     width: 36%;

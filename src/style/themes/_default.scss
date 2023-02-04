@@ -20,86 +20,68 @@ $mat-grey: (
 
 // define Angular Material theme colors
 $default-primary: (
-  50 : #e4f1f5,
-  100 : #bbdde5,
-  200 : #8ec6d4,
-  300 : #60afc2,
-  400 : #3e9db5,
-  500 : #1c8ca8,
-  600 : #1984a0,
-  700 : #147997,
-  800 : #116f8d,
-  900 : #095c7d,
-  A100 : #ade5ff,
-  A200 : #7ad5ff,
-  A400 : #47c4ff,
-  A700 : #2dbcff,
+  50 : #f5f5f5,
+  100 : #e9e9e9,
+  200 : #d9d9d9,
+  300 : #c4c4c4,
+  400 : #9d9d9d,
+  500 : #7b7b7b,
+  600 : #555555,
+  700 : #434343,
+  800 : #262626,
+  900 : #000000,
   contrast: (
     50 : #000000,
     100 : #000000,
     200 : #000000,
     300 : #000000,
     400 : #000000,
-    500 : #ffffff,
+    500 : #000000,
     600 : #ffffff,
     700 : #ffffff,
     800 : #ffffff,
     900 : #ffffff,
-    A100 : #000000,
-    A200 : #000000,
-    A400 : #000000,
-    A700 : #000000,
   )
 );
 
 $default-accent: (
-  50 : #fdebe8,
-  100 : #fbcdc7,
-  200 : #f8aca1,
-  300 : #f58a7b,
-  400 : #f2715f,
-  500 : #f05843,
-  600 : #ee503d,
-  700 : #ec4734,
-  800 : #e93d2c,
-  900 : #e52d1e,
-  A100 : #ffffff,
-  A200 : #ffe9e7,
-  A400 : #ffb9b4,
-  A700 : #ffa19b,
+  50 : #f5f5f5,
+  100 : #e9e9e9,
+  200 : #d9d9d9,
+  300 : #c4c4c4,
+  400 : #9d9d9d,
+  500 : #7b7b7b,
+  600 : #555555,
+  700 : #434343,
+  800 : #262626,
+  900 : #000000,
   contrast: (
     50 : #000000,
     100 : #000000,
     200 : #000000,
     300 : #000000,
     400 : #000000,
-    500 : #ffffff,
+    500 : #000000,
     600 : #ffffff,
     700 : #ffffff,
     800 : #ffffff,
     900 : #ffffff,
-    A100 : #000000,
-    A200 : #000000,
-    A400 : #000000,
-    A700 : #000000,
   )
 );
 
-$default-theme-primary: mat-palette($default-primary);
-$default-theme-accent: mat-palette($default-accent);
-$default-theme-warn: mat-palette($mat-red, 800);
+$default-theme-primary: mat-palette($default-primary, 900);
+$default-theme-accent: mat-palette($default-accent, 900);
 
 // create Angular Material theme
 $default: mat-light-theme(
   $default-theme-primary,
-  $default-theme-accent,
-  $default-theme-warn
+  $default-theme-accent
 );
 
 $default-mat-light-theme-background: (
-  status-bar: map_get($mat-grey, 400),
-  app-bar:    map_get($mat-grey, 300),
-  background: map_get($mat-grey, 100),
+  status-bar: white,
+  app-bar:    white,
+  background: white,
   hover:      rgba(black, 0.04),
   card:       white,
   dialog:     white,
@@ -126,8 +108,8 @@ $background: map-get($default-theme, background);
 // create colors object (including additional colors)
 $default-colors: (
   'accent': mat-color($accent),
-  'accent-1': #795C3A,
-  'accent-2': #CAD266,
+  'accent-1': black,
+  'accent-2': black,
   'app-bg': white,
   'control-bg': white,
   'control-bg-active': white,
@@ -135,7 +117,7 @@ $default-colors: (
   'highlighted': #fffaec,
   'info': #ef6c00,
   'info-contrast': white,
-  'notice-bg': rgba(black, 0.04),
+  'notice-bg': rgba(black, 0.1),
   'primary': mat-color($primary),
   'score': #FFC107,
   'secondary-text': mat-color($foreground, secondary-text),

@@ -1,27 +1,42 @@
 <nav class="header__links" [ngSwitch]="location" fxLayout="row" fxLayoutAlign="start center">
-  <span class="mat-body-1">
-    <ng-container *ngSwitchCase="'teacher'" i18n>Welcome {{ user.firstName }}!</ng-container>
-    <ng-container *ngSwitchCase="'student'" i18n>Welcome {{ user.firstName }}!</ng-container>
-  </span>
+  <div class="mat-body-1">
+    <span *ngSwitchCase="'teacher' || 'student'" i18n>Welcome {{ user.firstName }}!</span>
+  </div>
   <ng-container *ngSwitchDefault>
-    <a
-      mat-button
-      routerLink="/features"
-      routerLinkActive="active"
-      [routerLinkActiveOptions]="{ exact: true }"
-      i18n
-      >Features</a
-    >
-    <a
-      mat-button
-      routerLink="/about"
-      routerLinkActive="active"
-      [routerLinkActiveOptions]="{ exact: true }"
-      i18n
-      >About Us</a
-    >
-    <a mat-button href="https://wise-discuss.berkeley.edu" i18n>Community</a>
-    <a mat-button href="https://wise-research.berkeley.edu" i18n>Research</a>
+    <div>
+      <a
+        class="header-link mat-body-2"
+        routerLink=""
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        i18n
+        >Teachers</a
+      >
+      <a
+        class="header-link mat-body-2"
+        routerLink=""
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        i18n
+        >Students</a
+      >
+      <a
+        class="header-link mat-body-2"
+        routerLink=""
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        i18n
+        >Partnerships</a
+      >
+      <a
+        class="header-link mat-body-2"
+        routerLink=""
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        i18n
+        >Curriculum</a
+      >
+    </div>
   </ng-container>
-  <app-header-signin *ngIf="!role"></app-header-signin>
+  <ng-container *ngIf="!role"> | <app-header-signin></app-header-signin> </ng-container>
 </nav>
