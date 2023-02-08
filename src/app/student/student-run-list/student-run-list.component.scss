@@ -7,23 +7,23 @@ h2 {
   margin-bottom: 0;
 }
 
-.student-run-list {
-  margin-top: 16px;
+.no-runs {
+  padding: 16px 0;
 }
 
-.content-block {
-  margin-top: 24px;
-  overflow: hidden;
+.mat-divider {
+  margin: 0;
 }
 
-.content-block__header {
-  margin: -16px -16px 16px;
+.run-list {
+  padding: 16px 16px 0;
 
   @media (min-width: breakpoint('sm.min')) {
-    margin: -24px -24px 16px;
+    padding: 24px 16px 16px;
   }
 }
 
-.notice {
-  font-weight: 500;
+.run-count {
+  margin-top: 0;
+  font-weight: 600;
 }

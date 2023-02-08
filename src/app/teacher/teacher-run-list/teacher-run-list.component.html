@@ -1,6 +1,8 @@
-<div class="notice" *ngIf="!runs.length && loaded">
-  <p i18n>Hey there! Looks like you haven't run any WISE units in your classes yet.</p>
-  <p i18n>Select "Browse Units" to find titles to use with your students.</p>
+<div class="mat-app-background no-runs" *ngIf="!runs.length && loaded">
+  <div class="notice">
+    <p i18n>Hey there! Looks like you haven't run any units with your classes yet.</p>
+    <p i18n>Select "Browse Units" to find titles to use with your students.</p>
+  </div>
 </div>
 <div class="mat-app-background" *ngIf="runs.length">
   <div class="controls" fxLayout="row" fxLayout.xs="column" fxLayoutGap.sm="16px">
@@ -31,7 +33,7 @@
   </div>
   <mat-divider></mat-divider>
   <div class="run-list notice-bg-bg">
-    <div class="notice">
+    <div class="notice run-count">
       <p [ngStyle]="{ visibility: loaded ? 'visible' : 'hidden' }">
         <ng-container *ngIf="searchValue || filterValue" i18n
           >Units found: {{ filteredRuns.length }}</ng-container

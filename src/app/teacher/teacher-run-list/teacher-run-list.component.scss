@@ -7,6 +7,10 @@ h2 {
   margin-bottom: 0;
 }
 
+.no-runs {
+  padding: 16px 0;
+}
+
 .content-block {
   overflow: hidden;
 }
@@ -16,13 +20,14 @@ h2 {
 }
 
 .run-list {
-  padding: 0 16px;
+  padding: 16px 16px 0;
 
   @media (min-width: breakpoint('sm.min')) {
-    padding: 16px;
+    padding: 24px 16px 16px;
   }
 }
 
-.notice {
+.run-count {
+  margin-top: 0;
   font-weight: 600;
 }
