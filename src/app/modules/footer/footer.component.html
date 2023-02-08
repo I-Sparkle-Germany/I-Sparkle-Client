@@ -1,11 +1,9 @@
 <footer class="footer mat-caption mat-app-background">
   <div class="content secondary-text">
-    <div fxLayout="column" fxLayout.gt-sm="row wrap" fxLayoutAlign="center center">
+    <div fxLayout="column" fxLayout.gt-sm="row wrap" fxLayoutAlign="start center">
       <div fxLayout="column" fxLayout.gt-xs="row wrap" fxLayoutAlign="center center">
         <div class="footer__section center">
-          <a routerLink="/join" i18n>Create Account</a> |
-          <a routerLink="/features" i18n>Features</a> | <a routerLink="/about" i18n>About Us</a> |
-          <a href="https://wise-discuss.berkeley.edu/" i18n>Community</a>
+          <a routerLink="/join" i18n>Create Account</a>
         </div>
         <span fxHide fxShow.gt-xs>/</span>
         <div class="footer__section center">
@@ -14,7 +12,7 @@
           <a routerLink="/contact" i18n>Contact Us</a>
         </div>
       </div>
-      <span fxFlex fxHide fxShow.gt-sm></span>
+      <!-- <span fxFlex fxHide fxShow.gt-sm></span>
       <div>
         <a
           href="https://www.facebook.com/wisetels/"
@@ -43,7 +41,7 @@
         >
           <mat-icon svgIcon="github-ffffff"></mat-icon>
         </a>
-      </div>
+      </div> -->
     </div>
     <div
       fxLayout="column"
@@ -62,17 +60,17 @@
           Powered by
           <a href="https://wise-research.berkeley.edu" target="_blank">TELS Research</a> and
           <a href="https://github.com/WISE-Community" target="_blank">WISE Open Source Technology</a
-          >. Help us <a href="https://crowdin.com/project/wise" target="_blank">translate</a> WISE!
+          >. Help us <a href="https://crowdin.com/project/wise" target="_blank">translate</a>!
         </p>
-        <p i18n>
+        <!-- <p i18n>
           This material is based upon work supported by the National Science Foundation. Any
           opinions, findings, and conclusions or recommendations expressed in this material are
           those of the author(s) and do not necessarily reflect the views of the National Science
           Foundation.
-        </p>
+        </p> -->
       </div>
       <div fxFlex="100%" fxFlex.gt-sm="1 1 0">
-        <div
+        <!-- <div
           class="footer__section"
           fxLayout="row wrap"
           fxLayoutAlign="center center"
@@ -139,13 +137,9 @@
               alt="SAIL (Scalable Architecture for Interactive Learning)"
             />
           </picture>
-        </div>
+        </div> -->
         <div class="footer__section" fxLayoutAlign="center center" fxLayoutAlign.gt-sm="end center">
-          <span class="center" i18n
-            >©1996-{{ time | date: 'y' }},
-            <a href="https://www.berkeley.edu" target="_blank">UC Berkeley</a> | Web-based Inquiry
-            Science Environment</span
-          >
+          <span class="center" i18n>©{{ time | date: 'y' }} | i-sparkle</span>
         </div>
       </div>
     </div>
