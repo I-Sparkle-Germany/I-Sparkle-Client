@@ -22,7 +22,7 @@
 
 <a
   *ngIf="isOutsideLink"
-  mat-raised-button
+  mat-flat-button
   class="cta"
   href="{{ destination }}"
   target="{{ linkTarget }}"
@@ -32,7 +32,7 @@
   </div>
 </a>
 
-<a *ngIf="!isOutsideLink" mat-raised-button class="cta" routerLink="{{ destination }}">
+<a *ngIf="!isOutsideLink" mat-flat-button class="cta" routerLink="{{ destination }}">
   <div class="cta__wrap">
     <span *ngTemplateOutlet="linkContent"></span>
   </div>

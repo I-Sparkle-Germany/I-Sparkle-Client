@@ -22,6 +22,7 @@ import { ForgotTeacherPasswordChangeComponent } from './teacher/forgot-teacher-p
 import { ForgotTeacherPasswordCompleteComponent } from './teacher/forgot-teacher-password-complete/forgot-teacher-password-complete.component';
 import { ForgotTeacherPasswordVerifyComponent } from './teacher/forgot-teacher-password-verify/forgot-teacher-password-verify.component';
 import { PasswordModule } from '../password/password.module';
+import { StandaloneModule } from '../standalone/standalone.module';
 
 @NgModule({
   imports: [
@@ -32,7 +33,8 @@ import { PasswordModule } from '../password/password.module';
     MatProgressBarModule,
     PasswordModule,
     ReactiveFormsModule,
-    SharedModule
+    SharedModule,
+    StandaloneModule
   ],
   declarations: [
     ForgotComponent,

@@ -1,4 +1,4 @@
-<mat-card class="standalone__content mat-elevation-z4">
+<mat-card class="standalone__content mat-elevation-z0">
   <mat-card-content>
     <form
       role="form"
@@ -6,6 +6,7 @@
       (submit)="createAccount()"
       [formGroup]="createTeacherAccountFormGroup"
     >
+      <standalone-logo></standalone-logo>
       <h2 class="standalone__title accent" i18n>Create Teacher Account</h2>
       <p>
         <mat-form-field appearance="fill" fxFlex>
@@ -154,7 +155,7 @@
           <mat-checkbox class="checkbox-inline" formControlName="agree"
             ><ng-container i18n
               >I agree to the
-              <a href="privacy" target="_blank">WISE Privacy Policy & Terms of Use</a>
+              <a href="privacy" target="_blank">Privacy Policy & Terms of Use</a>
               *</ng-container
             ></mat-checkbox
           >

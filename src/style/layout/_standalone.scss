@@ -23,22 +23,13 @@
   }
 }
 
-.standalone__logo {
-  margin: 0 auto 16px;
-  padding-top: 32px;
-  max-width: 300px;
-
-  img {
-    width: 100%;
-    height: auto;
-  }
-}
-
 .standalone__content {
   max-width: breakpoint('sm.min');
-  margin: 0 auto 32px;
+  margin: 16px;
 
   @media (min-width: breakpoint('sm.min')) {
+    margin: 32px auto;
+
     &.mat-card {
       padding: 24px !important;
     }

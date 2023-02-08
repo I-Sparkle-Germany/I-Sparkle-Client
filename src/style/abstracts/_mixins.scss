@@ -3,33 +3,33 @@
 // Define a custom mixin for common styles
 @mixin common-setup() {
   // Override specific Material typography levels
-  .mat-caption, .mat-small {
-    @include mat-typography-level-to-styles($custom-typography, caption);
-  }
+  // .mat-caption, .mat-small {
+  //   @include mat-typography-level-to-styles($custom-typography, caption);
+  // }
 
-  &.mat-typography, .mat-body, .mat-body-1 {
-    @include mat-typography-level-to-styles($custom-typography, body-1);
-  }
+  // &.mat-typography, .mat-body, .mat-body-1 {
+  //   @include mat-typography-level-to-styles($custom-typography, body-1);
+  // }
 
-  .mat-body-2 {
-    @include mat-typography-level-to-styles($custom-typography, body-2);
-  }
+  // .mat-body-2 {
+  //   @include mat-typography-level-to-styles($custom-typography, body-2);
+  // }
 
-  h4, .mat-subheading-1 {
-    @include mat-typography-level-to-styles($custom-typography, subheading-1);
-  }
+  // h4, .mat-subheading-1 {
+  //   @include mat-typography-level-to-styles($custom-typography, subheading-1);
+  // }
 
-  h3, .mat-subheading-2 {
-    @include mat-typography-level-to-styles($custom-typography, subheading-2);
-  }
+  // h3, .mat-subheading-2 {
+  //   @include mat-typography-level-to-styles($custom-typography, subheading-2);
+  // }
 
-  h1, .mat-headline {
-    @include mat-typography-level-to-styles($custom-typography, headline);
-  }
+  // h1, .mat-headline {
+  //   @include mat-typography-level-to-styles($custom-typography, headline);
+  // }
 
-  h1, h2, .mat-display-1, .mat-display-2, .mat-display-3, .mat-display-4 {
-    font-family: $heading-font-family
-  }
+  // h1, h2, .mat-display-1, .mat-display-2, .mat-display-3, .mat-display-4 {
+  //   font-family: $heading-font-family
+  // }
 
   h1 {
     .mat-icon {
@@ -67,6 +67,7 @@
 
   .mat-button, .mat-raised-button, .mat-flat-button, .mat-stroked-button {
     min-width: 0;
+    border-radius: $button-border-radius;
   }
 
   .mat-raised-button, .mat-fab, .mat-mini-fab {
@@ -112,10 +113,10 @@
   .mat-card--button {
     cursor: pointer;
     border-radius: $button-border-radius;
-    @include mat-elevation(3);
+    @include mat-elevation(0);
 
     &:hover, &:focus {
-      @include mat-elevation(4);
+      @include mat-elevation(3);
     }
 
     &:hover {
@@ -138,11 +139,11 @@
   }
 
   .mat-accordion .mat-expansion-panel {
-    @include mat-elevation(3);
+    @include mat-elevation(0);
     @include mat-elevation-transition;
 
     &.mat-expanded {
-      @include mat-elevation(6);
+      @include mat-elevation(3);
     }
 
     &:not(.mat-expanded) {
@@ -166,13 +167,13 @@
     opacity: 1;
   }
 
-  .mat-toolbar {
-    @include mat-typography-level-to-styles($custom-typography, subheading-2);
+  // .mat-toolbar {
+  //   @include mat-typography-level-to-styles($custom-typography, subheading-2);
 
-    h1, h2, h3, h4, h5 ,h6 {
-      @include mat-typography-level-to-styles($custom-typography, subheading-2);
-    }
-  }
+  //   h1, h2, h3, h4, h5 ,h6 {
+  //     @include mat-typography-level-to-styles($custom-typography, subheading-2);
+  //   }
+  // }
 
   .mat-toolbar-row, .mat-toolbar-single-row {
     height: $toolbar-height;
@@ -210,12 +211,22 @@
   a {
     &:not(.mat-button):not(.mat-raised-button):not(.mat-menu-item):not(.mat-flat-button):not(.mat-stroked-button):not(.mat-icon-button):not(.mat-tab-link) {
       color: map-get($colors, primary);
+      background-image: linear-gradient(to top, map-get($colors, primary) 50%, transparent 50%);
+      background-size: 100% 200%;
+      background-position: top;
+      transition: background-position 0.1s ease-in-out, color 0.1s ease-in-out;
 
       // Set classes for each named color in the $colors map
       @each $key, $value in $colors {
         &.#{$key} {
           color: $value;
         }
+      }
+
+      &:hover {
+        background-position: bottom;
+        text-decoration: none;
+        color: map-get($colors, app-bg);
       }
     }
   }
