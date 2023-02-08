@@ -2631,7 +2631,7 @@ Click &quot;Cancel&quot; to keep the invalid JSON open so you can fix it.</sourc
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/teacher/teacher-run-list/teacher-run-list.component.html</context>
-          <context context-type="linenumber">17</context>
+          <context context-type="linenumber">12</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/assets/wise5/components/outsideURL/outside-url-authoring/outside-url-authoring.component.html</context>
@@ -4440,6 +4440,20 @@ Click &quot;Cancel&quot; to keep the invalid JSON open so you can fix it.</sourc
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="8db1ad5a7f02cab86679ffbbbe0d497600c9829a" datatype="html">
+        <source>Ready to use i-sparkle?</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/home/home.component.html</context>
+          <context context-type="linenumber">104</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b4b200f1299f2e043cae72f59718dca3b12f1f38" datatype="html">
+        <source>Sign up for free!</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/home/home.component.html</context>
+          <context context-type="linenumber">105</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="3220280128711469703" datatype="html">
         <source>WISE students in classroom</source>
         <context-group purpose="location">
@@ -4873,15 +4887,15 @@ Click &quot;Cancel&quot; to keep the invalid JSON open so you can fix it.</sourc
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="e3433d7200a8d43a992d58cee5f979fc4c2a59e2" datatype="html">
-        <source> The &quot;Community Built&quot; library contains units that were designed and contributed by WISE community members. Want to publicly share your custom unit? <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/contact&quot; target=&quot;_blank&quot;&gt;"/>Contact Us<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>! </source>
+      <trans-unit id="ba478b12a00145e38217df3cfd07b4e43022242d" datatype="html">
+        <source> The &quot;Community Built&quot; library contains units that were designed and contributed by i-sparkle community members. Want to publicly share your custom unit? <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/contact&quot; target=&quot;_blank&quot;&gt;"/>Contact Us<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>! </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/library/community-library/community-library-details.html</context>
           <context context-type="linenumber">4,8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="17c7a557bbdf4f0e74c4a17223153f884ab633b6" datatype="html">
-        <source> *Please note: While WISE staff have reviewed the units listed here, we cannot specifically vouch for their effectiveness or quality. Please examine the units carefully before using in your classrooms. Thanks! </source>
+      <trans-unit id="79240b2aa38a62cd0a78febce21ec7d17dc904ee" datatype="html">
+        <source> *Please note: While i-sparkle staff have reviewed the units listed here, we cannot specifically vouch for their effectiveness or quality. Please examine the units carefully before using in your classrooms. Thanks! </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/library/community-library/community-library-details.html</context>
           <context context-type="linenumber">9,13</context>
@@ -5261,15 +5275,15 @@ Click &quot;Cancel&quot; to keep the invalid JSON open so you can fix it.</sourc
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5080207bff284204adb9544ae12ef39917aa74ae" datatype="html">
-        <source>WISE Tested</source>
+      <trans-unit id="f5802cf9fd6c86f3b0f365fcb093e22895c7c4be" datatype="html">
+        <source>i-sparkle Tested</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/library/official-library/official-library-details.html</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="babd041c8f47bf5bb8dcabfc02d9904a8e363c9c" datatype="html">
-        <source>The &quot;WISE Tested&quot; library contains curricula developed by the WISE team.</source>
+      <trans-unit id="b441f182cf1eea7ec7caa074c1e7f438b586e131" datatype="html">
+        <source>The &quot;i-sparkle Tested&quot; library contains curricula developed by the i-sparkle team.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/library/official-library/official-library-details.html</context>
           <context context-type="linenumber">4</context>
@@ -5282,16 +5296,6 @@ Click &quot;Cancel&quot; to keep the invalid JSON open so you can fix it.</sourc
           <context context-type="linenumber">5,9</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5a257a0f8671cc1d63562920f29ae95c51956f10" datatype="html">
-        <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/about&quot; target=&quot;_blank&quot;&gt;"/>Learn more<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a
-      &gt;"/> about our design process and <x id="START_LINK_1" equiv-text="&lt;a href=&quot;https://wise-research.berkeley.edu&quot; target=&quot;_blank&quot;
-        &gt;"/>check out our research and publications<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a
-      &gt;"/>. </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/modules/library/official-library/official-library-details.html</context>
-          <context context-type="linenumber">11,15</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="32994fe5ec4e53b681a661dd565256e91a9eb515" datatype="html">
         <source>unit(s)</source>
         <context-group purpose="location">
@@ -5299,22 +5303,22 @@ Click &quot;Cancel&quot; to keep the invalid JSON open so you can fix it.</sourc
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="73da064756ecee7cf3d056dc8a0b99f0f39863b6" datatype="html">
-        <source>What is WISE Tested?</source>
+      <trans-unit id="6219b4ecb0baf6e43ab68c9414a082940e2defc1" datatype="html">
+        <source>What is i-sparkle Tested?</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/library/official-library/official-library.component.html</context>
-          <context context-type="linenumber">41</context>
+          <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="17858fe486f8712b22603a2901b8009929e10bec" datatype="html">
-        <source> The &quot;My Units&quot; library contains curriculum units that you own or that have been shared with you by other WISE users. </source>
+      <trans-unit id="b9f327dea05794d1ec579e5f8d5fd5d290d1d94e" datatype="html">
+        <source> The &quot;My Units&quot; library contains curriculum units that you own or that have been shared with you by other i-sparkle users. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/library/personal-library/personal-library-details.html</context>
           <context context-type="linenumber">4,7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="a7a6da1d931b6d12766ea7c6c0ea4969f540c6d7" datatype="html">
-        <source> Units that you create using the WISE Authoring Tool will appear here. Any units that you copy will also be listed here. </source>
+      <trans-unit id="0f7d9d19bcc6cf578ecd52bf20c6557401251de9" datatype="html">
+        <source> Units that you create using the Authoring Tool will appear here. Any units that you copy will also be listed here. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/library/personal-library/personal-library-details.html</context>
           <context context-type="linenumber">8,11</context>
@@ -5495,11 +5499,11 @@ Click &quot;Cancel&quot; to keep the invalid JSON open so you can fix it.</sourc
         <source>Teacher unit library navigation</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/library/teacher-project-library/teacher-project-library.component.html</context>
-          <context context-type="linenumber">6</context>
+          <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8381440848283879343" datatype="html">
-        <source>WISE Tested</source>
+      <trans-unit id="5951893472151629657" datatype="html">
+        <source>i-sparkle Tested</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/library/teacher-project-library/teacher-project-library.component.ts</context>
           <context context-type="linenumber">19</context>
@@ -5561,8 +5565,8 @@ Click &quot;Cancel&quot; to keep the invalid JSON open so you can fix it.</sourc
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8454739bcb4cf4debfd509a35e466a828ea11363" datatype="html">
-        <source><x id="TAG_IMG" ctype="image" equiv-text="&lt;img class=&quot;google-icon&quot; src=&quot;assets/img/icons/google-logo.svg&quot; i18n-alt alt=&quot;Google logo&quot; /&gt;"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>This account was created using Google and doesn&apos;t use a WISE password.<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></source>
+      <trans-unit id="7ca88854093e3a4c42c98da1c0e29b259c1816b9" datatype="html">
+        <source><x id="TAG_IMG" ctype="image" equiv-text="&lt;img class=&quot;google-icon&quot; src=&quot;assets/img/icons/google-logo.svg&quot; i18n-alt alt=&quot;Google logo&quot; /&gt;"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>This account was created using Google and doesn&apos;t use an i-sparkle password.<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/shared/edit-password/edit-password.component.html</context>
           <context context-type="linenumber">50,51</context>
@@ -5611,7 +5615,7 @@ Click &quot;Cancel&quot; to keep the invalid JSON open so you can fix it.</sourc
         <source>Unlink Google Account</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/shared/edit-password/edit-password.component.html</context>
-          <context context-type="linenumber">61</context>
+          <context context-type="linenumber">62</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/shared/unlink-google-account-confirm/unlink-google-account-confirm.component.html</context>
@@ -5631,7 +5635,7 @@ Click &quot;Cancel&quot; to keep the invalid JSON open so you can fix it.</sourc
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/teacher/account/edit-profile/edit-profile.component.html</context>
-          <context context-type="linenumber">160</context>
+          <context context-type="linenumber">166</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8666615009060969246" datatype="html">
@@ -5662,15 +5666,15 @@ Click &quot;Cancel&quot; to keep the invalid JSON open so you can fix it.</sourc
           <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="667e68a26b91f8aa0b3d34f42cb482478a62792c" datatype="html">
-        <source> To remove the link to your Google account, you will be asked to create a WISE password. In the future, you&apos;ll sign in to WISE using your username and password. </source>
+      <trans-unit id="8ebc77d53f1d732ef9e50ad1d38c81e296bc5f60" datatype="html">
+        <source> To remove the link to your Google account, you will be asked to create a i-sparkle password. In the future, you&apos;ll sign in to i-sparkle using your username and password. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/shared/unlink-google-account-confirm/unlink-google-account-confirm.component.html</context>
           <context context-type="linenumber">9,12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="28b3fe52b4bde35f1ecc168634564e5982dff14f" datatype="html">
-        <source>You will no longer be able to sign in to WISE using Google. Would you like to continue?</source>
+      <trans-unit id="b6efc3d5c9fa7db5ef0398f4ba4046de0f720d1e" datatype="html">
+        <source>You will no longer be able to sign in to i-sparkle using Google. Would you like to continue?</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/shared/unlink-google-account-confirm/unlink-google-account-confirm.component.html</context>
           <context context-type="linenumber">15,16</context>
@@ -5725,7 +5729,7 @@ Click &quot;Cancel&quot; to keep the invalid JSON open so you can fix it.</sourc
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/teacher/teacher-run-list/teacher-run-list.component.html</context>
-          <context context-type="linenumber">79</context>
+          <context context-type="linenumber">78</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3376099465386156138" datatype="html">
@@ -7093,7 +7097,7 @@ Click &quot;Cancel&quot; to keep the invalid JSON open so you can fix it.</sourc
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/teacher/teacher-run-list/teacher-run-list.component.html</context>
-          <context context-type="linenumber">40</context>
+          <context context-type="linenumber">37</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cba86a51e8ee210e24b4d9b47ceffed1e70b61d1" datatype="html">
@@ -7111,7 +7115,7 @@ Click &quot;Cancel&quot; to keep the invalid JSON open so you can fix it.</sourc
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/teacher/teacher-run-list/teacher-run-list.component.html</context>
-          <context context-type="linenumber">47</context>
+          <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
       <trans-unit id="db39827bab98f8af5e0a97d4614a0d667e98fcb6" datatype="html">
@@ -7122,7 +7126,7 @@ Click &quot;Cancel&quot; to keep the invalid JSON open so you can fix it.</sourc
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/teacher/teacher-run-list/teacher-run-list.component.html</context>
-          <context context-type="linenumber">50</context>
+          <context context-type="linenumber">47</context>
         </context-group>
       </trans-unit>
       <trans-unit id="940ac9990f6a15fadf0a162bd4206ce5661592ed" datatype="html">
@@ -8201,8 +8205,8 @@ Click &quot;Cancel&quot; to keep the invalid JSON open so you can fix it.</sourc
           <context context-type="linenumber">76</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="f57170d70557aac3e4828197ac70dd848cb65eb8" datatype="html">
-        <source>Last student login: <x id="INTERPOLATION" equiv-text="{{ run.lastRun | date : &apos;short&apos; }}"/></source>
+      <trans-unit id="f88e7633c282be79dd79aa3765a3a853a9b5a5a4" datatype="html">
+        <source>Last student login: <x id="INTERPOLATION" equiv-text="{{ run.lastRun | date: &apos;short&apos; }}"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/teacher/teacher-run-list-item/teacher-run-list-item.component.html</context>
           <context context-type="linenumber">101</context>
@@ -8240,21 +8244,21 @@ Click &quot;Cancel&quot; to keep the invalid JSON open so you can fix it.</sourc
         <source>Filter By Period</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/teacher/teacher-run-list/teacher-run-list.component.html</context>
-          <context context-type="linenumber">28</context>
+          <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
       <trans-unit id="54d96f2f53d37cf8c3260171012afedef7ba7f95" datatype="html">
         <source>Total classroom units: <x id="INTERPOLATION" equiv-text="{{ filteredRuns.length }}"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/teacher/teacher-run-list/teacher-run-list.component.html</context>
-          <context context-type="linenumber">43</context>
+          <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1e5e23363e949f7dcbaf034bdb141a561132a10e" datatype="html">
         <source>Clear filters</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/teacher/teacher-run-list/teacher-run-list.component.html</context>
-          <context context-type="linenumber">56</context>
+          <context context-type="linenumber">53</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1775311053456611668" datatype="html">

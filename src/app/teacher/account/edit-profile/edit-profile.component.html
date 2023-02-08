@@ -133,7 +133,7 @@
     fxLayoutGap="24px"
   >
     <button
-      mat-raised-button
+      mat-flat-button
       color="primary"
       type="submit"
       [disabled]="!editProfileFormGroup.valid || !changed || isSaving"
@@ -156,8 +156,14 @@
         />
         <span i18n>This profile is linked to a Google account.</span>
       </div>
-      <button class="unlink" type="button" mat-raised-button (click)="unlinkGoogleAccount()">
-        <span class="warn" i18n>Unlink Google Account</span>
+      <button
+        class="unlink"
+        type="button"
+        mat-flat-button
+        color="warn"
+        (click)="unlinkGoogleAccount()"
+      >
+        <span i18n>Unlink Google Account</span>
       </button>
     </div>
   </div>

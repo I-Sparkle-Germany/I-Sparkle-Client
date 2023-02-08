@@ -51,7 +51,7 @@
 </ng-template>
 
 <mat-card
-  class="mat-elevation-z3 can-highlight"
+  class="can-highlight"
   [ngClass]="{ 'highlighted-bg': run.isHighlighted }"
   [@flash]="{ value: '*', params: { duration: animateDuration, delay: animateDelay } }"
 >
@@ -98,7 +98,7 @@
       fxLayoutGap="16px"
     >
       <span *ngIf="run.lastRun" class="mat-caption secondary-text center" i18n
-        >Last student login: {{ run.lastRun | date : 'short' }}</span
+        >Last student login: {{ run.lastRun | date: 'short' }}</span
       >
       <button
         *ngIf="!isRunActive(run) && !isRunCompleted(run)"
