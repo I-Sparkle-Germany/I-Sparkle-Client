@@ -9,12 +9,14 @@ import { ProjectService } from './projectService';
 import { Message } from '@stomp/stompjs';
 import { NotebookService } from './notebookService';
 import { StompService } from './stompService';
+import { ConfigService } from './configService';
 
 @Injectable()
 export class StudentWebSocketService {
   constructor(
     private AnnotationService: AnnotationService,
-    private NodeService: NodeService,
+    private configService: ConfigService,
+    private nodeService: NodeService,
     private notebookService: NotebookService,
     private ProjectService: ProjectService,
     private stompService: StompService,
@@ -28,44 +30,46 @@ export class StudentWebSocketService {
   }
 
   subscribeToClassroomTopic(): void {
-    this.stompService.periodMessage$
-      .subscribe((message: Message) => {
-        const body = JSON.parse(message.body);
-        if (body.type === 'studentWork') {
-          const studentWork = JSON.parse(body.content);
-          this.StudentDataService.broadcastStudentWorkReceived(studentWork);
-        } else if (body.type === 'annotation') {
-          const annotation = JSON.parse(body.content);
-          this.AnnotationService.broadcastAnnotationReceived({ annotation: annotation });
-        } else if (body.type === 'goToNode') {
-          this.goToStep(body.content);
-        } else if (body.type === 'node') {
-          this.updateNode(body.content);
-        }
-      });
+    this.stompService.periodMessage$.subscribe((message: Message) => {
+      const body = JSON.parse(message.body);
+      if (body.type === 'studentWork') {
+        const studentWork = JSON.parse(body.content);
+        this.StudentDataService.broadcastStudentWorkReceived(studentWork);
+      } else if (body.type === 'annotation') {
+        const annotation = JSON.parse(body.content);
+        this.AnnotationService.broadcastAnnotationReceived({ annotation: annotation });
+      } else if (body.type === 'goToNode') {
+        this.goToStep(body.content);
+      } else if (body.type === 'node') {
+        this.updateNode(body.content);
+      } else if (body.type === 'newWorkgroupJoinedRun') {
+        this.configService.retrieveConfig(
+          `/api/config/studentRun/${this.configService.getRunId()}`
+        );
+      }
+    });
   }
 
   subscribeToWorkgroupTopic(): void {
-    this.stompService.workgroupMessage$
-      .subscribe((message: Message) => {
-        const body = JSON.parse(message.body);
-        if (body.type === 'annotation') {
-          const annotationData = JSON.parse(body.content);
-          this.AnnotationService.addOrUpdateAnnotation(annotationData);
-          this.handleAnnotationReceived(annotationData);
-        } else if (body.type === 'tagsToWorkgroup') {
-          const tags = JSON.parse(body.content);
-          this.TagService.setTags(tags);
-          this.StudentDataService.updateNodeStatuses();
-          this.NodeService.evaluateTransitionLogic();
-        } else if (body.type === 'goToNode') {
-          this.goToStep(body.content);
-        } else if (body.type === 'goToNextNode') {
-          this.goToNextStep();
-        } else if (body.type === 'classmateStudentWork') {
-          this.StudentDataService.broadcastStudentWorkReceived(JSON.parse(body.content));
-        }
-      });
+    this.stompService.workgroupMessage$.subscribe((message: Message) => {
+      const body = JSON.parse(message.body);
+      if (body.type === 'annotation') {
+        const annotationData = JSON.parse(body.content);
+        this.AnnotationService.addOrUpdateAnnotation(annotationData);
+        this.handleAnnotationReceived(annotationData);
+      } else if (body.type === 'tagsToWorkgroup') {
+        const tags = JSON.parse(body.content);
+        this.TagService.setTags(tags);
+        this.StudentDataService.updateNodeStatuses();
+        this.nodeService.evaluateTransitionLogic();
+      } else if (body.type === 'goToNode') {
+        this.goToStep(body.content);
+      } else if (body.type === 'goToNextNode') {
+        this.goToNextStep();
+      } else if (body.type === 'classmateStudentWork') {
+        this.StudentDataService.broadcastStudentWorkReceived(JSON.parse(body.content));
+      }
+    });
   }
 
   handleAnnotationReceived(annotation: any): void {
@@ -78,12 +82,12 @@ export class StudentWebSocketService {
   }
 
   goToStep(nodeId: string): void {
-    this.StudentDataService.endCurrentNodeAndSetCurrentNodeByNodeId(nodeId);
+    this.nodeService.setCurrentNode(nodeId);
   }
 
   goToNextStep(): void {
-    this.NodeService.getNextNodeId().then((nextNodeId) => {
-      this.StudentDataService.endCurrentNodeAndSetCurrentNodeByNodeId(nextNodeId);
+    this.nodeService.getNextNodeId().then((nextNodeId) => {
+      this.nodeService.setCurrentNode(nextNodeId);
     });
   }
 

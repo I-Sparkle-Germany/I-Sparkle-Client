@@ -1,5 +1,5 @@
-<div class="component__content" fxLayout="row wrap">
-  <div fxLayout="column" fxFlex="100" fxFlex.gt-sm="66" class="component--grading__response">
+<div class="component__content" fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap="16px">
+  <div fxLayout="column" fxFlex="100" [fxFlex.gt-sm]="isGradable ? 66 : 100">
     <ng-container *ngIf="latestComponentState != null">
       <animation-grading
         *ngIf="component.type === 'Animation'"
@@ -102,9 +102,15 @@
       >
       </table-grading>
     </ng-container>
+    <show-group-work-grading
+      *ngIf="component.type === 'ShowGroupWork'"
+      [nodeId]="nodeId"
+      [componentId]="component.id"
+      [workgroupId]="workgroupId"
+    ></show-group-work-grading>
     <span fxFlex></span>
     <div
-      *ngIf="componentStates.length === 0"
+      *ngIf="componentStates.length === 0 && component.type !== 'ShowGroupWork'"
       class="component__actions__info component--grading__actions__info md-caption"
       i18n
     >
@@ -121,7 +127,7 @@
       </span>
     </div>
   </div>
-  <div fxFlex="100" fxFlex.gt-sm="33" class="component--grading__annotations">
+  <div *ngIf="isGradable" fxFlex="100" fxFlex.gt-sm="33" class="component--grading__annotations">
     <edit-component-annotations
       [componentId]="component.id"
       [componentStateId]="latestComponentStateId"

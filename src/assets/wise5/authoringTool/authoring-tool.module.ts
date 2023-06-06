@@ -3,12 +3,12 @@
 import * as angular from 'angular';
 import { downgradeComponent, downgradeInjectable } from '@angular/upgrade/static';
 import './addComponent/addComponentModule';
+import './addLesson/addLessonModule';
 import './addNode/addNodeModule';
 import '../components/component-authoring.module';
 import './components/shared/shared';
 import './importComponent/importComponentModule';
 import './importStep/importStepModule';
-import './node/editRubric/editRubricModule';
 import './node/node-authoring.module';
 import './project/project-authoring.module';
 import './structure/structureAuthoringModule';
@@ -16,14 +16,15 @@ import { ProjectLibraryService } from '../services/projectLibraryService';
 import { AuthoringToolComponent } from '../authoringTool/authoringToolComponent';
 import { MainAuthoringComponent } from '../authoringTool/main/mainAuthoringComponent';
 import { WiseAuthoringTinymceEditorComponent } from '../directives/wise-tinymce-editor/wise-authoring-tinymce-editor.component';
+import { StepToolsComponent } from '../common/stepTools/step-tools.component';
 
 export default angular
   .module('authoringTool', [
     'addComponentModule',
+    'addLessonModule',
     'addNodeModule',
     'atShared',
     'componentAuthoringModule',
-    'editRubricModule',
     'importComponentModule',
     'importStepModule',
     'nodeAuthoringModule',
@@ -31,6 +32,10 @@ export default angular
     'structureAuthoringModule',
     'ui.router'
   ])
+  .directive(
+    'stepTools',
+    downgradeComponent({ component: StepToolsComponent }) as angular.IDirectiveFactory
+  )
   .directive(
     'wiseAuthoringTinymceEditor',
     downgradeComponent({

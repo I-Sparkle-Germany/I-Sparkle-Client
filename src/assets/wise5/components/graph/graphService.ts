@@ -94,7 +94,7 @@ export class GraphService extends ComponentService {
     if (this.canEdit(component)) {
       return this.hasCompletedComponentState(componentStates, node, component);
     } else {
-      return this.UtilService.hasNodeEnteredEvent(nodeEvents);
+      return this.hasNodeEnteredEvent(nodeEvents);
     }
   }
 
@@ -319,10 +319,6 @@ export class GraphService extends ComponentService {
     return document.querySelector(`#chart_${componentId} .highcharts-container`);
   }
 
-  isMultipleYAxes(yAxis: any): boolean {
-    return Array.isArray(yAxis);
-  }
-
   getSeriesColor(index: number): string {
     return this.seriesColors[index];
   }
@@ -370,14 +366,31 @@ export class GraphService extends ComponentService {
     yAxis: any,
     roundValuesTo: string
   ): string {
-    const seriesName = this.getSeriesText(series);
+    const tooltipHeader = this.getTooltipHeader(point, series, yAxis);
     const xText = this.getAxisTextForLimitGraph(series, point.x, 'xAxis', xAxis, roundValuesTo);
     const yText = this.getAxisTextForLimitGraph(series, point.y, 'yAxis', yAxis, roundValuesTo);
-    return this.combineSeriesNameXTextYText(seriesName, xText, yText);
+    return this.combineSeriesNameXTextYText(tooltipHeader, xText, yText);
   }
 
-  getSeriesText(series: any): string {
-    return series.name === '' ? '' : `<b>${series.name}</b>`;
+  getTooltipHeader(point: any, series: any, yAxis: any): string {
+    let tooltipHeader = '';
+    if (point.point.tooltipHeader) {
+      tooltipHeader = point.point.tooltipHeader;
+    } else {
+      const yAxisLabel = this.getAxisTitle(series, yAxis);
+      const seriesName = series.name;
+      if (yAxisLabel !== seriesName) {
+        tooltipHeader = seriesName;
+      }
+    }
+    if (tooltipHeader !== '') {
+      tooltipHeader = this.getBoldText(tooltipHeader);
+    }
+    return tooltipHeader;
+  }
+
+  getBoldText(text: string): string {
+    return `<b>${text}</b>`;
   }
 
   getAxisTextForLimitGraph(
@@ -395,10 +408,13 @@ export class GraphService extends ComponentService {
 
   getAxisTitle(series: any, axisObj: any): string {
     if (Array.isArray(axisObj)) {
-      if (axisObj[series.index].title.text == null || axisObj[series.index].title.text === '') {
-        return series.name;
-      } else {
-        return axisObj[series.index].title.text;
+      const axisIndex = series.options.yAxis == null ? series.index : series.options.yAxis;
+      if (axisObj[axisIndex] != null) {
+        if (axisObj[axisIndex].title.text == null || axisObj[axisIndex].title.text === '') {
+          return series.name;
+        } else {
+          return axisObj[axisIndex].title.text;
+        }
       }
     } else if (axisObj.title.text == null || axisObj.title.text === '') {
       return series.name;
@@ -444,7 +460,7 @@ export class GraphService extends ComponentService {
     yAxis: any,
     roundValuesTo: string
   ): string {
-    const seriesName = this.getSeriesText(series);
+    const tooltipHeader = this.getTooltipHeader(point, series, yAxis);
     const xText = this.getXTextForCategoriesGraph(
       series,
       point.point,
@@ -453,7 +469,7 @@ export class GraphService extends ComponentService {
       roundValuesTo
     );
     const yText = this.getYTextForCategoriesGraph(series, point.y, yAxis, roundValuesTo);
-    return this.combineSeriesNameXTextYText(seriesName, xText, yText);
+    return this.combineSeriesNameXTextYText(tooltipHeader, xText, yText);
   }
 
   getXTextForCategoriesGraph(

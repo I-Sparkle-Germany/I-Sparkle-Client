@@ -1,16 +1,15 @@
 import { Injectable } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { replaceWiseLinks } from '../../assets/wise5/common/wise-link/wise-link';
 import { NodeService } from '../../assets/wise5/services/nodeService';
 import { StudentDataService } from '../../assets/wise5/services/studentDataService';
-import { UtilService } from '../../assets/wise5/services/utilService';
 
 @Injectable()
 export class WiseLinkService {
   constructor(
     private nodeService: NodeService,
     private sanitizer: DomSanitizer,
-    private studentDataService: StudentDataService,
-    private utilService: UtilService
+    private studentDataService: StudentDataService
   ) {}
 
   wiseLinkClickedEventName: string = 'wiselinkclicked';
@@ -32,7 +31,7 @@ export class WiseLinkService {
   }
 
   removeWiseLinkClickedListener(): void {
-    this.getWiseLinkCommunicator().removeEventListener(
+    this.getWiseLinkCommunicator()?.removeEventListener(
       this.wiseLinkClickedEventName,
       this.wiseLinkClickedHandler
     );
@@ -54,15 +53,19 @@ export class WiseLinkService {
     if (componentId !== '') {
       this.nodeService.registerScrollToComponent(componentId);
     }
-    this.studentDataService.endCurrentNodeAndSetCurrentNodeByNodeId(nodeId);
+    this.nodeService.setCurrentNode(nodeId);
   }
 
   generateHtmlWithWiseLink(html: string): SafeHtml {
     return this.sanitizer.bypassSecurityTrustHtml(
-      this.utilService.replaceDivReference(
-        this.utilService.replaceWISELinks(html),
-        this.wiseLinkCommunicatorId
-      )
+      this.replaceDivReference(replaceWiseLinks(html), this.wiseLinkCommunicatorId)
+    );
+  }
+
+  private replaceDivReference(html: string, newString: string): string {
+    return html.replace(
+      /document\.getElementById\('replace-with-unique-id'\)/g,
+      `document.getElementById('${newString}')`
     );
   }
 }

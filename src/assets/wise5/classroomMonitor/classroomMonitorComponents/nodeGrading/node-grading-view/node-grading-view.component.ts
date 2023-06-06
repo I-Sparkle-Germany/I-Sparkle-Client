@@ -14,6 +14,7 @@ import { CompletionStatus } from '../../shared/CompletionStatus';
 import { copy } from '../../../../common/object/object';
 import { ShowNodeInfoDialogComponent } from '../../../../../../app/classroom-monitor/show-node-info-dialog/show-node-info-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { MilestoneDetailsDialogComponent } from '../../milestones/milestone-details-dialog/milestone-details-dialog.component';
 
 @Component({
   selector: 'node-grading-view',
@@ -76,7 +77,7 @@ export class NodeGradingViewComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.nodeId) {
+    if (changes.nodeId && !changes.nodeId.firstChange) {
       this.nodeId = changes.nodeId.currentValue;
       this.setupNode();
     }
@@ -129,7 +130,11 @@ export class NodeGradingViewComponent implements OnInit {
   protected retrieveStudentData(node: Node = this.node): void {
     this.teacherDataService.retrieveStudentDataForNode(node).then(() => {
       this.teacherWorkgroupId = this.configService.getWorkgroupId();
-      this.workgroups = copy(this.configService.getClassmateUserInfos());
+      this.workgroups = copy(this.configService.getClassmateUserInfos()).filter(
+        (workgroup) =>
+          workgroup.workgroupId != null &&
+          this.classroomStatusService.hasStudentStatus(workgroup.workgroupId)
+      );
       this.canViewStudentNames = this.configService.getPermissions().canViewStudentNames;
       this.setWorkgroupsById();
       this.sortWorkgroups();
@@ -270,6 +275,8 @@ export class NodeGradingViewComponent implements OnInit {
       workgroupId,
       this.nodeId
     );
+    const studentStatus = this.classroomStatusService.getStudentStatusForWorkgroupId(workgroupId);
+    workgroup.nodeStatus = studentStatus.nodeStatuses[this.nodeId] || {};
   }
 
   private workgroupHasNewAlert(alertNotifications: Notification[]): boolean {
@@ -432,8 +439,11 @@ export class NodeGradingViewComponent implements OnInit {
     }
   }
 
-  showReport($event: any): void {
-    this.milestoneService.showMilestoneDetails(this.milestoneReport, $event);
+  showReport(): void {
+    this.dialog.open(MilestoneDetailsDialogComponent, {
+      data: this.milestoneReport,
+      panelClass: 'dialog-lg'
+    });
   }
 
   showPeerGroupDetails(peerGroupingTag: string): void {

@@ -4,10 +4,10 @@ import { Component } from '@angular/core';
 import { Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { ProjectAssetService } from '../../../../../app/services/projectAssetService';
-import { ComponentAuthoring } from '../../../authoringTool/components/component-authoring.component';
+import { AbstractComponentAuthoring } from '../../../authoringTool/components/AbstractComponentAuthoring';
+import { generateRandomKey } from '../../../common/string/string';
 import { ConfigService } from '../../../services/configService';
 import { NodeService } from '../../../services/nodeService';
-import { RandomKeyService } from '../../../services/randomKeyService';
 import { TeacherProjectService } from '../../../services/teacherProjectService';
 
 @Component({
@@ -15,7 +15,7 @@ import { TeacherProjectService } from '../../../services/teacherProjectService';
   templateUrl: 'animation-authoring.component.html',
   styleUrls: ['animation-authoring.component.scss']
 })
-export class AnimationAuthoring extends ComponentAuthoring {
+export class AnimationAuthoring extends AbstractComponentAuthoring {
   stepNodesDetails: string[];
   availableDataSourceComponentTypes = ['Graph'];
   inputChange: Subject<string> = new Subject<string>();
@@ -41,7 +41,7 @@ export class AnimationAuthoring extends ComponentAuthoring {
       this.componentContent.objects = [];
     }
     const newObject = {
-      id: RandomKeyService.generate(),
+      id: generateRandomKey(),
       type: 'image'
     };
     this.componentContent.objects.push(newObject);

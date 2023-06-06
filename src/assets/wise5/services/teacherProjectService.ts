@@ -8,8 +8,9 @@ import { ComponentServiceLookupService } from './componentServiceLookupService';
 import { HttpClient } from '@angular/common/http';
 import { ConfigService } from './configService';
 import { PathService } from './pathService';
-import { RandomKeyService } from './randomKeyService';
 import { copy } from '../common/object/object';
+import { generateRandomKey } from '../common/string/string';
+import { ComponentContent } from '../common/ComponentContent';
 
 @Injectable()
 export class TeacherProjectService extends ProjectService {
@@ -63,6 +64,9 @@ export class TeacherProjectService extends ProjectService {
               fontSet: 'material-icons',
               fontName: 'info'
             }
+          },
+          transitionLogic: {
+            transitions: []
           }
         },
         {
@@ -257,7 +261,7 @@ export class TeacherProjectService extends ProjectService {
    * @param title the title of the group
    * @returns the group object
    */
-  createGroup(title) {
+  createGroup(title: string): any {
     return {
       id: this.getNextAvailableGroupId(),
       type: 'group',
@@ -587,15 +591,15 @@ export class TeacherProjectService extends ProjectService {
    * @param nodeId the node id containing the node
    * @param componentId the component id
    */
-  deleteComponent(nodeId, componentId) {
+  deleteComponent(nodeId: string, componentId: string): ComponentContent {
     const node = this.getNodeById(nodeId);
     const components = node.components;
     for (let c = 0; c < components.length; c++) {
       if (components[c].id === componentId) {
-        components.splice(c, 1);
-        break;
+        return components.splice(c, 1)[0];
       }
     }
+    return null;
   }
 
   deleteTransition(node, transition) {
@@ -1012,7 +1016,7 @@ export class TeacherProjectService extends ProjectService {
 
   addTeacherRemovalConstraint(node: any, periodId: number) {
     const lockConstraint = {
-      id: RandomKeyService.generate(),
+      id: generateRandomKey(),
       action: 'makeThisNodeNotVisitable',
       targetId: node.id,
       removalConditional: 'any',
@@ -1113,16 +1117,12 @@ export class TeacherProjectService extends ProjectService {
    * objects.
    */
   cleanupBeforeSave() {
-    this.getActiveNodes().forEach((activeNode) => {
+    this.project.nodes.forEach((activeNode) => {
       this.cleanupNode(activeNode);
     });
     this.getInactiveNodes().forEach((inactiveNode) => {
       this.cleanupNode(inactiveNode);
     });
-  }
-
-  getActiveNodes(): any[] {
-    return this.project.nodes;
   }
 
   /**
@@ -2816,7 +2816,7 @@ export class TeacherProjectService extends ProjectService {
    * @return a component id that isn't already being used in the project
    */
   getUnusedComponentId(componentIdsToSkip = []) {
-    let newComponentId = RandomKeyService.generate();
+    let newComponentId = generateRandomKey();
 
     // check if the component id is already used in the project
     if (this.isComponentIdUsed(newComponentId)) {
@@ -2831,7 +2831,7 @@ export class TeacherProjectService extends ProjectService {
        * one that isn't already being used
        */
       while (!alreadyUsed) {
-        newComponentId = RandomKeyService.generate();
+        newComponentId = generateRandomKey();
 
         // check if the id is already being used in the project
         alreadyUsed = this.isComponentIdUsed(newComponentId);

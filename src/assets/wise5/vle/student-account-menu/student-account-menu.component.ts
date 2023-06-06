@@ -5,6 +5,7 @@ import { ConfigService } from '../../services/configService';
 import { ProjectService } from '../../services/projectService';
 import { SessionService } from '../../services/sessionService';
 import { StudentDataService } from '../../services/studentDataService';
+import { getAvatarColorForWorkgroupId } from '../../common/workgroup/workgroup';
 
 @Component({
   selector: 'student-account-menu',
@@ -47,7 +48,7 @@ export class StudentAccountMenuComponent implements OnInit, OnDestroy {
     this.workgroupId = this.configService.getWorkgroupId();
     this.usersInWorkgroup = this.configService.getUsernamesByWorkgroupId(this.workgroupId);
     this.usernamesDisplay = this.getUsernamesDisplay(this.usersInWorkgroup);
-    this.maxScore = this.studentDataService.maxScore;
+    this.maxScore = this.getMaxScore();
     this.showScore = this.maxScore != null;
     if (this.showScore) {
       this.updateScores();
@@ -63,11 +64,36 @@ export class StudentAccountMenuComponent implements OnInit, OnDestroy {
     this.subscriptions.unsubscribe();
   }
 
-  updateScores(): void {
+  private updateScores(): void {
     this.totalScoreNum = this.studentDataService.getTotalScore();
     this.totalScore = typeof this.totalScoreNum === 'number' ? this.totalScoreNum.toString() : '-';
-    this.maxScore = this.studentDataService.maxScore;
+    this.maxScore = this.getMaxScore();
     this.scorePercentage = Math.ceil((100 * this.totalScoreNum) / this.maxScore);
+  }
+
+  /**
+   * Get the max possible score for the project
+   * @returns the sum of the max scores for all the nodes in the project visible
+   * to the current workgroup or null if none of the visible components has max scores.
+   */
+  private getMaxScore(): number {
+    let maxScore = null;
+    for (const property in this.nodeStatuses) {
+      if (this.nodeStatuses.hasOwnProperty(property)) {
+        const nodeStatus = this.nodeStatuses[property];
+        const nodeId = nodeStatus.nodeId;
+        if (nodeStatus.isVisible && !this.projectService.isGroupNode(nodeId)) {
+          const nodeMaxScore = this.projectService.getMaxScoreForNode(nodeId);
+          if (nodeMaxScore) {
+            if (maxScore == null) {
+              maxScore = 0;
+            }
+            maxScore += nodeMaxScore;
+          }
+        }
+      }
+    }
+    return maxScore;
   }
 
   getUsernamesDisplay(users: any[]): string {
@@ -82,7 +108,7 @@ export class StudentAccountMenuComponent implements OnInit, OnDestroy {
   }
 
   getAvatarColorForWorkgroupId(workgroupId: number): string {
-    return this.configService.getAvatarColorForWorkgroupId(workgroupId);
+    return getAvatarColorForWorkgroupId(workgroupId);
   }
 
   goHome() {

@@ -7,6 +7,7 @@ import { ProjectService } from './projectService';
 import { ChooseBranchPathDialogComponent } from '../../../app/preview/modules/choose-branch-path-dialog/choose-branch-path-dialog.component';
 import { DataService } from '../../../app/services/data.service';
 import { Observable, Subject } from 'rxjs';
+import { ConstraintService } from './constraintService';
 
 @Injectable()
 export class NodeService {
@@ -24,17 +25,22 @@ export class NodeService {
   public deleteStarterState$: Observable<any> = this.deleteStarterStateSource.asObservable();
 
   constructor(
-    private dialog: MatDialog,
-    private ConfigService: ConfigService,
-    private ProjectService: ProjectService,
-    private DataService: DataService
+    protected dialog: MatDialog,
+    protected ConfigService: ConfigService,
+    protected constraintService: ConstraintService,
+    protected ProjectService: ProjectService,
+    protected DataService: DataService
   ) {}
+
+  setCurrentNode(nodeId: string): void {
+    this.DataService.setCurrentNodeByNodeId(nodeId);
+  }
 
   goToNextNode() {
     return this.getNextNodeId().then((nextNodeId) => {
       if (nextNodeId != null) {
         const mode = this.ConfigService.getMode();
-        this.DataService.endCurrentNodeAndSetCurrentNodeByNodeId(nextNodeId);
+        this.setCurrentNode(nextNodeId);
       }
       return nextNodeId;
     });
@@ -157,7 +163,7 @@ export class NodeService {
   goToNextNodeWithWork(): Promise<string> {
     return this.getNextNodeIdWithWork().then((nextNodeId: string) => {
       if (nextNodeId) {
-        this.DataService.endCurrentNodeAndSetCurrentNodeByNodeId(nextNodeId);
+        this.setCurrentNode(nextNodeId);
       }
       return nextNodeId;
     });
@@ -184,7 +190,7 @@ export class NodeService {
 
   goToPrevNode() {
     const prevNodeId = this.getPrevNodeId();
-    this.DataService.endCurrentNodeAndSetCurrentNodeByNodeId(prevNodeId);
+    this.setCurrentNode(prevNodeId);
   }
 
   /**
@@ -252,7 +258,7 @@ export class NodeService {
    */
   goToPrevNodeWithWork() {
     const prevNodeId = this.getPrevNodeIdWithWork();
-    this.DataService.endCurrentNodeAndSetCurrentNodeByNodeId(prevNodeId);
+    this.setCurrentNode(prevNodeId);
   }
 
   /**
@@ -283,7 +289,7 @@ export class NodeService {
       let currentNodeId = currentNode.id;
       let parentNode = this.ProjectService.getParentGroup(currentNodeId);
       let parentNodeId = parentNode.id;
-      this.DataService.endCurrentNodeAndSetCurrentNodeByNodeId(parentNodeId);
+      this.setCurrentNode(parentNodeId);
     }
   }
 
@@ -405,7 +411,10 @@ export class NodeService {
     const availableTransitions = [];
     for (const transition of transitions) {
       const criteria = transition.criteria;
-      if (criteria == null || (criteria != null && this.DataService.evaluateCriterias(criteria))) {
+      if (
+        criteria == null ||
+        (criteria != null && this.constraintService.evaluateCriterias(criteria))
+      ) {
         availableTransitions.push(transition);
       }
     }
@@ -540,44 +549,6 @@ export class NodeService {
    */
   setChooseTransitionPromise(nodeId, promise) {
     this.chooseTransitionPromises[nodeId] = promise;
-  }
-
-  /**
-   * Move the component(s) within the node
-   * @param nodeId we are moving component(s) in this node
-   * @param componentIds the component(s) we are moving
-   * @param insertAfterComponentId Insert the component(s) after this given
-   * component id. If this argument is null, we will place the new
-   * component(s) in the first position.
-   */
-  moveComponent(nodeId: string, componentIds: string[], insertAfterComponentId: string): void {
-    const node = this.ProjectService.getNodeById(nodeId);
-    const components = node.components;
-    const extractedComponents = this.extractComponents(components, componentIds);
-    if (insertAfterComponentId == null) {
-      components.unshift(...extractedComponents);
-    } else {
-      this.insertComponentsAfter(extractedComponents, components, insertAfterComponentId);
-    }
-  }
-
-  extractComponents(components, componentIds) {
-    const extractedComponents = [];
-    for (let i = 0; i < components.length; i++) {
-      if (componentIds.includes(components[i].id)) {
-        extractedComponents.push(components.splice(i--, 1)[0]);
-      }
-    }
-    return extractedComponents;
-  }
-
-  insertComponentsAfter(componentsToInsert, components, insertAfterComponentId) {
-    for (let i = 0; i < components.length; i++) {
-      if (components[i].id === insertAfterComponentId) {
-        components.splice(i + 1, 0, ...componentsToInsert);
-        return;
-      }
-    }
   }
 
   broadcastNodeSubmitClicked(args: any) {

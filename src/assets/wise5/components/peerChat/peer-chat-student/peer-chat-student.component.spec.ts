@@ -146,7 +146,6 @@ describe('PeerChatStudentComponent', () => {
         NotificationService,
         PauseScreenService,
         PeerChatService,
-        PeerGroupService,
         ProjectService,
         SessionService,
         StudentAssetService,
@@ -173,6 +172,7 @@ describe('PeerChatStudentComponent', () => {
     spyOn(TestBed.inject(PeerGroupService), 'retrievePeerGroupWork').and.returnValue(
       of([componentState1, componentState2])
     );
+    spyOn(TestBed.inject(PeerGroupService), 'retrievePeerGroupAnnotations').and.returnValue(of([]));
     component = fixture.componentInstance;
     component.component = new PeerChatComponent(componentContent, nodeId);
     component.workgroupId = studentWorkgroupId1;

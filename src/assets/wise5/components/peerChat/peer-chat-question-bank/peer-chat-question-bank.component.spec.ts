@@ -9,6 +9,9 @@ import { QuestionBankRule } from './QuestionBankRule';
 import { PeerGroupService } from '../../../services/peerGroupService';
 import { PeerGroup } from '../PeerGroup';
 import { of } from 'rxjs';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
 
 let component: PeerChatQuestionBankComponent;
 let fixture: ComponentFixture<PeerChatQuestionBankComponent>;
@@ -22,7 +25,13 @@ const defaultQuestionBankRule = {
 describe('PeerChatQuestionBankComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, StudentTeacherCommonServicesModule],
+      imports: [
+        HttpClientTestingModule,
+        MatCardModule,
+        MatDialogModule,
+        MatIconModule,
+        StudentTeacherCommonServicesModule
+      ],
       declarations: [PeerChatQuestionBankComponent]
     }).compileComponents();
     fixture = TestBed.createComponent(PeerChatQuestionBankComponent);

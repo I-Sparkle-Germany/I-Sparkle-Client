@@ -14,13 +14,13 @@ import { ComponentContent } from '../common/ComponentContent';
 import { MultipleChoiceContent } from '../components/multipleChoice/MultipleChoiceContent';
 import { TransitionLogic } from '../common/TransitionLogic';
 import { Transition } from '../common/Transition';
+import { ReferenceComponent } from '../../../app/domain/referenceComponent';
 
 @Injectable()
 export class ProjectService {
   achievements: any = [];
-  activeConstraints: any = [];
   additionalProcessingFunctionsMap: any = {};
-  allPaths: string[] = [];
+  allPaths: string[][] = [];
   applicationNodes: any = [];
   flattenedProjectAsNodeIds: any = null;
   groupNodes: any[] = [];
@@ -28,7 +28,6 @@ export class ProjectService {
   idToOrder: any = {};
   inactiveGroupNodes: any[] = [];
   inactiveStepNodes: any[] = [];
-  isNodeAffectedByConstraintResult: any = {};
   metadata: any = {};
   nodes: any = {};
   nodeCount: number = 0;
@@ -39,8 +38,8 @@ export class ProjectService {
   project: any = null;
   rootNode: any = null;
   transitions: Transition[] = [];
-  private projectChangedSource: Subject<void> = new Subject<void>();
-  public projectChanged$: Observable<void> = this.projectChangedSource.asObservable();
+  private projectParsedSource: Subject<void> = new Subject<void>();
+  public projectParsed$: Observable<void> = this.projectParsedSource.asObservable();
 
   constructor(
     protected branchService: BranchService,
@@ -63,9 +62,7 @@ export class ProjectService {
     this.inactiveGroupNodes = [];
     this.groupNodes = [];
     this.idToNode = {};
-    this.isNodeAffectedByConstraintResult = {};
     this.metadata = {};
-    this.activeConstraints = [];
     this.rootNode = null;
     this.idToOrder = {};
     this.nodeCount = 0;
@@ -181,12 +178,6 @@ export class ProjectService {
     for (const node of nodes) {
       const nodeId = node.id;
       const nodeType = node.type;
-      const content = node.content;
-      const constraints = node.constraints;
-
-      if (content != null) {
-        //node.content = this.injectAssetPaths(content);
-      }
 
       this.setIdToNode(nodeId, node);
       this.addNode(node);
@@ -200,23 +191,6 @@ export class ProjectService {
       const groupId = node.groupId;
       if (groupId != null) {
         this.addNodeToGroupNode(groupId, nodeId);
-      }
-
-      if (constraints != null) {
-        if (
-          this.configService.isPreview() == true &&
-          this.configService.getConfigParam('constraints') === false
-        ) {
-          /*
-           * if we are in preview mode and constraints are set
-           * to false, we will not add the constraints
-           */
-        } else {
-          // all other cases we will add the constraints
-          for (const constraint of constraints) {
-            this.activeConstraints.push(constraint);
-          }
-        }
       }
     }
   }
@@ -235,21 +209,25 @@ export class ProjectService {
     this.metadata = this.project.metadata;
     this.loadNodes(this.project.nodes);
     this.loadInactiveNodes(this.project.inactiveNodes);
-    this.loadConstraints(this.project.constraints);
     this.rootNode = this.getRootNode(this.project.nodes[0].id);
     this.calculateNodeOrderOfProject();
     this.loadNodeIdsInAnyBranch(this.getBranches());
     this.calculateNodeNumbers();
+    this.groupNodes = this.getActiveGroupNodes();
     if (this.project.projectAchievements != null) {
       this.achievements = this.project.projectAchievements;
     }
-    this.broadcastProjectChanged();
+    this.broadcastProjectParsed();
+  }
+
+  private getActiveGroupNodes(): any[] {
+    const activeNodeIds = Object.keys(this.idToOrder);
+    return this.groupNodes.filter((node) => activeNodeIds.includes(node.id));
   }
 
   instantiateDefaults(): void {
     this.project.nodes = this.project.nodes ? this.project.nodes : [];
     this.project.inactiveNodes = this.project.inactiveNodes ? this.project.inactiveNodes : [];
-    this.project.constraints = this.project.constraints ? this.project.constraints : [];
   }
 
   private calculateNodeOrderOfProject(): void {
@@ -656,93 +634,6 @@ export class ProjectService {
     return this.project.startNodeId === nodeId;
   }
 
-  getConstraintsThatAffectNode(node: any): any[] {
-    const constraints = [];
-    const allConstraints = this.activeConstraints;
-    for (let constraint of allConstraints) {
-      if (this.isNodeAffectedByConstraint(node, constraint)) {
-        constraints.push(constraint);
-      }
-    }
-    return constraints;
-  }
-
-  /**
-   * Order the constraints so that they show up in the same order as in the
-   * project.
-   * @param constraints An array of constraint objects.
-   * @return An array of ordered constraints.
-   */
-  orderConstraints(constraints: any[]): any[] {
-    let orderedNodeIds = this.getFlattenedProjectAsNodeIds();
-    return constraints.sort(this.constraintsComparatorGenerator(orderedNodeIds));
-  }
-
-  /**
-   * Create the constraints comparator function that is used for sorting an
-   * array of constraint objects.
-   * @param orderedNodeIds An array of node ids in the order in which they
-   * show up in the project.
-   * @return A comparator that orders constraint objects in the order in which
-   * the target ids show up in the project.
-   */
-  private constraintsComparatorGenerator(orderedNodeIds: string[]): any {
-    return function (constraintA, constraintB) {
-      let constraintAIndex = orderedNodeIds.indexOf(constraintA.targetId);
-      let constraintBIndex = orderedNodeIds.indexOf(constraintB.targetId);
-      if (constraintAIndex < constraintBIndex) {
-        return -1;
-      } else if (constraintAIndex > constraintBIndex) {
-        return 1;
-      }
-      return 0;
-    };
-  }
-
-  /**
-   * Check if a node is affected by the constraint
-   * @param node check if the node is affected
-   * @param constraint the constraint that might affect the node
-   * @returns whether the node is affected by the constraint
-   */
-  private isNodeAffectedByConstraint(node: any, constraint: any): boolean {
-    const cachedResult = this.getCachedIsNodeAffectedByConstraintResult(node.id, constraint.id);
-    if (cachedResult != null) {
-      return cachedResult;
-    } else {
-      let result = false;
-      const nodeId = node.id;
-      const targetId = constraint.targetId;
-      const action = constraint.action;
-
-      if (action === 'makeAllNodesAfterThisNotVisible') {
-        if (this.isNodeIdAfter(targetId, node.id)) {
-          result = true;
-        }
-      } else if (action === 'makeAllNodesAfterThisNotVisitable') {
-        if (this.isNodeIdAfter(targetId, node.id)) {
-          result = true;
-        }
-      } else {
-        const targetNode = this.getNodeById(targetId);
-        if (targetNode != null) {
-          const nodeType = targetNode.type;
-          if (nodeType === 'node' && nodeId === targetId) {
-            result = true;
-          } else if (
-            nodeType === 'group' &&
-            (nodeId === targetId || this.isNodeDescendentOfGroup(node, targetNode))
-          ) {
-            result = true;
-          }
-        }
-      }
-
-      this.cacheIsNodeAffectedByConstraintResult(node.id, constraint.id, result);
-      return result;
-    }
-  }
-
   /**
    * Check if a node id comes after another node id in the project.
    * @param nodeId1 The node id of a step or group.
@@ -755,7 +646,7 @@ export class ProjectService {
         return false;
       } else {
         for (const onePath of this.getOrCalculateAllPaths()) {
-          if (onePath.indexOf(nodeId1) < onePath.indexOf(nodeId2)) {
+          if (this.pathIncludesNodesAndOneComesBeforeTwo(onePath, nodeId1, nodeId2)) {
             return true;
           }
         }
@@ -766,7 +657,15 @@ export class ProjectService {
     return false;
   }
 
-  private getOrCalculateAllPaths(): string[] {
+  pathIncludesNodesAndOneComesBeforeTwo(path: string[], nodeId1: string, nodeId2: string): boolean {
+    return (
+      path.includes(nodeId1) &&
+      path.includes(nodeId2) &&
+      path.indexOf(nodeId1) < path.indexOf(nodeId2)
+    );
+  }
+
+  private getOrCalculateAllPaths(): string[][] {
     if (this.allPaths.length === 0) {
       this.allPaths = this.getAllPaths([], this.getStartNodeId(), true);
     }
@@ -950,7 +849,7 @@ export class ProjectService {
    * @param includeGroups whether to include the group node ids in the paths
    * @return an array of paths. each path is an array of node ids.
    */
-  getAllPaths(pathSoFar: string[], nodeId: string = '', includeGroups: boolean = false): any[] {
+  getAllPaths(pathSoFar: string[], nodeId: string = '', includeGroups: boolean = false): any[][] {
     const allPaths = [];
     if (this.isApplicationNode(nodeId)) {
       const path = [];
@@ -1423,12 +1322,6 @@ export class ProjectService {
     }
   }
 
-  loadConstraints(constraints: any[]): void {
-    for (const constraint of constraints) {
-      constraint.active = true;
-    }
-  }
-
   shouldIncludeInTotalScore(nodeId: string, componentId: string): boolean {
     const component = this.getComponent(nodeId, componentId);
     return this.isNodeActive(nodeId) && component != null && !component.excludeFromTotalScore;
@@ -1482,6 +1375,16 @@ export class ProjectService {
   componentHasWork(component: any): boolean {
     const componentService = this.componentServiceLookupService.getService(component.type);
     return componentService.componentHasWork(component);
+  }
+
+  calculateComponentIdToHasWork(
+    components: ComponentContent[]
+  ): { [componentId: string]: boolean } {
+    const componentIdToHasWork: { [componentId: string]: boolean } = {};
+    for (const component of components) {
+      componentIdToHasWork[component.id] = this.componentHasWork(component);
+    }
+    return componentIdToHasWork;
   }
 
   getComponentType(nodeId: string, componentId: string): string {
@@ -1546,7 +1449,7 @@ export class ProjectService {
     currentActivityNumber: any,
     currentStepNumber: number,
     branchLetterCode = null
-  ): void {
+  ): number {
     if (nodeId != null) {
       if (this.isApplicationNode(nodeId)) {
         const node = this.getNodeById(nodeId);
@@ -1613,6 +1516,10 @@ export class ProjectService {
 
               for (let bpn = 0; bpn < branchPath.length; bpn++) {
                 if (bpn == 0) {
+                  if (this.getParentGroupId(nodeId) !== this.getParentGroupId(branchPath[bpn])) {
+                    branchCurrentStepNumber = 1;
+                  }
+
                   /*
                    * Recursively call calculateNodeNumbersHelper on the
                    * first step in this branch path. This will recursively
@@ -1620,15 +1527,13 @@ export class ProjectService {
                    * branch path.
                    */
                   const branchPathNodeId = branchPath[bpn];
-                  this.calculateNodeNumbersHelper(
+                  branchCurrentStepNumber = this.calculateNodeNumbersHelper(
                     branchPathNodeId,
                     currentActivityNumber,
                     branchCurrentStepNumber,
                     branchLetterCode
                   );
                 }
-
-                branchCurrentStepNumber++;
 
                 /*
                  * update the max current step number if we have found
@@ -1719,7 +1624,10 @@ export class ProjectService {
                 if (transition != null) {
                   if (this.isBranchMergePoint(transition.to)) {
                   } else {
-                    this.calculateNodeNumbersHelper(
+                    if (this.getParentGroupId(nodeId) !== this.getParentGroupId(transition.to)) {
+                      currentStepNumber = 1;
+                    }
+                    currentStepNumber = this.calculateNodeNumbersHelper(
                       transition.to,
                       currentActivityNumber,
                       currentStepNumber,
@@ -1829,6 +1737,7 @@ export class ProjectService {
         }
       }
     }
+    return currentStepNumber;
   }
 
   getProjectScript(): any {
@@ -1899,28 +1808,6 @@ export class ProjectService {
       }
     }
     return null;
-  }
-
-  /**
-   * Remember the result for whether the node is affected by the constraint
-   * @param nodeId the node id
-   * @param constraintId the constraint id
-   * @param whether the node is affected by the constraint
-   */
-  cacheIsNodeAffectedByConstraintResult(nodeId: string, constraintId: string, result: any): void {
-    this.isNodeAffectedByConstraintResult[nodeId + '-' + constraintId] = result;
-  }
-
-  /**
-   * Check if we have calculated the result for whether the node is affected
-   * by the constraint
-   * @param nodeId the node id
-   * @param constraintId the constraint id
-   * @return Return the result if we have calculated the result before. If we
-   * have not calculated the result before, we will return null
-   */
-  getCachedIsNodeAffectedByConstraintResult(nodeId: string, constraintId: string): any {
-    return this.isNodeAffectedByConstraintResult[nodeId + '-' + constraintId];
   }
 
   getSpaces(): any[] {
@@ -2049,8 +1936,8 @@ export class ProjectService {
     }
   }
 
-  broadcastProjectChanged(): void {
-    this.projectChangedSource.next();
+  broadcastProjectParsed(): void {
+    this.projectParsedSource.next();
   }
 
   getPeerGroupings(): PeerGrouping[] {
@@ -2066,5 +1953,31 @@ export class ProjectService {
 
   getProjectRootNode(): any {
     return this.rootNode;
+  }
+
+  /**
+   * Get the reference component from a field in the component content
+   * @param nodeId the node id
+   * @param componentId the component id
+   * @param fieldName the name of the object that contains a referenceComponent object
+   * In this example the fieldName would be 'dynamicPrompt'
+   * {
+   *   id: 'component2',
+   *   dynamicPrompt: {
+   *     referenceComponent: {
+   *       nodeId: 'node1',
+   *       componentId: 'component1'
+   *     }
+   *   }
+   * }
+   * @returns the referenceComponent object from a component
+   */
+  getReferenceComponent(
+    nodeId: string,
+    componentId: string,
+    fieldName: string
+  ): ReferenceComponent {
+    const component = this.getComponent(nodeId, componentId);
+    return component[fieldName]?.referenceComponent;
   }
 }

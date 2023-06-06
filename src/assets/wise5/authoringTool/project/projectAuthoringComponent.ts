@@ -6,22 +6,21 @@ import { DeleteNodeService } from '../../services/deleteNodeService';
 import { MoveNodesService } from '../../services/moveNodesService';
 import { TeacherProjectService } from '../../services/teacherProjectService';
 import { TeacherDataService } from '../../services/teacherDataService';
-import { UtilService } from '../../services/utilService';
 import * as angular from 'angular';
 import * as $ from 'jquery';
 import { Subscription } from 'rxjs';
 import { Message } from '@stomp/stompjs';
 import { RxStomp } from '@stomp/rx-stomp';
+import { temporarilyHighlightElement } from '../../common/dom/dom';
 
 class ProjectAuthoringController {
   $translate: any;
-  createGroupTitle: string;
+  authors: string[] = [];
   projectId: number;
   items: any;
   nodeIds: [];
   nodeId: string;
   projectTitle: string;
-  showCreateGroup: boolean = false;
   inactiveGroupNodes: any[];
   inactiveStepNodes: any[];
   inactiveNodes: any[];
@@ -29,13 +28,9 @@ class ProjectAuthoringController {
   insertNodeMode: boolean;
   idToNode: any;
   copyMode: boolean;
-  createMode: boolean;
   nodeToAdd: any;
-  projectScriptFilename: string;
-  currentAuthorsMessage: string = '';
   stepNodeSelected: boolean = false;
   activityNodeSelected: boolean = false;
-  metadata: any;
   moveMode: boolean;
   projectURL: string;
   rxStomp: RxStomp;
@@ -70,8 +65,7 @@ class ProjectAuthoringController {
     'DeleteNodeService',
     'MoveNodesService',
     'ProjectService',
-    'TeacherDataService',
-    'UtilService'
+    'TeacherDataService'
   ];
 
   constructor(
@@ -86,8 +80,7 @@ class ProjectAuthoringController {
     private DeleteNodeService: DeleteNodeService,
     private MoveNodesService: MoveNodesService,
     private ProjectService: TeacherProjectService,
-    private TeacherDataService: TeacherDataService,
-    private UtilService: UtilService
+    private TeacherDataService: TeacherDataService
   ) {
     this.$translate = $filter('translate');
   }
@@ -99,10 +92,8 @@ class ProjectAuthoringController {
     this.inactiveStepNodes = this.ProjectService.getInactiveStepNodes();
     this.inactiveNodes = this.ProjectService.getInactiveNodes();
     this.idToNode = this.ProjectService.getIdToNode();
-    this.projectScriptFilename = this.ProjectService.getProjectScriptFilename();
     this.stepNodeSelected = false;
     this.activityNodeSelected = false;
-    this.metadata = this.ProjectService.getProjectMetadata();
     this.subscribeToCurrentAuthors(this.projectId);
     this.projectURL = window.location.origin + this.ConfigService.getConfigParam('projectURL');
     this.$transitions.onSuccess({}, ($transition) => {
@@ -149,33 +140,16 @@ class ProjectAuthoringController {
     this.subscriptions.unsubscribe();
   }
 
-  endProjectAuthoringSession() {
-    this.unSubscribeFromCurrentAuthors();
+  private endProjectAuthoringSession(): void {
+    this.rxStomp.deactivate();
     this.ProjectService.notifyAuthorProjectEnd(this.projectId);
   }
 
-  previewProject(enableConstraints: boolean = true) {
-    const previewProjectEventData = { constraints: enableConstraints };
-    this.saveEvent('projectPreviewed', 'Navigation', previewProjectEventData);
+  previewProject(enableConstraints: boolean = true): void {
+    this.saveEvent('projectPreviewed', 'Navigation', { constraints: enableConstraints });
     window.open(
       `${this.ConfigService.getConfigParam('previewProjectURL')}?constraints=${enableConstraints}`
     );
-  }
-
-  previewProjectWithoutConstraints() {
-    this.previewProject(false);
-  }
-
-  showOtherConcurrentAuthors(authors) {
-    const myUsername = this.ConfigService.getMyUsername();
-    authors.splice(authors.indexOf(myUsername), 1);
-    if (authors.length > 0) {
-      this.currentAuthorsMessage = this.$translate('concurrentAuthorsWarning', {
-        currentAuthors: authors.join(', ')
-      });
-    } else {
-      this.currentAuthorsMessage = '';
-    }
   }
 
   saveProject() {
@@ -221,19 +195,9 @@ class ProjectAuthoringController {
     this.$state.go('root.at.project.node.advanced.path', { nodeId: nodeId });
   }
 
-  createGroup() {
-    this.nodeToAdd = this.ProjectService.createGroup(this.createGroupTitle);
-    this.showCreateGroup = false;
-    this.createGroupTitle = '';
-    this.insertGroupMode = true;
-    this.createMode = true;
-  }
-
   insertInside(nodeId) {
     // TODO check that we are inserting into a group
-    if (this.createMode) {
-      this.handleCreateModeInsert(nodeId, 'inside');
-    } else if (this.moveMode) {
+    if (this.moveMode) {
       this.handleMoveModeInsert(nodeId, 'inside');
     } else if (this.copyMode) {
       this.handleCopyModeInsert(nodeId, 'inside');
@@ -241,52 +205,11 @@ class ProjectAuthoringController {
   }
 
   insertAfter(nodeId) {
-    if (this.createMode) {
-      this.handleCreateModeInsert(nodeId, 'after');
-    } else if (this.moveMode) {
+    if (this.moveMode) {
       this.handleMoveModeInsert(nodeId, 'after');
     } else if (this.copyMode) {
       this.handleCopyModeInsert(nodeId, 'after');
     }
-  }
-
-  /**
-   * Create a node and then insert it in the specified location
-   * @param nodeId insert the new node inside or after this node id
-   * @param moveTo whether to insert 'inside' or 'after' the nodeId parameter
-   */
-  handleCreateModeInsert(nodeId, moveTo) {
-    if (moveTo === 'inside') {
-      this.ProjectService.createNodeInside(this.nodeToAdd, nodeId);
-    } else if (moveTo === 'after') {
-      this.ProjectService.createNodeAfter(this.nodeToAdd, nodeId);
-    } else {
-      // an unspecified moveTo was provided
-      return;
-    }
-
-    let newNodes = [this.nodeToAdd];
-    let newNode = this.nodeToAdd;
-    this.nodeToAdd = null;
-    this.createMode = false;
-    this.insertGroupMode = false;
-    this.insertNodeMode = false;
-    this.temporarilyHighlightNewNodes(newNodes);
-
-    this.ProjectService.checkPotentialStartNodeIdChangeThenSaveProject().then(() => {
-      this.refreshProject();
-      if (newNode != null) {
-        let nodeCreatedEventData = {
-          nodeId: newNode.id,
-          title: this.ProjectService.getNodePositionAndTitle(newNode.id)
-        };
-        if (this.ProjectService.isGroupNode(newNode.id)) {
-          this.saveEvent('activityCreated', 'Authoring', nodeCreatedEventData);
-        } else {
-          this.saveEvent('stepCreated', 'Authoring', nodeCreatedEventData);
-        }
-      }
-    });
   }
 
   /**
@@ -575,14 +498,8 @@ class ProjectAuthoringController {
     this.activityNodeSelected = false;
   }
 
-  creatNewActivityClicked() {
-    this.clearGroupTitle();
-    this.toggleGroupView();
-    if (this.showCreateGroup) {
-      this.$timeout(() => {
-        $('#createGroupTitle').focus();
-      });
-    }
+  protected createNewLesson(): void {
+    this.$state.go('root.at.project.add-lesson.configure');
   }
 
   createNewStep() {
@@ -597,7 +514,6 @@ class ProjectAuthoringController {
     this.insertGroupMode = false;
     this.insertNodeMode = false;
     this.nodeToAdd = null;
-    this.createMode = false;
     this.moveMode = false;
     this.copyMode = false;
     this.unselectAllItems();
@@ -658,19 +574,6 @@ class ProjectAuthoringController {
     return this.ProjectService.isNodeInAnyBranchPath(nodeId);
   }
 
-  showProjectView() {
-    this.clearGroupTitle();
-    this.showCreateGroup = false;
-  }
-
-  toggleGroupView() {
-    this.showCreateGroup = !this.showCreateGroup;
-  }
-
-  clearGroupTitle() {
-    this.createGroupTitle = '';
-  }
-
   goBackToProjectList() {
     this.$state.go('root.at.main');
   }
@@ -695,7 +598,7 @@ class ProjectAuthoringController {
       if (newNodes != null && newNodes.length > 0) {
         for (let newNode of newNodes) {
           if (newNode != null) {
-            this.UtilService.temporarilyHighlightElement(newNode.id);
+            temporarilyHighlightElement(newNode.id);
           }
         }
         if (doScrollToNewNodes) {
@@ -878,23 +781,18 @@ class ProjectAuthoringController {
     return this.getSelectedNodeIds().length > 0;
   }
 
-  subscribeToCurrentAuthors(projectId) {
+  private subscribeToCurrentAuthors(projectId: number): void {
     this.rxStomp = new RxStomp();
     this.rxStomp.configure({
       brokerURL: this.ConfigService.getWebSocketURL()
     });
     this.rxStomp.activate();
     this.rxStomp.watch(`/topic/current-authors/${projectId}`).subscribe((message: Message) => {
-      const body = JSON.parse(message.body);
-      this.showOtherConcurrentAuthors(body);
+      this.authors = JSON.parse(message.body);
     });
     this.rxStomp.connected$.subscribe(() => {
       this.ProjectService.notifyAuthorProjectBegin(this.projectId);
     });
-  }
-
-  unSubscribeFromCurrentAuthors() {
-    this.rxStomp.deactivate();
   }
 }
 

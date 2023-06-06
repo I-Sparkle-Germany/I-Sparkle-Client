@@ -1,7 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { NodeProgress } from '../common/NodeProgress';
 import { StudentStatus } from '../common/StudentStatus';
 import { ConfigService } from './configService';
+import { NodeProgressService } from './nodeProgressService';
+import { NodeStatusService } from './nodeStatusService';
 import { StudentDataService } from './studentDataService';
 
 @Injectable()
@@ -11,6 +14,8 @@ export class StudentStatusService {
   constructor(
     private http: HttpClient,
     private configService: ConfigService,
+    private nodeProgressService: NodeProgressService,
+    private nodeStatusService: NodeStatusService,
     private studentDataService: StudentDataService
   ) {
     studentDataService.nodeStatusesChanged$.subscribe(() => {
@@ -55,16 +60,13 @@ export class StudentStatusService {
       const runId = this.configService.getRunId();
       const periodId = this.configService.getPeriodId();
       const workgroupId = this.configService.getWorkgroupId();
-      const currentNodeId = this.studentDataService.getCurrentNodeId();
-      const nodeStatuses = this.studentDataService.getNodeStatuses();
-      const projectCompletion = this.studentDataService.getProjectCompletion();
       const studentStatusJSON: StudentStatus = {
         runId: runId,
         periodId: periodId,
         workgroupId: workgroupId,
-        currentNodeId: currentNodeId,
-        nodeStatuses: nodeStatuses,
-        projectCompletion: projectCompletion
+        currentNodeId: this.studentDataService.getCurrentNodeId(),
+        nodeStatuses: this.nodeStatusService.getNodeStatuses(),
+        projectCompletion: this.getProjectCompletion()
       };
       const computerAvatarId = this.getComputerAvatarId();
       if (computerAvatarId != null) {
@@ -89,5 +91,12 @@ export class StudentStatusService {
           }
         );
     }
+  }
+
+  private getProjectCompletion(): NodeProgress {
+    return this.nodeProgressService.getNodeProgress(
+      'group0',
+      this.nodeStatusService.getNodeStatuses()
+    );
   }
 }

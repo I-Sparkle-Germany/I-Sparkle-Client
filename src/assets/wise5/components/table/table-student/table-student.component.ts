@@ -32,6 +32,7 @@ export class TableStudent extends ComponentStudent {
   dataExplorerGraphType: string;
   dataExplorerSeries: any[];
   dataExplorerSeriesParams: any[];
+  dataExplorerTooltipHeaderColumn: number;
   dataExplorerXAxisLabel: string;
   dataExplorerXColumn: number;
   dataExplorerYAxisLabel: string;
@@ -83,9 +84,6 @@ export class TableStudent extends ComponentStudent {
     // holds the the table data
     this.tableData = null;
 
-    // whether the reset table button is shown or not
-    this.isResetTableButtonVisible = true;
-
     // the label for the notebook in thos project
     this.notebookConfig = this.NotebookService.getNotebookConfig();
 
@@ -101,7 +99,6 @@ export class TableStudent extends ComponentStudent {
 
     this.isSaveButtonVisible = this.componentContent.showSaveButton;
     this.isSubmitButtonVisible = this.componentContent.showSubmitButton;
-    this.isResetTableButtonVisible = true;
 
     if (this.UtilService.hasShowWorkConnectedComponent(this.componentContent)) {
       // we will show work from another component
@@ -147,6 +144,9 @@ export class TableStudent extends ComponentStudent {
       this.isDisabled = true;
     }
 
+    this.isResetTableButtonVisible = this.TableService.componentHasEditableCells(
+      this.componentContent
+    );
     this.disableComponentIfNecessary();
 
     if (this.isDataExplorerEnabled && this.componentContent.dataExplorerDataToColumn != null) {
@@ -169,6 +169,7 @@ export class TableStudent extends ComponentStudent {
     this.isDataExplorerScatterPlotRegressionLineEnabled = this.componentContent.isDataExplorerScatterPlotRegressionLineEnabled;
     this.dataExplorerYAxisLabels = Array(this.componentContent.numDataExplorerYAxis).fill('');
     this.dataExplorerSeriesParams = this.componentContent.dataExplorerSeriesParams;
+    this.dataExplorerTooltipHeaderColumn = this.componentContent.dataExplorerTooltipHeaderColumn;
   }
 
   setDataExplorerDataToColumn(): void {
@@ -405,6 +406,7 @@ export class TableStudent extends ComponentStudent {
     studentData.isDataExplorerEnabled = this.isDataExplorerEnabled;
     studentData.dataExplorerGraphType = this.dataExplorerGraphType;
     studentData.dataExplorerXAxisLabel = this.dataExplorerXAxisLabel;
+    studentData.dataExplorerTooltipHeaderColumn = this.dataExplorerTooltipHeaderColumn;
     if (this.dataExplorerYAxisLabel != null) {
       studentData.dataExplorerYAxisLabel = this.dataExplorerYAxisLabel;
     }

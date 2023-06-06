@@ -1,8 +1,10 @@
 import { Component } from '../../../common/Component';
+import { removeHTMLTags } from '../../../common/string/string';
 import { ComponentDataExportParams } from '../ComponentDataExportParams';
 import { ComponentRevisionCounter } from '../ComponentRevisionCounter';
 import { UserIdsAndStudentNames } from '../UserIdsAndStudentNames';
 import { AbstractDataExportStrategy } from './AbstractDataExportStrategy';
+import { millisecondsToDateTime } from '../../../common/datetime/datetime';
 
 export abstract class AbstractComponentDataExportStrategy extends AbstractDataExportStrategy {
   abstract COMPONENT_TYPE: string;
@@ -166,9 +168,9 @@ export abstract class AbstractComponentDataExportStrategy extends AbstractDataEx
     row[this.columnNameToNumber.get('Project Name')] = this.projectService.getProjectTitle();
     row[this.columnNameToNumber.get('Run ID')] = this.configService.getRunId();
     row[this.columnNameToNumber.get('Student Work ID')] = componentState.id;
-    row[
-      this.columnNameToNumber.get('Server Timestamp')
-    ] = this.utilService.convertMillisecondsToFormattedDateTime(componentState.serverSaveTime);
+    row[this.columnNameToNumber.get('Server Timestamp')] = millisecondsToDateTime(
+      componentState.serverSaveTime
+    );
     const clientSaveTime = new Date(componentState.clientSaveTime);
     const clientSaveTimeString =
       clientSaveTime.toDateString() + ' ' + clientSaveTime.toLocaleTimeString();
@@ -184,7 +186,7 @@ export abstract class AbstractComponentDataExportStrategy extends AbstractDataEx
     row[this.columnNameToNumber.get('Component Part Number')] = componentPartNumber;
     row[this.columnNameToNumber.get('Component Type')] = this.component.content.type;
     if (this.component.content.prompt != null) {
-      let prompt = this.utilService.removeHTMLTags(this.component.content.prompt);
+      let prompt = removeHTMLTags(this.component.content.prompt);
       prompt = prompt.replace(/"/g, '""');
       row[this.columnNameToNumber.get('Component Prompt')] = prompt;
     }

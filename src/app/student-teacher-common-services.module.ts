@@ -37,7 +37,6 @@ import { DialogGuidanceService } from '../assets/wise5/components/dialogGuidance
 import { PeerChatService } from '../assets/wise5/components/peerChat/peerChatService';
 import { ShowMyWorkService } from '../assets/wise5/components/showMyWork/showMyWorkService';
 import { ShowGroupWorkService } from '../assets/wise5/components/showGroupWork/showGroupWorkService';
-import { PeerGroupService } from '../assets/wise5/services/peerGroupService';
 import { ComputerAvatarService } from '../assets/wise5/services/computerAvatarService';
 import { StudentStatusService } from '../assets/wise5/services/studentStatusService';
 import { OpenResponseCompletionCriteriaService } from '../assets/wise5/components/openResponse/openResponseCompletionCriteriaService';
@@ -48,6 +47,13 @@ import { PathService } from '../assets/wise5/services/pathService';
 import { TabulatorDataService } from '../assets/wise5/components/table/tabulatorDataService';
 import { StompService } from '../assets/wise5/services/stompService';
 import { ClickToSnipImageService } from '../assets/wise5/services/clickToSnipImageService';
+import { StudentPeerGroupService } from '../assets/wise5/services/studentPeerGroupService';
+import { ConstraintService } from '../assets/wise5/services/constraintService';
+import { NodeStatusService } from '../assets/wise5/services/nodeStatusService';
+import { PeerGroupService } from '../assets/wise5/services/peerGroupService';
+import { NodeProgressService } from '../assets/wise5/services/nodeProgressService';
+import { CompletionService } from '../assets/wise5/services/completionService';
+import { StudentNodeService } from '../assets/wise5/services/studentNodeService';
 
 @NgModule({
   providers: [
@@ -59,6 +65,8 @@ import { ClickToSnipImageService } from '../assets/wise5/services/clickToSnipIma
     BranchService,
     ClickToSnipImageService,
     ConceptMapService,
+    ConstraintService,
+    CompletionService,
     ComponentService,
     ComponentServiceLookupService,
     ComponentTypeService,
@@ -74,7 +82,9 @@ import { ClickToSnipImageService } from '../assets/wise5/services/clickToSnipIma
     LabelService,
     MatchService,
     MultipleChoiceService,
-    NodeService,
+    NodeProgressService,
+    { provide: NodeService, useExisting: StudentNodeService },
+    NodeStatusService,
     NotebookService,
     NotificationService,
     OutsideURLService,
@@ -91,6 +101,8 @@ import { ClickToSnipImageService } from '../assets/wise5/services/clickToSnipIma
     StompService,
     StudentAssetService,
     StudentDataService,
+    StudentNodeService,
+    StudentPeerGroupService,
     StudentStatusService,
     StudentWebSocketService,
     SummaryService,
