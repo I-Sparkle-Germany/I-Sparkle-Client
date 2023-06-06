@@ -7,8 +7,13 @@
     </p>
   </div>
 </div>
-<div class="mat-app-background" *ngIf="runs.length">
-  <div class="controls" fxLayout="row" fxLayout.xs="column" fxLayoutGap.sm="16px">
+<div *ngIf="runs.length">
+  <div
+    class="controls mat-app-background"
+    fxLayout="row"
+    fxLayout.xs="column"
+    fxLayoutGap.sm="16px"
+  >
     <app-search-bar
       fxFlex="0 0 100%"
       fxFlex.gt-sm="0 0 auto"
@@ -17,12 +22,11 @@
       (update)="searchUpdated($event)"
     ></app-search-bar>
   </div>
-  <mat-divider></mat-divider>
-  <div class="run-list notice-bg-bg">
+  <div class="run-list container-bg">
     <div id="unitCount" *ngIf="loaded" class="notice run-count">
       <p>
         <ng-container *ngIf="search" i18n>Units found: {{ filteredRuns.length }}</ng-container>
-        <ng-container *ngIf="!search" i18n>My WISE units: {{ filteredRuns.length }}</ng-container>
+        <ng-container *ngIf="!search" i18n>My units: {{ filteredRuns.length }}</ng-container>
         <span class="mat-caption" *ngIf="filteredRuns.length">
           (<ng-container *ngIf="scheduledTotal()"
             ><span i18n>{{ scheduledTotal() }} scheduled</span>,

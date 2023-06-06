@@ -1,10 +1,15 @@
-<div class="library library-teacher mat-app-background">
-  <div class="controls library__header library-teacher__header">
+<div class="library library-teacher">
+  <div class="controls library__header library-teacher__header mat-app-background">
     <app-library-filters></app-library-filters>
+    <mat-divider class="library-teacher-divider"></mat-divider>
   </div>
-  <mat-divider></mat-divider>
-  <div class="library__content library-teacher__content notice-bg-bg">
-    <nav mat-tab-nav-bar i18n-aria-label aria-label="Teacher unit library navigation">
+  <div class="library__content library-teacher__content">
+    <nav
+      mat-tab-nav-bar
+      class="mat-app-background"
+      i18n-aria-label
+      aria-label="Teacher unit library navigation"
+    >
       <a
         mat-tab-link
         *ngFor="let tab of tabs; index as i"
@@ -16,8 +21,10 @@
         {{ tab.label }} ({{ tab.numVisible }})
       </a>
     </nav>
-    <app-official-library [hidden]="!isOfficialRoute()"></app-official-library>
-    <app-community-library [hidden]="!isCommunityRoute()"></app-community-library>
-    <app-personal-library [hidden]="!isPersonalRoute()"></app-personal-library>
+    <div class="container-bg">
+      <app-official-library [hidden]="!isOfficialRoute()"></app-official-library>
+      <app-community-library [hidden]="!isCommunityRoute()"></app-community-library>
+      <app-personal-library [hidden]="!isPersonalRoute()"></app-personal-library>
+    </div>
   </div>
 </div>
