@@ -4,10 +4,10 @@ import { FormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { UpgradeModule } from '@angular/upgrade/static';
 import { StudentTeacherCommonServicesModule } from '../../../../app/student-teacher-common-services.module';
 import { TeacherProjectService } from '../../services/teacherProjectService';
 import { RecoveryAuthoringComponent } from './recovery-authoring.component';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 
 class MockTeacherProjectService {
   project = {
@@ -47,10 +47,13 @@ describe('RecoveryAuthoringComponent', () => {
         HttpClientTestingModule,
         MatDialogModule,
         MatInputModule,
-        StudentTeacherCommonServicesModule,
-        UpgradeModule
+        RouterModule,
+        StudentTeacherCommonServicesModule
       ],
-      providers: [{ provide: TeacherProjectService, useClass: MockTeacherProjectService }]
+      providers: [
+        { provide: ActivatedRoute, useValue: { snapshot: { paramMap: { get: () => '1' } } } },
+        { provide: TeacherProjectService, useClass: MockTeacherProjectService }
+      ]
     }).compileComponents();
   });
 
@@ -83,7 +86,7 @@ function detectJSONValidity() {
 
 function setJSONAndExpect(json: string, jsonIsValid: boolean, saveButtonEnabled: boolean) {
   setProjectJSONStringAndTriggerChange(json);
-  expect(component.jsonIsValid).toEqual(jsonIsValid);
+  expect(component.jsonValid).toEqual(jsonIsValid);
   expect(component.saveButtonEnabled).toEqual(saveButtonEnabled);
 }
 

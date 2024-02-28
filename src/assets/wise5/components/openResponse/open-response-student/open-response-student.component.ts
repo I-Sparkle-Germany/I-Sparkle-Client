@@ -11,7 +11,6 @@ import { NotificationService } from '../../../services/notificationService';
 import { ProjectService } from '../../../services/projectService';
 import { StudentAssetService } from '../../../services/studentAssetService';
 import { StudentDataService } from '../../../services/studentDataService';
-import { UtilService } from '../../../services/utilService';
 import { ComponentStudent } from '../../component-student.component';
 import { ComponentService } from '../../componentService';
 import { CRaterResponse } from '../../common/cRater/CRaterResponse';
@@ -21,6 +20,8 @@ import { FeedbackRuleComponent } from '../../feedbackRule/FeedbackRuleComponent'
 import { OpenResponseService } from '../openResponseService';
 import { copy } from '../../../common/object/object';
 import { RawCRaterResponse } from '../../common/cRater/RawCRaterResponse';
+import { hasConnectedComponent } from '../../../common/ComponentContent';
+import { ConstraintService } from '../../../services/constraintService';
 
 @Component({
   selector: 'open-response-student',
@@ -38,6 +39,7 @@ export class OpenResponseStudent extends ComponentStudent {
     protected AnnotationService: AnnotationService,
     private changeDetector: ChangeDetectorRef,
     protected ComponentService: ComponentService,
+    private constraintService: ConstraintService,
     protected ConfigService: ConfigService,
     private CRaterService: CRaterService,
     protected dialog: MatDialog,
@@ -47,8 +49,7 @@ export class OpenResponseStudent extends ComponentStudent {
     private NotificationService: NotificationService,
     private ProjectService: ProjectService,
     protected StudentAssetService: StudentAssetService,
-    protected StudentDataService: StudentDataService,
-    protected UtilService: UtilService
+    protected StudentDataService: StudentDataService
   ) {
     super(
       AnnotationService,
@@ -64,7 +65,7 @@ export class OpenResponseStudent extends ComponentStudent {
 
   ngOnInit(): void {
     super.ngOnInit();
-    if (this.UtilService.hasShowWorkConnectedComponent(this.componentContent)) {
+    if (hasConnectedComponent(this.componentContent, 'showWork')) {
       this.handleConnectedComponents();
     } else if (
       this.componentState != null &&
@@ -400,7 +401,9 @@ export class OpenResponseStudent extends ComponentStudent {
             this.getFeedbackRules(),
             this.getMaxSubmitCount(),
             this.isMultipleFeedbackTextsForSameRuleAllowed()
-          )
+          ),
+          this.ConfigService,
+          this.constraintService
         );
         const rule: FeedbackRule = feedbackRuleEvaluator.getFeedbackRule([response]);
         autoComment = this.getFeedbackText(rule);
@@ -481,9 +484,10 @@ export class OpenResponseStudent extends ComponentStudent {
   }
 
   private getFeedbackText(rule: FeedbackRule): string {
-    const annotationsForFeedbackRule = this.AnnotationService.annotations.filter((annotation) => {
-      return this.isForThisComponent(annotation) && annotation.data.feedbackRuleId === rule.id;
-    });
+    const annotationsForFeedbackRule = this.AnnotationService.getAnnotations().filter(
+      (annotation) =>
+        this.isForThisComponent(annotation) && annotation.data.feedbackRuleId === rule.id
+    );
     return rule.feedback[annotationsForFeedbackRule.length % rule.feedback.length];
   }
 

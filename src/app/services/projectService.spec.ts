@@ -7,6 +7,7 @@ import demoProjectJSON_import from './sampleData/curriculum/Demo.project.json';
 import oneBranchTwoPathsProjectJSON_import from './sampleData/curriculum/OneBranchTwoPaths.project.json';
 import scootersProjectJSON_import from './sampleData/curriculum/SelfPropelledVehiclesChallenge.project.json';
 import twoStepsProjectJSON_import from './sampleData/curriculum/TwoSteps.project.json';
+import twoLesssonsProjectJSON_import from './sampleData/curriculum/TwoLessons.project.json';
 import { PeerGrouping } from '../domain/peerGrouping';
 import { StudentTeacherCommonServicesModule } from '../student-teacher-common-services.module';
 import { EmbeddedContent } from '../../assets/wise5/components/embedded/EmbeddedContent';
@@ -25,6 +26,7 @@ let demoProjectJSON: any;
 let oneBranchTwoPathsProjectJSON: any;
 let scootersProjectJSON: any;
 let twoStepsProjectJSON: any;
+let twoLessonsProjectJSON: any;
 describe('ProjectService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -38,12 +40,12 @@ describe('ProjectService', () => {
     oneBranchTwoPathsProjectJSON = copy(oneBranchTwoPathsProjectJSON_import);
     scootersProjectJSON = copy(scootersProjectJSON_import);
     twoStepsProjectJSON = copy(twoStepsProjectJSON_import);
+    twoLessonsProjectJSON = copy(twoLesssonsProjectJSON_import);
   });
   shouldReplaceAssetPathsInNonHtmlComponentContent();
   shouldReplaceAssetPathsInHtmlComponentContent();
   shouldNotReplaceAssetPathsInHtmlComponentContent();
   shouldRetrieveProjectWhenConfigProjectURLIsValid();
-  shouldNotRetrieveProjectWhenConfigProjectURLIsUndefined();
   shouldGetDefaultThemePath();
   shouldReturnTheStartNodeOfTheProject();
   shouldReturnTheNodeByNodeId();
@@ -150,19 +152,10 @@ function shouldNotReplaceAssetPathsInHtmlComponentContent() {
 function shouldRetrieveProjectWhenConfigProjectURLIsValid() {
   it('should retrieve project when Config.projectURL is valid', () => {
     spyOn(configService, 'getConfigParam').withArgs('projectURL').and.returnValue(projectURL);
-    service.retrieveProject().then((response) => {
+    service.retrieveProject().subscribe((response) => {
       expect(response).toEqual(scootersProjectJSON);
     });
     http.expectOne(projectURL);
-  });
-}
-
-function shouldNotRetrieveProjectWhenConfigProjectURLIsUndefined() {
-  it('should not retrieve project when Config.projectURL is undefined', () => {
-    spyOn(configService, 'getConfigParam').and.returnValue(null);
-    const project = service.retrieveProject();
-    expect(configService.getConfigParam).toHaveBeenCalledWith('projectURL');
-    expect(project).toBeNull();
   });
 }
 
@@ -444,6 +437,8 @@ function calculateNodeNumbers(): void {
   calculateNodeNumbersWhenNoBranches();
   calculateNodeNumbersWhenBranchInOneActivity();
   calculateNodeNumbersWhenBranchSpansMultipleActivities();
+  calculateNodeNumbersWhenOnlyLessons();
+  calculateNodeNumbersWhenNoLessons();
 }
 
 function calculateNodeNumbersWhenNoBranches(): void {
@@ -452,6 +447,7 @@ function calculateNodeNumbersWhenNoBranches(): void {
       service.project = twoStepsProjectJSON;
       service.parseProject();
       expectNodeIdsToHaveNumbers([
+        { nodeId: 'group1', number: '1' },
         { nodeId: 'node1', number: '1.1' },
         { nodeId: 'node2', number: '1.2' }
       ]);
@@ -465,6 +461,7 @@ function calculateNodeNumbersWhenBranchInOneActivity(): void {
       service.project = oneBranchTwoPathsProjectJSON;
       service.parseProject();
       expectNodeIdsToHaveNumbers([
+        { nodeId: 'group1', number: '1' },
         { nodeId: 'node1', number: '1.1' },
         { nodeId: 'node2', number: '1.2' },
         { nodeId: 'node3', number: '1.3 A' },
@@ -484,14 +481,43 @@ function calculateNodeNumbersWhenBranchSpansMultipleActivities(): void {
       service.project = branchSpansActivitiesProjectJSON;
       service.parseProject();
       expectNodeIdsToHaveNumbers([
+        { nodeId: 'group1', number: '1' },
         { nodeId: 'node1', number: '1.1' },
         { nodeId: 'node2', number: '1.2 A' },
         { nodeId: 'node3', number: '1.2 B' },
+        { nodeId: 'group2', number: '2' },
         { nodeId: 'node4', number: '2.1 A' },
         { nodeId: 'node5', number: '2.1 B' },
         { nodeId: 'node6', number: '2.2 B' },
         { nodeId: 'node7', number: '2.3' }
       ]);
+    });
+  });
+}
+
+function calculateNodeNumbersWhenOnlyLessons(): void {
+  describe('project with only lessons', () => {
+    it('should calculate node numbers correctly', () => {
+      service.project = twoLessonsProjectJSON;
+      service.parseProject();
+      expectNodeIdsToHaveNumbers([
+        { nodeId: 'group1', number: '1' },
+        { nodeId: 'group2', number: '2' }
+      ]);
+    });
+  });
+}
+
+function calculateNodeNumbersWhenNoLessons(): void {
+  describe('project with no lessons', () => {
+    it('calculates node numbers correctly', () => {
+      service.project = {
+        nodes: [{ id: 'group0', type: 'group', ids: [], startId: '' }],
+        startNodeId: 'group0',
+        startGroupId: 'group0'
+      };
+      service.parseProject();
+      expectNodeIdsToHaveNumbers([{ nodeId: 'group0', number: '0' }]);
     });
   });
 }

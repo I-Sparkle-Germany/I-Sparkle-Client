@@ -9,3 +9,13 @@ a {
 .mat-divider {
   height: 100%;
 }
+
+.mat-mdc-button:not(.mat-mdc-icon-button) {
+  text-transform: none;
+  font-size: 16px;
+  margin: 0 4px;
+}
+
+.mat-body-1 {
+  margin-bottom: 0;
+}
