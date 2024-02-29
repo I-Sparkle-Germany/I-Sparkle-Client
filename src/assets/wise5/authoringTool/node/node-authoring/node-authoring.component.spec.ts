@@ -2,11 +2,8 @@ import { By } from '@angular/platform-browser';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NodeAuthoringComponent } from './node-authoring.component';
 import { StudentTeacherCommonServicesModule } from '../../../../../app/student-teacher-common-services.module';
-import { UpgradeModule } from '@angular/upgrade/static';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TeacherProjectService } from '../../../services/teacherProjectService';
-import { MatDialogModule } from '@angular/material/dialog';
-import { InsertComponentService } from '../../../services/insertComponentService';
 import { TeacherDataService } from '../../../services/teacherDataService';
 import { TeacherWebSocketService } from '../../../services/teacherWebSocketService';
 import { ClassroomStatusService } from '../../../services/classroomStatusService';
@@ -20,6 +17,14 @@ import { ComponentAuthoringModule } from '../../../../../app/teacher/component-a
 import { ProjectAssetService } from '../../../../../app/services/projectAssetService';
 import { PreviewComponentModule } from '../../components/preview-component/preview-component.module';
 import { DebugElement } from '@angular/core';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { RouterTestingModule } from '@angular/router/testing';
+import { ActivatedRoute, Router, convertToParamMap } from '@angular/router';
+import { of } from 'rxjs';
+import { TeacherNodeService } from '../../../services/teacherNodeService';
+import { EditNodeTitleComponent } from '../edit-node-title/edit-node-title.component';
+import { AddComponentButtonComponent } from '../add-component-button/add-component-button.component';
+import { CopyComponentButtonComponent } from '../copy-component-button/copy-component-button.component';
 
 let component: NodeAuthoringComponent;
 let component1: any;
@@ -35,40 +40,56 @@ let teacherProjectService: TeacherProjectService;
 describe('NodeAuthoringComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [NodeAuthoringComponent, TeacherNodeIconComponent],
+      declarations: [
+        AddComponentButtonComponent,
+        CopyComponentButtonComponent,
+        EditNodeTitleComponent,
+        NodeAuthoringComponent,
+        TeacherNodeIconComponent
+      ],
       imports: [
         BrowserAnimationsModule,
         ComponentAuthoringModule,
+        DragDropModule,
         FormsModule,
         HttpClientTestingModule,
         MatCheckboxModule,
-        MatDialogModule,
         MatIconModule,
         MatInputModule,
         PreviewComponentModule,
-        StudentTeacherCommonServicesModule,
-        UpgradeModule
+        RouterTestingModule,
+        StudentTeacherCommonServicesModule
       ],
       providers: [
         ClassroomStatusService,
         ProjectAssetService,
         TeacherDataService,
+        TeacherNodeService,
         TeacherProjectService,
-        TeacherWebSocketService
+        TeacherWebSocketService,
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: { paramMap: convertToParamMap({ nodeId: 'node1' }) },
+            parent: { params: of({ unitId: 1 }) }
+          }
+        },
+        {
+          provide: Router,
+          useValue: {
+            events: of([]),
+            url: '/teacher/edit/unit/123/node/node4'
+          }
+        }
       ]
     }).compileComponents();
-    TestBed.inject(UpgradeModule).$injector = {
-      get: () => {
-        return {
-          current: {
-            name: 'root.at.project.node'
-          },
-          go: (route: string, params: any) => {},
-          newComponents: [],
-          nodeId: nodeId1
-        };
-      }
-    };
+    window.history.pushState(
+      {
+        newComponents: []
+      },
+      '',
+      ''
+    );
     spyOn(document, 'getElementById').and.returnValue(document.createElement('div'));
     confirmSpy = spyOn(window, 'confirm');
     component1 = { id: 'component1', type: 'OpenResponse', showSubmitButton: true };
@@ -76,15 +97,13 @@ describe('NodeAuthoringComponent', () => {
     component3 = { id: 'component3', type: 'Match', showSubmitButton: true };
     node1Components = [component1, component2, component3];
     teacherProjectService = TestBed.inject(TeacherProjectService);
-    teacherProjectService.idToNode = {
-      node1: {
-        components: node1Components
-      }
-    };
+    const node1 = { components: node1Components };
+    teacherProjectService.idToNode = { node1: node1 };
     teacherProjectService.project = {
       nodes: [{ id: nodeId1, components: node1Components }],
       inactiveNodes: []
     };
+    spyOn(teacherProjectService, 'getNodeById').and.returnValue(node1);
     teacherDataService = TestBed.inject(TeacherDataService);
     spyOn(teacherDataService, 'saveEvent').and.callFake(() => {
       return Promise.resolve();
@@ -97,7 +116,6 @@ describe('NodeAuthoringComponent', () => {
   });
 
   copyComponent();
-  copyComponents();
   deleteComponent();
   deleteComponents();
 });
@@ -117,37 +135,6 @@ function copyComponent() {
       expect(components[3].id).toEqual(component3.id);
     });
   });
-}
-
-function copyComponents() {
-  describe('copyComponents()', () => {
-    it('should copy components', () => {
-      clickComponentCheckbox(component1.id);
-      clickComponentCheckbox(component3.id);
-      fixture.detectChanges();
-      expect(component.components).toEqual(node1Components);
-      clickCopyComponentsButton();
-      clickLastInsertButton();
-      expect(component.components.length).toEqual(5);
-      expect(component.components[0].id).toEqual(component1.id);
-      expect(component.components[1].id).toEqual(component2.id);
-      expect(component.components[2].id).toEqual(component3.id);
-      expect(component.components[3].id).not.toEqual(component1.id);
-      expect(component.components[4].id).not.toEqual(component3.id);
-      expect(component.componentsToChecked[component1.id]).toBeUndefined();
-      expect(component.componentsToChecked[component3.id]).toBeUndefined();
-    });
-  });
-}
-
-function clickLastInsertButton(): void {
-  clickNativeElement(
-    fixture.debugElement
-      .queryAll(By.css('button'))
-      .reverse()
-      .find((button) => button.nativeElement.innerText === 'keyboard_backspace')
-  );
-  fixture.detectChanges();
 }
 
 function deleteComponent() {
@@ -179,10 +166,14 @@ function deleteComponents() {
         `Are you sure you want to delete these components?\n1. OpenResponse\n3. Match`
       );
       expect(component.components).toEqual([component2]);
-      expect(component.componentsToChecked[component1.id]).toBeUndefined();
-      expect(component.componentsToChecked[component3.id]).toBeUndefined();
+      expect(expectCheckboxValue(component1.id)).toBeFalsy();
+      expect(expectCheckboxValue(component3.id)).toBeFalsy();
     });
   });
+}
+
+function expectCheckboxValue(componentId: string): void {
+  return fixture.debugElement.query(By.css(`#${componentId} mat-checkbox`)).nativeElement.checked;
 }
 
 function clickComponentCheckbox(componentId: string): void {

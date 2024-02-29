@@ -1,0 +1,38 @@
+.project-content {
+  background-color: white;
+  margin-bottom: 15px;
+  position: sticky;
+  top: 26px;
+  z-index: 2;
+}
+
+.all-nodes-div {
+  margin-top: 20px;
+}
+
+.componentHeader {
+  margin-left: 30px !important;
+}
+
+.insertButton {
+  min-height: 23px !important;
+  min-width: 46px !important;
+  font-size: 10px !important;
+  line-height: 0px;
+}
+
+.moveComponentButton {
+  min-height: 30px !important;
+  max-height: 30px !important;
+  min-width: 46px !important;
+  font-size: 10px !important;
+  line-height: 0px;
+}
+
+.unused-header {
+  text-decoration: underline;
+}
+
+.mat-icon {
+  margin: 0px;
+}

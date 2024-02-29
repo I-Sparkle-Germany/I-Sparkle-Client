@@ -1,3 +1,4 @@
+import { millisecondsToDateTime } from '../../../common/datetime/datetime';
 import { AnnotationService } from '../../../services/annotationService';
 import { ConfigService } from '../../../services/configService';
 import { DataExportService } from '../../../services/dataExportService';
@@ -6,6 +7,7 @@ import { TeacherProjectService } from '../../../services/teacherProjectService';
 import { DataExportComponent } from '../data-export/data-export.component';
 import { DataExportContext } from '../DataExportContext';
 import { DataExportStrategy } from './DataExportStrategy';
+import { removeHTMLTags } from '../../../common/string/string';
 
 export abstract class AbstractDataExportStrategy implements DataExportStrategy {
   context: DataExportContext;
@@ -14,6 +16,7 @@ export abstract class AbstractDataExportStrategy implements DataExportStrategy {
   configService: ConfigService;
   dataExportService: DataExportService;
   projectService: TeacherProjectService;
+  protected allOrLatest: 'all' | 'latest' = 'all';
   teacherDataService: TeacherDataService;
 
   setDataExportContext(context: DataExportContext) {
@@ -23,7 +26,7 @@ export abstract class AbstractDataExportStrategy implements DataExportStrategy {
     this.configService = context.controller.configService;
     this.dataExportService = context.controller.dataExportService;
     this.projectService = context.controller.projectService;
-    this.teacherDataService = context.controller.teacherDataService;
+    this.teacherDataService = context.controller.dataService;
   }
 
   abstract export();
@@ -75,5 +78,88 @@ export abstract class AbstractDataExportStrategy implements DataExportStrategy {
       }
     }
     return selectedNodesMap;
+  }
+
+  setRunInfo(row: any[], columnNameToNumber: any, componentState: any): void {
+    const userInfo = this.configService.getUserInfoByWorkgroupId(componentState.workgroupId);
+    if (userInfo != null) {
+      this.setColumnValue(row, columnNameToNumber, 'Class Period', userInfo.periodName);
+    }
+    this.setColumnValue(row, columnNameToNumber, 'Project ID', this.configService.getProjectId());
+    this.setColumnValue(row, columnNameToNumber, 'Project Name', this.configService.getRunName());
+    this.setColumnValue(row, columnNameToNumber, 'Run ID', this.configService.getRunId());
+    this.setColumnValue(
+      row,
+      columnNameToNumber,
+      'Start Date',
+      millisecondsToDateTime(this.configService.getStartDate())
+    );
+    const endDate = this.configService.getEndDate();
+    if (endDate != null) {
+      this.setColumnValue(row, columnNameToNumber, 'End Date', millisecondsToDateTime(endDate));
+    }
+  }
+
+  populateColumnNameMappings(columnNames: string[], columnNameToNumber: any): void {
+    for (let c = 0; c < columnNames.length; c++) {
+      columnNameToNumber[columnNames[c]] = c;
+    }
+  }
+
+  setColumnValue(row: any[], columnNameToNumber: any, columnName: string, value: any): void {
+    row[columnNameToNumber[columnName]] = value;
+  }
+
+  getColumnValue(row: any[], columnNameToNumber: any, columnName: string): any {
+    return row[columnNameToNumber[columnName]];
+  }
+
+  insertColumnBeforeResponseColumn(headerRow: string[], columnName: string): void {
+    headerRow.splice(headerRow.indexOf('Response'), 0, columnName);
+  }
+
+  insertColumnAtEnd(headerRow: string[], columnName: string): void {
+    headerRow.push(columnName);
+  }
+
+  /**
+   * Get the plain text representation of the student work.
+   * @param componentState {object} A component state that contains the student work.
+   * @returns {string} A string that can be placed in a csv cell.
+   */
+  getStudentDataString(componentState: any): string {
+    /*
+     * In Excel, if there is a cell with a long string and the cell to the
+     * right of it is empty, the long string will overlap onto cells to the
+     * right until the string ends or hits a cell that contains a value.
+     * To prevent this from occurring, we will default empty cell values to
+     * a string with a space in it. This way all values of cells are limited
+     * to displaying only in its own cell.
+     */
+    let studentDataString = ' ';
+    let componentType = componentState.componentType;
+    let componentService = this.controller.componentServiceLookupService.getService(componentType);
+    if (componentService != null && componentService.getStudentDataString != null) {
+      studentDataString = componentService.getStudentDataString(componentState);
+      studentDataString = removeHTMLTags(studentDataString);
+      studentDataString = studentDataString.replace(/"/g, '""');
+    } else {
+      studentDataString = componentState.studentData;
+    }
+    return studentDataString;
+  }
+
+  generateExportFileName(
+    nodeId: string,
+    componentId: string,
+    componentTypeWithUnderscore: string
+  ): string {
+    const runId = this.configService.getRunId();
+    const stepNumber = this.projectService.getNodePositionById(nodeId);
+    const componentNumber = this.projectService.getComponentPosition(nodeId, componentId) + 1;
+    return (
+      `${runId}_step_${stepNumber}_component_` +
+      `${componentNumber}_${componentTypeWithUnderscore}_work.csv`
+    );
   }
 }

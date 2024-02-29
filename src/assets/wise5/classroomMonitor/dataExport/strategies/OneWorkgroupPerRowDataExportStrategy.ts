@@ -29,7 +29,7 @@ export class OneWorkgroupPerRowDataExportStrategy extends AbstractDataExportStra
       }
     }
 
-    this.dataExportService.retrieveStudentData(selectedNodes, true, true, true).then(() => {
+    this.dataExportService.retrieveStudentData(selectedNodes, true, true, true).subscribe(() => {
       var rows = [];
       var projectId = this.configService.getProjectId();
       var projectTitle = this.projectService.getProjectTitle();
@@ -137,7 +137,7 @@ export class OneWorkgroupPerRowDataExportStrategy extends AbstractDataExportStra
                     }
                     workgroupRow[
                       columnIdToColumnIndex[columnIdPrefix + '-studentWork']
-                    ] = this.controller.getStudentDataString(componentState);
+                    ] = this.getStudentDataString(componentState);
                     if (this.controller.includeScores || this.controller.includeComments) {
                       var latestComponentAnnotations = this.annotationService.getLatestComponentAnnotations(
                         nodeId,

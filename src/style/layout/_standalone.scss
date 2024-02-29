@@ -1,39 +1,11 @@
 .standalone {
   height: 100%;
-
-  .mat-card-content {
-    margin-bottom: 16px;
-
-    @media (min-width: breakpoint('sm.min')) {
-      margin-bottom: 24px;
-    }
-  }
-
-  .mat-card-actions {
-    margin: 0;
-    padding: 16px 0;
-
-    @media (min-width: breakpoint('sm.min')) {
-      padding-top: 24px;
-    }
-
-    p:last-child {
-      margin-bottom: 0;
-    }
-  }
+  padding: 0 16px;
 }
 
 .standalone__content {
   max-width: breakpoint('sm.min');
-  margin: 16px;
-
-  @media (min-width: breakpoint('sm.min')) {
-    margin: 32px auto;
-
-    &.mat-card {
-      padding: 24px !important;
-    }
-  }
+  margin: 0 auto 32px;
 }
 
 .standalone__content--sm {

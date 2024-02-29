@@ -3,9 +3,8 @@ import { ProjectAssetService } from '../../../../../app/services/projectAssetSer
 import { AbstractComponentAuthoring } from '../../../authoringTool/components/AbstractComponentAuthoring';
 import { insertWiseLinks, replaceWiseLinks } from '../../../common/wise-link/wise-link';
 import { ConfigService } from '../../../services/configService';
-import { NodeService } from '../../../services/nodeService';
 import { TeacherProjectService } from '../../../services/teacherProjectService';
-import { UtilService } from '../../../services/utilService';
+import { TeacherNodeService } from '../../../services/teacherNodeService';
 
 @Component({
   selector: 'html-authoring',
@@ -16,10 +15,9 @@ export class HtmlAuthoring extends AbstractComponentAuthoring {
 
   constructor(
     protected configService: ConfigService,
-    protected nodeService: NodeService,
+    protected nodeService: TeacherNodeService,
     protected projectAssetService: ProjectAssetService,
-    protected projectService: TeacherProjectService,
-    protected utilService: UtilService
+    protected projectService: TeacherProjectService
   ) {
     super(configService, nodeService, projectAssetService, projectService);
   }
