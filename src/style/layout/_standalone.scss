@@ -1,11 +1,29 @@
 .standalone {
-  height: 100%;
-  padding: 0 16px;
+  p:last-child {
+    margin-bottom: 0;
+  }
+
+  .mat-mdc-card-actions {
+    margin: 0;
+    padding: 16px 0;
+
+    @media (min-width: breakpoint('sm.min')) {
+      padding-top: 24px;
+    }
+
+    p:last-child {
+      margin-bottom: 0;
+    }
+  }
 }
 
 .standalone__content {
   max-width: breakpoint('sm.min');
-  margin: 0 auto 32px;
+  margin: 16px;
+
+  @media (min-width: breakpoint('sm.min')) {
+    margin: 32px auto;
+  }
 }
 
 .standalone__content--sm {

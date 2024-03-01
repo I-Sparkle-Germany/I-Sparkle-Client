@@ -1,5 +1,5 @@
 <nav class="header__links" [ngSwitch]="location" fxLayout="row" fxLayoutAlign="start center">
-  <span class="mat-body-2">
+  <span class="mat-body-1">
     <ng-container *ngSwitchCase="'teacher'" i18n>Welcome {{ user.firstName }}!</ng-container>
     <ng-container *ngSwitchCase="'student'" i18n>Welcome {{ user.firstName }}!</ng-container>
   </span>
@@ -39,5 +39,5 @@
       >
     </div>
   </ng-container>
-  <app-header-signin *ngIf="roles.length === 0"></app-header-signin>
+  <ng-container *ngIf="!roles.length"> | <app-header-signin></app-header-signin> </ng-container>
 </nav>

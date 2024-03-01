@@ -1,5 +1,16 @@
 @use '@angular/material' as mat;
 
+.mat-mdc-button, .mat-mdc-raised-button, .mat-mdc-icon-button, .mat-mdc-stroked-button,
+.mat-mdc-flat-button, .mat-mdc-fab, .mat-mdc-mini-fab {
+  .mat-button-wrapper {
+    font-weight: 600;
+  }
+
+  &:hover, &:focus {
+    text-decoration: none;
+  }
+}
+
 .button--progress.mdc-button {
   .mdc-button__label {
     position: unset;

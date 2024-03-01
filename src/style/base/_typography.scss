@@ -1,16 +1,23 @@
 @use '@angular/material' as mat;
 
+$family: Tahoma, Geneva, Verdana, sans-serif;
+
 $wise-typography: mat.define-typography-config(
-  $headline-5: mat.define-typography-level(24px, 32px, 500),
-  $subtitle-1: mat.define-typography-level(17px, 24px, 500),
-  $subtitle-2: mat.define-typography-level(17px, 24px, 400),
-  $body-1: mat.define-typography-level(16px, 22px, 500),
-  $body-2: mat.define-typography-level(16px, 22px, 400),
+  $font-family: $family,
+  $body-1: mat.define-typography-level(16px, 22px, 400),
+  $body-2: mat.define-typography-level(16px, 22px, 600),
   $caption: mat.define-typography-level(14px, 20px, 400),
-  $button: mat.define-typography-level(14px, 14px, 500, $letter-spacing: 'normal'),
+  $headline-5: mat.define-typography-level(24px, 32px, 600),
+  $subtitle-1: mat.define-typography-level(17px, 24px, 600),
+  $subtitle-2: mat.define-typography-level(17px, 24px, 400),
+  $button: mat.define-typography-level(14px, 14px, 600, $letter-spacing: 'normal'),
 );
 
 textarea {
-  font-family: Roboto,Helvetica Neue,sans-serif;
   font-size: 100%;
+  font-family: $family;
+}
+
+strong, b {
+  font-weight: 600;
 }

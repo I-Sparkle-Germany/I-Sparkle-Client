@@ -4,9 +4,6 @@
 
 // Define a custom mixin for common styles
 @mixin common-setup() {
-  h1, h2, .mat-headline-1, .mat-headline-2, .mat-headline-3, .mat-headline-4 {
-    font-family: $heading-font-family
-  }
 
   h1 {
     .mat-icon {
@@ -44,7 +41,7 @@
 
   .mat-mdc-button, .mat-mdc-raised-button, .mat-mdc-unelevated-button, .mat-mdc-outlined-button {
     min-width: 0;
-    text-transform: uppercase;
+    border-radius: $button-border-radius;
   }
 
   .mdc-button {
@@ -140,14 +137,6 @@
     opacity: 1;
   }
 
-  .mat-toolbar {
-    @include mat.typography-level($wise-typography, 'subtitle-1');
-
-    h1, h2, h3, h4, h5 ,h6 {
-      @include mat.typography-level($wise-typography, 'subtitle-1');
-    }
-  }
-
   .mat-toolbar-row, .mat-toolbar-single-row {
     height: $toolbar-height;
   }
@@ -174,8 +163,12 @@
 // Define a custom mixin that takes in the current material theme and colors
 @mixin theme-setup($theme, $colors) {
   a {
-    &:not(.mat-mdc-button):not(.mat-mdc-raised-button):not(.mat-mdc-menu-item):not(.mat-mdc-unelevated-button):not(.mat-mdc-outlined-button):not(.mat-mdc-icon-button):not(.mat-mdc-tab-link) {
+    &:not(.mat-mdc-button):not(.mat-mdc-raised-button):not(.mat-mdc-menu-item):not(.mat-mdc-unelevated-button):not(.mat-mdc-outlined-button):not(.mat-mdc-icon-button):not(.mat-mdc-tab-link):not(.img-link) {
       color: map.get($colors, 'primary');
+      background-image: linear-gradient(to top, map-get($colors, primary) 50%, transparent 50%);
+      background-size: 100% 200%;
+      background-position: top;
+      transition: background-position 0.1s ease-in-out, color 0.1s ease-in-out;
 
       // Set classes for each named color in the $colors map
       @each $key, $value in $colors {

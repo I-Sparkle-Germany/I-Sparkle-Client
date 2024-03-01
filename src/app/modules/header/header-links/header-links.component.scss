@@ -1,9 +1,15 @@
-.mat-mdc-button:not(.mat-mdc-icon-button) {
-  text-transform: none;
-  font-size: 16px;
-  margin: 0 4px;
+a {
+  text-decoration: none;
 }
 
-.mat-subtitle-1 {
+.header-link {
+  margin: 0 8px;
+}
+
+.mat-divider {
+  height: 100%;
+}
+
+.mat-body-1 {
   margin-bottom: 0;
 }

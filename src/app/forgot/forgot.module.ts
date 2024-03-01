@@ -21,6 +21,7 @@ import { ForgotTeacherPasswordChangeComponent } from './teacher/forgot-teacher-p
 import { ForgotTeacherPasswordVerifyComponent } from './teacher/forgot-teacher-password-verify/forgot-teacher-password-verify.component';
 import { PasswordModule } from '../password/password.module';
 import { ForgotUserPasswordCompleteComponent } from './forgot-user-password-complete/forgot-user-password-complete.component';
+import { StandaloneLogoComponent } from '../common/standalone-logo/standalone-logo.comonent';
 
 @NgModule({
   imports: [
@@ -32,7 +33,7 @@ import { ForgotUserPasswordCompleteComponent } from './forgot-user-password-comp
     PasswordModule,
     ReactiveFormsModule,
     SharedModule,
-    StandaloneModule
+    StandaloneLogoComponent
   ],
   declarations: [
     ForgotComponent,
@@ -50,6 +51,6 @@ import { ForgotUserPasswordCompleteComponent } from './forgot-user-password-comp
     ForgotTeacherPasswordVerifyComponent,
     ForgotUserPasswordCompleteComponent
   ],
-  exports: [ForgotComponent]
+  exports: [ForgotComponent, StandaloneLogoComponent]
 })
 export class ForgotModule {}

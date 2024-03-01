@@ -3,6 +3,7 @@ import { FaqComponent } from '../faq.component';
 
 @Component({
   selector: 'app-student-faq',
-  templateUrl: './student-faq.component.html'
+  templateUrl: './student-faq.component.html',
+  styleUrls: ['../../help.component.scss']
 })
 export class StudentFaqComponent extends FaqComponent {}

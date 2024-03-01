@@ -21,7 +21,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { SharedModule } from '../modules/shared/shared.module';
 import { ContactFormComponent } from './contact-form/contact-form.component';
 import { RecaptchaModule, RecaptchaFormsModule } from 'ng-recaptcha';
-import { StandaloneModule } from '../standalone/standalone.module';
+import { StandaloneLogoComponent } from '../common/standalone-logo/standalone-logo.comonent';
 
 const materialModules = [
   MatAutocompleteModule,
@@ -38,8 +38,7 @@ const materialModules = [
   MatRadioModule,
   MatTabsModule,
   MatTableModule,
-  MatTooltipModule,
-  StandaloneModule
+  MatTooltipModule
 ];
 
 @NgModule({
@@ -52,9 +51,10 @@ const materialModules = [
     SharedModule,
     materialModules,
     RecaptchaModule,
-    RecaptchaFormsModule
+    RecaptchaFormsModule,
+    StandaloneLogoComponent
   ],
   declarations: [ContactFormComponent],
-  exports: [ContactFormComponent, materialModules]
+  exports: [ContactFormComponent, materialModules, StandaloneLogoComponent]
 })
 export class ContactModule {}

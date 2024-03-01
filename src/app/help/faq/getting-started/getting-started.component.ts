@@ -4,6 +4,7 @@ import { FaqComponent } from '../faq.component';
 
 @Component({
   selector: 'app-getting-started',
-  templateUrl: './getting-started.component.html'
+  templateUrl: './getting-started.component.html',
+  styleUrls: ['../../help.component.scss']
 })
 export class GettingStartedComponent extends FaqComponent {}
