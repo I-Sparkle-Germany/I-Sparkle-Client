@@ -10,6 +10,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { PasswordRequirementComponent } from '../../../password/password-requirement/password-requirement.component';
+import { StandaloneLogoComponent } from '../../../common/standalone-logo/standalone-logo.comonent';
 
 export class MockTeacherService {
   changePassword(
@@ -52,7 +53,8 @@ describe('ForgotTeacherPasswordChangeComponent', () => {
         MatDividerModule,
         PasswordModule,
         ReactiveFormsModule,
-        RouterTestingModule
+        RouterTestingModule,
+        StandaloneLogoComponent
       ],
       providers: [{ provide: TeacherService, useClass: MockTeacherService }],
       schemas: []

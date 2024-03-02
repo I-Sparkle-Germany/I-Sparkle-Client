@@ -6,6 +6,7 @@ import { MatButtonHarness } from '@angular/material/button/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
+import { StandaloneLogoComponent } from '../../common/standalone-logo/standalone-logo.comonent';
 
 let loader: HarnessLoader;
 describe('ForgotUserPasswordCompleteComponent', () => {
@@ -15,7 +16,7 @@ describe('ForgotUserPasswordCompleteComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [ForgotUserPasswordCompleteComponent],
-      imports: [MatCardModule, RouterTestingModule]
+      imports: [MatCardModule, RouterTestingModule, StandaloneLogoComponent]
     });
     fixture = TestBed.createComponent(ForgotUserPasswordCompleteComponent);
     component = fixture.componentInstance;
