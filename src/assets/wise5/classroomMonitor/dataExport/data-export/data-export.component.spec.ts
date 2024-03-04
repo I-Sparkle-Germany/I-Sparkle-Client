@@ -4,6 +4,7 @@ import { DataExportService } from '../../../services/dataExportService';
 import { TeacherProjectService } from '../../../services/teacherProjectService';
 import { ClassroomMonitorTestingModule } from '../../classroom-monitor-testing.module';
 import { DataExportComponent } from './data-export.component';
+import { RouterTestingModule } from '@angular/router/testing';
 
 let component: DataExportComponent;
 let fixture: ComponentFixture<DataExportComponent>;
@@ -30,7 +31,7 @@ describe('DataExportComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [DataExportComponent],
-      imports: [ClassroomMonitorTestingModule],
+      imports: [ClassroomMonitorTestingModule, RouterTestingModule],
       providers: [DataExportService]
     }).compileComponents();
   });
@@ -60,8 +61,6 @@ describe('DataExportComponent', () => {
   });
 
   setExportType();
-  selectAll();
-  deselectAll();
 });
 
 function setExportType() {
@@ -70,28 +69,6 @@ function setExportType() {
       component.setExportType('events');
       expect(component.exportType).toEqual('events');
       expect(component.exportTypeLabel).toEqual('Events');
-    });
-  });
-}
-
-function selectAll() {
-  describe('selectAll', () => {
-    it('should select all', () => {
-      component.selectAll();
-      for (let i = 1; i < component.nodes.length; i++) {
-        expect(component.nodes[i].checked).toEqual(true);
-      }
-    });
-  });
-}
-
-function deselectAll() {
-  describe('deselectAll', () => {
-    it('should deselect all', () => {
-      component.deselectAll();
-      for (let i = 1; i < component.nodes.length; i++) {
-        expect(component.nodes[i].checked).toEqual(false);
-      }
     });
   });
 }

@@ -22,7 +22,8 @@ import { MobileMenuModule } from './modules/mobile-menu/mobile-menu.module';
 import { AnnouncementComponent } from './announcement/announcement.component';
 import { AnnouncementDialogComponent } from './announcement/announcement.component';
 import { TrackScrollDirective } from './track-scroll.directive';
-import { RecaptchaV3Module, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
+import { RecaptchaV3Module, RECAPTCHA_V3_SITE_KEY, RECAPTCHA_BASE_URL } from 'ng-recaptcha';
+import { ArchiveProjectService } from './services/archive-project.service';
 
 export function initialize(
   configService: ConfigService,
@@ -61,10 +62,12 @@ export function initialize(
     RouterModule.forRoot([], {
       scrollPositionRestoration: 'enabled',
       anchorScrolling: 'enabled',
-      relativeLinkResolution: 'legacy'
+      bindToComponentInputs: true,
+      onSameUrlNavigation: 'reload'
     })
   ],
   providers: [
+    ArchiveProjectService,
     ConfigService,
     StudentService,
     TeacherService,
@@ -94,6 +97,10 @@ export function initialize(
         return configService.getRecaptchaPublicKey();
       },
       deps: [ConfigService]
+    },
+    {
+      provide: RECAPTCHA_BASE_URL,
+      useValue: 'https://recaptcha.net/recaptcha/api.js'
     }
   ],
   bootstrap: [AppComponent]

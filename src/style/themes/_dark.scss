@@ -1,3 +1,6 @@
+@use '@angular/material' as mat;
+@use 'sass:map';
+
 // define Angular Material theme colors
 $dark-primary: (
   50 : #ffffff,
@@ -49,82 +52,61 @@ $dark-accent: (
   )
 );
 
-$dark-theme-primary: mat-palette($dark-primary, 50);
-$dark-theme-accent: mat-palette($dark-accent, 50);
-$dark-theme-warn: mat-palette($mat-red, 600);
+$dark-theme-primary: mat.define-palette($dark-primary, 50);
+$dark-theme-accent: mat.define-palette($dark-accent, 50);
+$dark-theme-warn: mat.define-palette(mat.$red-palette, 600);
+
+// create Angular Material theme
+$dark: mat.define-dark-theme((
+  color: (
+    primary: $dark-theme-primary,
+    accent: $dark-theme-accent,
+    warn: $dark-theme-warn,
+  ),
+  typography: $wise-typography,
+));
 
 // custom background and foreground palettes for this theme
 $dark-theme-background: (
   status-bar: black,
   app-bar:    black,
   background: black,
-  hover:      rgba(white, 0.04),
-  card:       black,
-  dialog:     black,
-  disabled-button: rgba(white, 0.12),
-  raised-button: black,
-  focused-button: rgba(black, 0.12),
-  selected-button: map_get($mat-grey, 300),
-  selected-disabled-button: map_get($mat-grey, 400),
-  disabled-button-toggle: map_get($mat-grey, 200),
-  unselected-chip: map_get($mat-grey, 300),
-  disabled-list-option: map_get($mat-grey, 200),
-  tooltip: map_get($mat-grey, 700)
 );
 
 $dark-theme-foreground: (
   base:              white,
-  divider:           $light-dividers,
-  dividers:          $light-dividers,
-  disabled:          $light-disabled-text,
-  disabled-button:   rgba(white, 0.3),
-  disabled-text:     $light-disabled-text,
-  hint-text:         $light-disabled-text,
-  secondary-text:    $light-secondary-text,
-  icon:              white,
-  icons:             white,
-  text:              white,
-  slider-min:        white,
-  slider-off:        rgba(white, 0.3),
-  slider-off-active: rgba(white, 0.3)
 );
 
-// create Angular Material dark theme
-//$dark-theme: mat-dark-theme(
-    //$dark-theme-primary,
-    //$dark-theme-accent,
-    //$dark-theme-warn
-//);
-
-$dark-theme: create-custom-theme($dark-theme-primary, $dark-theme-accent, $dark-theme-warn, $dark-theme-foreground,
-  $dark-theme-background, true);
+$dark-theme: map.deep-merge($dark, (
+  'color': (
+    'background': $dark-theme-background,
+    'foreground': $dark-theme-foreground,
+  ),
+));
 
 // get theme color variables
-$primary: map-get($dark-theme, primary);
-$accent: map-get($dark-theme, accent);
-$warn: map-get($dark-theme, warn);
-$foreground: map-get($dark-theme, foreground);
-$background: map-get($dark-theme, background);
+$foreground: map.get($dark-theme, foreground);
+$background: map.get($dark-theme, background);
 
 // create colors object (including additional colors)
 $dark-colors: (
-  'accent': mat-color($accent),
+  'accent': mat.get-color-from-palette($dark-theme-accent, 50),
   'accent-1': white,
   'accent-2': white,
   'app-bg': black,
   'control-bg': black,
   'control-bg-active': black,
-  'disabled-text': mat-color($foreground, disabled-text),
+  'disabled-text': mat.get-color-from-palette($foreground, 'disabled-text'),
   'highlighted': #fffaec,
   'info': #ef6c00,
   'info-contrast': white,
   'notice-bg': rgba(white, 0.04),
-  'primary': mat-color($primary),
+  'primary': mat.get-color-from-palette($dark-theme-primary, 500),
   'score': #FFC107,
-  'secondary-text': mat-color($foreground, secondary-text),
-  'selected-bg': map-get($dark-theme-primary, 50),
+  'secondary-text': mat.get-color-from-palette($foreground, 'secondary-text'),
+  'selected-bg': mat.get-color-from-palette($dark-theme-primary, 50),
   'success': #00C853,
   'success-contrast': black,
-  'text': mat-color($foreground, text),
-  'warn': mat-color($warn)
+  'text': mat.get-color-from-palette($foreground, 'text'),
+  'warn': mat.get-color-from-palette($dark-theme-warn, 600),
 );

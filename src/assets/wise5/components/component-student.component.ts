@@ -17,6 +17,7 @@ import { StudentAssetRequest } from '../vle/studentAsset/StudentAssetRequest';
 import { ComponentService } from './componentService';
 import { ComponentStateRequest } from './ComponentStateRequest';
 import { ComponentStateWrapper } from './ComponentStateWrapper';
+import { Annotation } from '../common/Annotation';
 
 @Directive()
 export abstract class ComponentStudent {
@@ -119,9 +120,9 @@ export abstract class ComponentStudent {
     this.subscribeToRequestComponentState();
   }
 
-  subscribeToAnnotationSavedToServer() {
+  private subscribeToAnnotationSavedToServer(): void {
     this.subscriptions.add(
-      this.AnnotationService.annotationSavedToServer$.subscribe(({ annotation }) => {
+      this.AnnotationService.annotationSavedToServer$.subscribe((annotation: Annotation) => {
         if (this.isForThisComponent(annotation)) {
           this.latestAnnotations = this.AnnotationService.getLatestComponentAnnotations(
             this.nodeId,
@@ -403,7 +404,7 @@ export abstract class ComponentStudent {
     this.createComponentState(action).then((componentState: any) => {
       this.StudentDataService.setDummyIdIntoLocalId(componentState);
       this.StudentDataService.setDummyServerSaveTimeIntoLocalServerSaveTime(componentState);
-      this.handleStudentWorkSavedToServer({ studentWork: componentState });
+      this.handleStudentWorkSavedToServer(componentState);
     });
   }
 
