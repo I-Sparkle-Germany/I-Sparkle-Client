@@ -1,10 +1,9 @@
-import { Component, Input, OnInit, ViewEncapsulation, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnInit, ViewEncapsulation, ElementRef } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatDialog } from '@angular/material/dialog';
 import { LibraryProject } from '../libraryProject';
 import { LibraryProjectDetailsComponent } from '../library-project-details/library-project-details.component';
 import { flash } from '../../../animations';
-import { ProjectSelectionEvent } from '../../../domain/projectSelectionEvent';
 
 @Component({
   selector: 'app-library-project',
@@ -14,16 +13,17 @@ import { ProjectSelectionEvent } from '../../../domain/projectSelectionEvent';
   animations: [flash]
 })
 export class LibraryProjectComponent implements OnInit {
-  @Input() checked: boolean = false;
-  @Input() myUnit: boolean = false;
-  @Input() project: LibraryProject = new LibraryProject();
-  @Output()
-  projectSelectionEvent: EventEmitter<ProjectSelectionEvent> = new EventEmitter<ProjectSelectionEvent>();
+  @Input()
+  project: LibraryProject = new LibraryProject();
 
   animateDuration: string = '0s';
   animateDelay: string = '0s';
 
-  constructor(public dialog: MatDialog, private sanitizer: DomSanitizer) {}
+  constructor(
+    public dialog: MatDialog,
+    private sanitizer: DomSanitizer,
+    private elRef: ElementRef
+  ) {}
 
   ngOnInit() {
     this.project.thumbStyle = this.getThumbStyle(this.project.projectThumb);
@@ -54,11 +54,5 @@ export class LibraryProjectComponent implements OnInit {
       data: { project: project },
       panelClass: 'dialog-md'
     });
-  }
-
-  protected selectProject(event: any): void {
-    this.project.selected = event.target.checked;
-    event.stopPropagation();
-    this.projectSelectionEvent.emit({ selected: event.target.checked, project: this.project });
   }
 }

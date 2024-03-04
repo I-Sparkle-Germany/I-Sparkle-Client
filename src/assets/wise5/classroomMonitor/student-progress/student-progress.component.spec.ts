@@ -10,7 +10,22 @@ import { TeacherDataService } from '../../services/teacherDataService';
 import { ClassroomMonitorTestingModule } from '../classroom-monitor-testing.module';
 import { ClassroomMonitorTestHelper } from '../classroomMonitorComponents/shared/testing/ClassroomMonitorTestHelper';
 import { StudentProgressComponent } from './student-progress.component';
-import { RouterTestingModule } from '@angular/router/testing';
+
+class Team {
+  public completion: any;
+
+  constructor(
+    public workgroupId: number,
+    public username: string,
+    public location: string,
+    completionPct: number,
+    public scorePct: number
+  ) {
+    this.completion = {
+      completionPct
+    };
+  }
+}
 
 class SortTestParams {
   constructor(
@@ -37,8 +52,7 @@ describe('StudentProgressComponent', () => {
         MatFormFieldModule,
         MatInputModule,
         MatListModule,
-        ReactiveFormsModule,
-        RouterTestingModule
+        ReactiveFormsModule
       ]
     }).compileComponents();
   });
@@ -60,7 +74,13 @@ describe('StudentProgressComponent', () => {
 });
 
 function initializeWorkgroups(component: StudentProgressComponent) {
-  component.students = testHelper.students;
+  component.teams = [
+    new Team(workgroupId1, 'Spongebob', '1.2: Open Response', 30, 0.8),
+    new Team(workgroupId5, 'Patrick', '1.1: Open Response', 10, 0.6),
+    new Team(workgroupId3, 'Squidward', '1.5: Open Response', 20, 0.4),
+    new Team(workgroupId2, 'Sandy', '1.9: Open Response', 50, 0.8),
+    new Team(workgroupId4, 'Plankton', '1.5: Open Response', 20, 0.8)
+  ];
 }
 
 function setSort() {
@@ -85,85 +105,57 @@ function setSort() {
       ]),
       new SortTestParams('should sort by student ascending', 'student', 'asc', [
         workgroupId5,
-        workgroupId2,
         workgroupId4,
+        workgroupId2,
         workgroupId1,
         workgroupId3
       ]),
       new SortTestParams('should sort by student descending', 'student', 'desc', [
         workgroupId3,
         workgroupId1,
-        workgroupId4,
         workgroupId2,
+        workgroupId4,
         workgroupId5
-      ]),
-      new SortTestParams('should sort by first name ascending', 'firstName', 'asc', [
-        workgroupId5,
-        workgroupId2,
-        workgroupId4,
-        workgroupId1,
-        workgroupId3
-      ]),
-      new SortTestParams('should sort by first name descending', 'firstName', 'desc', [
-        workgroupId3,
-        workgroupId1,
-        workgroupId4,
-        workgroupId2,
-        workgroupId5
-      ]),
-      new SortTestParams('should sort by last name ascending', 'lastName', 'asc', [
-        workgroupId2,
-        workgroupId4,
-        workgroupId1,
-        workgroupId5,
-        workgroupId3
-      ]),
-      new SortTestParams('should sort by last name descending', 'lastName', 'desc', [
-        workgroupId3,
-        workgroupId5,
-        workgroupId1,
-        workgroupId4,
-        workgroupId2
       ]),
       new SortTestParams('should sort by score ascending', 'score', 'asc', [
         workgroupId3,
         workgroupId5,
-        workgroupId1,
+        workgroupId4,
         workgroupId2,
-        workgroupId4
+        workgroupId1
       ]),
       new SortTestParams('should sort by score descending', 'score', 'desc', [
-        workgroupId1,
-        workgroupId2,
         workgroupId4,
+        workgroupId2,
+        workgroupId1,
         workgroupId5,
         workgroupId3
       ]),
       new SortTestParams('should sort by completion ascending', 'completion', 'asc', [
         workgroupId5,
-        workgroupId3,
         workgroupId4,
+        workgroupId3,
         workgroupId1,
         workgroupId2
       ]),
       new SortTestParams('should sort by completion descending', 'completion', 'desc', [
         workgroupId2,
         workgroupId1,
-        workgroupId3,
         workgroupId4,
+        workgroupId3,
         workgroupId5
       ]),
       new SortTestParams('should sort by location ascending', 'location', 'asc', [
         workgroupId5,
         workgroupId1,
-        workgroupId3,
         workgroupId4,
+        workgroupId3,
         workgroupId2
       ]),
       new SortTestParams('should sort by location descending', 'location', 'desc', [
         workgroupId2,
-        workgroupId3,
         workgroupId4,
+        workgroupId3,
         workgroupId1,
         workgroupId5
       ])
@@ -171,10 +163,7 @@ function setSort() {
     for (const sortTest of sortTests) {
       it(sortTest.testDescription, () => {
         setSortAndDirection(sortTest.sortField, sortTest.sortDirection);
-        testHelper.expectWorkgroupOrder(
-          component.sortedStudents,
-          sortTest.expectedWorkgroupIdOrder
-        );
+        testHelper.expectWorkgroupOrder(component.sortedTeams, sortTest.expectedWorkgroupIdOrder);
       });
     }
   });

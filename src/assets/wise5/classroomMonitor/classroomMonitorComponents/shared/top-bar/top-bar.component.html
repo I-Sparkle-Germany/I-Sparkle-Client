@@ -13,8 +13,7 @@
       fxHide.gt-md
       aria-label="Unit Info"
       i18n-aria-label
-      matTooltip="Unit Info"
-      i18n-matTooltip
+      [matTooltip]="runInfo"
     >
       <mat-icon>info</mat-icon>
     </button>
@@ -33,11 +32,13 @@
     <button
       mat-icon-button
       fxHide.xs
+      aria-label="Preview Unit"
+      i18n-aria-label
       (click)="previewProject()"
       matTooltip="Preview Unit"
       i18n-matTooltip
     >
-      <mat-icon mat-menu-origin>preview</mat-icon>
+      <mat-icon mat-menu-origin>visibility</mat-icon>
     </button>
   </h3>
   <span fxFlex></span>
@@ -45,6 +46,7 @@
     mat-icon-button
     aria-label="Alerts"
     i18n-aria-label
+    class="mat-icon-button notification-btn notifications-menu-button"
     [matMenuTriggerFor]="notificationsMenu"
   >
     <span *ngIf="newNotifications.length > 0" class="notification-count"
@@ -57,6 +59,7 @@
       (click)="$event.stopPropagation()"
       [newNotifications]="newNotifications"
       [withPause]="true"
+      [state]="state"
     >
     </notifications-menu>
   </mat-menu>
@@ -94,7 +97,7 @@
           <mat-icon style="color: {{ avatarColor }}" class="mat-36"> account_circle </mat-icon>
         </div>
       </div>
-      <div class="mat-subtitle-2">
+      <div class="mat-body-2">
         {{ userInfo.firstName }} {{ userInfo.lastName }}
         <span class="mat-caption">({{ userInfo.username }})</span>
       </div>

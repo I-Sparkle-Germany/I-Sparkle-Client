@@ -1,19 +1,22 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { unique } from 'jquery';
 import { ConfigService } from './configService';
-import { Observable, map } from 'rxjs';
 
 @Injectable()
 export class ProjectLibraryService {
-  constructor(protected configService: ConfigService, protected http: HttpClient) {}
+  constructor(protected http: HttpClient, protected ConfigService: ConfigService) {}
 
-  getLibraryProjects(): Observable<any[]> {
+  getLibraryProjects() {
     return this.http
-      .get<any[]>(this.configService.getConfigParam('getLibraryProjectsURL'))
-      .pipe(map((projects) => this.sortAndFilterUniqueProjects(projects)));
+      .get(this.ConfigService.getConfigParam('getLibraryProjectsURL'))
+      .toPromise()
+      .then((projects) => {
+        return projects;
+      });
   }
 
-  private sortAndFilterUniqueProjects(projects: any): any[] {
+  sortAndFilterUniqueProjects(projects: any) {
     const flatProjectList = projects
       .map((grade) => {
         return grade.children;
@@ -22,7 +25,7 @@ export class ProjectLibraryService {
     return this.filterUniqueProjects(flatProjectList).sort(this.sortByProjectIdDescending);
   }
 
-  private filterUniqueProjects(projects: any[]): any[] {
+  filterUniqueProjects(projects: any[]): any[] {
     const uniqueProjects = [];
     const foundProjects = new Map();
     for (const project of projects) {
@@ -34,7 +37,7 @@ export class ProjectLibraryService {
     return uniqueProjects;
   }
 
-  private sortByProjectIdDescending(project1: any, project2: any): number {
+  sortByProjectIdDescending(project1: any, project2: any) {
     return project2.id - project1.id;
   }
 }

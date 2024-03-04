@@ -6,6 +6,7 @@ import { TeacherWebSocketService } from '../services/teacherWebSocketService';
 import { StudentTeacherCommonServicesModule } from '../../../app/student-teacher-common-services.module';
 import { MatDialogModule } from '@angular/material/dialog';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { UpgradeModule } from '@angular/upgrade/static';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MilestoneService } from '../services/milestoneService';
 import { TeacherPeerGroupService } from '../services/teacherPeerGroupService';
@@ -18,7 +19,8 @@ import { MilestoneReportService } from '../services/milestoneReportService';
     HttpClientTestingModule,
     MatDialogModule,
     MatSnackBarModule,
-    StudentTeacherCommonServicesModule
+    StudentTeacherCommonServicesModule,
+    UpgradeModule
   ],
   providers: [
     ClassroomStatusService,

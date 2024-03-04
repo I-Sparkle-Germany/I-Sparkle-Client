@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
-import { Subscription, filter } from 'rxjs';
+import { UpgradeModule } from '@angular/upgrade/static';
+import { Subscription } from 'rxjs';
 import { copy } from '../../common/object/object';
 import { AnnotationService } from '../../services/annotationService';
 import { ClassroomStatusService } from '../../services/classroomStatusService';
@@ -7,7 +8,6 @@ import { ConfigService } from '../../services/configService';
 import { NotificationService } from '../../services/notificationService';
 import { TeacherDataService } from '../../services/teacherDataService';
 import { TeacherProjectService } from '../../services/teacherProjectService';
-import { Annotation } from '../../common/Annotation';
 
 @Component({
   selector: 'student-grading',
@@ -35,9 +35,10 @@ export class StudentGradingComponent implements OnInit {
     private annotationService: AnnotationService,
     private classroomStatusService: ClassroomStatusService,
     private configService: ConfigService,
-    private dataService: TeacherDataService,
     private notificationService: NotificationService,
-    private projectService: TeacherProjectService
+    private projectService: TeacherProjectService,
+    private upgrade: UpgradeModule,
+    private teacherDataService: TeacherDataService
   ) {}
 
   ngOnInit(): void {
@@ -47,7 +48,6 @@ export class StudentGradingComponent implements OnInit {
     this.subscribeToStudentWorkReceived();
     this.subscribeToCurrentWorkgroupChanged();
     this.subscribeToCurrentPeriodChanged();
-    this.workgroupId = Number(this.workgroupId);
     this.initialize();
   }
 
@@ -58,17 +58,37 @@ export class StudentGradingComponent implements OnInit {
   }
 
   private initialize(): void {
+    const stateParams = this.upgrade.$injector.get('$stateParams');
+    const context = 'ClassroomMonitor',
+      nodeId = null,
+      componentId = null,
+      componentType = null,
+      category = 'Navigation',
+      event = 'studentGradingViewDisplayed',
+      data = { workgroupId: this.workgroupId };
+    this.teacherDataService.saveEvent(
+      context,
+      nodeId,
+      componentId,
+      componentType,
+      category,
+      event,
+      data
+    );
+
     document.body.scrollTop = document.documentElement.scrollTop = 0;
-    this.sort = this.dataService.studentGradingSort;
-    this.dataService.nodeGradingSort = this.sort;
+    this.sort = this.teacherDataService.studentGradingSort;
+    this.teacherDataService.nodeGradingSort = this.sort;
     this.permissions = this.configService.getPermissions();
+    this.workgroupId = parseInt(stateParams.workgroupId);
     const workgroup = this.configService.getUserInfoByWorkgroupId(this.workgroupId);
-    this.dataService.setCurrentWorkgroup(workgroup);
+    this.teacherDataService.setCurrentWorkgroup(workgroup);
     let maxScore = this.classroomStatusService.getMaxScoreForWorkgroupId(this.workgroupId);
     this.maxScore = maxScore ? maxScore : 0;
-    this.totalScore = this.dataService.getTotalScoreByWorkgroupId(this.workgroupId);
+    this.totalScore = this.teacherDataService.getTotalScoreByWorkgroupId(this.workgroupId);
     this.projectCompletion = this.classroomStatusService.getStudentProjectCompletion(
-      this.workgroupId
+      this.workgroupId,
+      true
     );
     this.nodeIds = this.projectService.getFlattenedProjectAsNodeIds();
     this.setNodesById();
@@ -102,11 +122,11 @@ export class StudentGradingComponent implements OnInit {
 
   private subscribeToAnnotationReceived(): void {
     this.subscriptions.add(
-      this.annotationService.annotationReceived$.subscribe((annotation: Annotation) => {
+      this.annotationService.annotationReceived$.subscribe(({ annotation }) => {
         const workgroupId = annotation.toWorkgroupId;
         const nodeId = annotation.nodeId;
         if (workgroupId === this.workgroupId && this.nodesById[nodeId]) {
-          this.totalScore = this.dataService.getTotalScoreByWorkgroupId(workgroupId);
+          this.totalScore = this.teacherDataService.getTotalScoreByWorkgroupId(workgroupId);
           this.updateNode(nodeId);
         }
       })
@@ -115,7 +135,7 @@ export class StudentGradingComponent implements OnInit {
 
   private subscribeToStudentWorkReceived(): void {
     this.subscriptions.add(
-      this.dataService.studentWorkReceived$.subscribe((args: any) => {
+      this.teacherDataService.studentWorkReceived$.subscribe((args: any) => {
         const studentWork = args.studentWork;
         if (studentWork != null) {
           let workgroupId = studentWork.workgroupId;
@@ -130,30 +150,29 @@ export class StudentGradingComponent implements OnInit {
 
   private subscribeToCurrentWorkgroupChanged(): void {
     this.subscriptions.add(
-      this.dataService.currentWorkgroupChanged$
-        .pipe(filter(({ currentWorkgroup }) => currentWorkgroup != null))
-        .subscribe(({ currentWorkgroup }) => {
-          const workgroupId = currentWorkgroup.workgroupId;
+      this.teacherDataService.currentWorkgroupChanged$.subscribe(({ currentWorkgroup }) => {
+        if (currentWorkgroup != null) {
+          let workgroupId = currentWorkgroup.workgroupId;
           if (this.workgroupId !== workgroupId) {
-            this.workgroupId = workgroupId;
-            this.initialize();
+            this.upgrade.$injector.get('$state').go('root.cm.team', { workgroupId: workgroupId });
           }
-        })
+        }
+      })
     );
   }
 
   private subscribeToCurrentPeriodChanged(): void {
     this.subscriptions.add(
-      this.dataService.currentPeriodChanged$.subscribe(({ currentPeriod }) => {
+      this.teacherDataService.currentPeriodChanged$.subscribe(({ currentPeriod }) => {
         let periodId = currentPeriod.periodId;
-        let currentWorkgroup = this.dataService.getCurrentWorkgroup();
+        let currentWorkgroup = this.teacherDataService.getCurrentWorkgroup();
         if (!currentWorkgroup) {
           let workgroups = copy(this.configService.getClassmateUserInfos());
           let n = workgroups.length;
           for (let i = 0; i < n; i++) {
             let workgroup = workgroups[i];
             if (workgroup.periodId === periodId) {
-              this.dataService.setCurrentWorkgroup(workgroup);
+              this.teacherDataService.setCurrentWorkgroup(workgroup);
               break;
             }
           }
@@ -163,7 +182,7 @@ export class StudentGradingComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
-    this.dataService.setCurrentWorkgroup(null);
+    this.teacherDataService.setCurrentWorkgroup(null);
     this.subscriptions.unsubscribe();
   }
 
@@ -224,7 +243,18 @@ export class StudentGradingComponent implements OnInit {
   }
 
   private nodeHasNewAlert(alertNotifications: any[]): boolean {
-    return alertNotifications.some((notification) => !notification.timeDismissed);
+    let newAlert = false;
+
+    let l = alertNotifications.length;
+    for (let i = 0; i < l; i++) {
+      let alert = alertNotifications[i];
+      if (!alert.timeDismissed) {
+        newAlert = true;
+        break;
+      }
+    }
+
+    return newAlert;
   }
 
   /**
@@ -300,7 +330,7 @@ export class StudentGradingComponent implements OnInit {
 
   private getLatestWorkTimeByNodeId(nodeId: string): number {
     let time = null;
-    const componentStates = this.dataService.getComponentStatesByNodeId(nodeId);
+    const componentStates = this.teacherDataService.getComponentStatesByNodeId(nodeId);
 
     // loop through component states for this node, starting with most recent
     for (let i = componentStates.length - 1; i > -1; i--) {
@@ -317,7 +347,7 @@ export class StudentGradingComponent implements OnInit {
 
   private getLatestAnnotationTimeByNodeId(nodeId: string): number {
     let time = null;
-    const annotations = this.dataService.getAnnotationsByNodeId(nodeId);
+    const annotations = this.teacherDataService.getAnnotationsByNodeId(nodeId);
 
     // loop through annotations for this node, starting with most recent
     for (let i = annotations.length - 1; i > -1; i--) {
@@ -355,7 +385,7 @@ export class StudentGradingComponent implements OnInit {
     const node = this.nodesById[nodeId];
 
     if (node.isVisible && (this.projectService.nodeHasWork(nodeId) || this.showNonWorkNodes)) {
-      let currentStep = this.dataService.getCurrentStep();
+      let currentStep = this.teacherDataService.getCurrentStep();
       if (currentStep) {
         // there is a currently selected step, so check if this one matches
         if (currentStep.nodeId === parseInt(nodeId)) {
@@ -379,7 +409,7 @@ export class StudentGradingComponent implements OnInit {
 
     // update value in the teacher data service so we can persist across view instances and
     // workgroup changes
-    this.dataService.studentGradingSort = this.sort;
+    this.teacherDataService.studentGradingSort = this.sort;
     this.sortNodes();
   }
 

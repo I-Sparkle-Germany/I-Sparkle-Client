@@ -7,6 +7,7 @@ import { ConfigService } from '../../assets/wise5/services/configService';
 import { ProjectService } from '../../assets/wise5/services/projectService';
 import { StudentAssetService } from '../../assets/wise5/services/studentAssetService';
 import { TagService } from '../../assets/wise5/services/tagService';
+import { UtilService } from '../../assets/wise5/services/utilService';
 import { SessionService } from '../../assets/wise5/services/sessionService';
 
 let service: MultipleChoiceService;
@@ -33,7 +34,8 @@ describe('MultipleChoiceService', () => {
         ProjectService,
         SessionService,
         StudentAssetService,
-        TagService
+        TagService,
+        UtilService
       ]
     });
     service = TestBed.inject(MultipleChoiceService);
@@ -134,7 +136,7 @@ function isChoicesSelected() {
   });
   it(`should check if choices are selected when constraint choice ids is a string and the constraint
       choice id is selected along with another choice`, () => {
-    expectIsChoicesSelected([choiceId1, choiceId3], choiceId3, true);
+    expectIsChoicesSelected([choiceId1, choiceId3], choiceId3, false);
   });
   it(`should check if choices are selected when constraint choice ids is a string and only the
       constraint choice id is selected`, () => {

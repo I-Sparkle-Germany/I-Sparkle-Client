@@ -6,19 +6,21 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { UpgradeModule } from '@angular/upgrade/static';
 import { EditComponentPrompt } from '../../../../../app/authoring-tool/edit-component-prompt/edit-component-prompt.component';
 import { ProjectAssetService } from '../../../../../app/services/projectAssetService';
 import { AnnotationService } from '../../../services/annotationService';
 import { ConfigService } from '../../../services/configService';
+import { NodeService } from '../../../services/nodeService';
 import { ProjectService } from '../../../services/projectService';
 import { SessionService } from '../../../services/sessionService';
 import { StudentAssetService } from '../../../services/studentAssetService';
 import { StudentDataService } from '../../../services/studentDataService';
 import { TagService } from '../../../services/tagService';
 import { TeacherProjectService } from '../../../services/teacherProjectService';
+import { UtilService } from '../../../services/utilService';
 import { ConceptMapService } from '../conceptMapService';
 import { ConceptMapAuthoring } from './concept-map-authoring.component';
-import { TeacherNodeService } from '../../../services/teacherNodeService';
 
 @NgModule({
   declarations: [ConceptMapAuthoring, EditComponentPrompt],
@@ -29,20 +31,22 @@ import { TeacherNodeService } from '../../../services/teacherNodeService';
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
-    MatDialogModule
+    MatDialogModule,
+    UpgradeModule
   ],
   providers: [
     AnnotationService,
     ConceptMapService,
     ConfigService,
+    NodeService,
     ProjectAssetService,
     ProjectService,
     SessionService,
     StudentAssetService,
     StudentDataService,
     TagService,
-    TeacherNodeService,
-    TeacherProjectService
+    TeacherProjectService,
+    UtilService
   ],
   exports: [ConceptMapAuthoring, EditComponentPrompt]
 })

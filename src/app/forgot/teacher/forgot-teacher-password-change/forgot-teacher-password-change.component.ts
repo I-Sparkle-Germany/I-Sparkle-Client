@@ -1,32 +1,36 @@
-import { ChangeDetectorRef, Component, Input } from '@angular/core';
-import { Router } from '@angular/router';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
 import { TeacherService } from '../../../teacher/teacher.service';
 import { finalize } from 'rxjs/operators';
 import { NewPasswordAndConfirmComponent } from '../../../password/new-password-and-confirm/new-password-and-confirm.component';
-import { injectPasswordErrors } from '../../../common/password-helper';
-import { PasswordErrors } from '../../../domain/password/password-errors';
 
 @Component({
   selector: 'app-forgot-teacher-password-change',
   templateUrl: './forgot-teacher-password-change.component.html',
   styleUrls: ['./forgot-teacher-password-change.component.scss']
 })
-export class ForgotTeacherPasswordChangeComponent {
+export class ForgotTeacherPasswordChangeComponent implements OnInit {
   changePasswordFormGroup: FormGroup = this.fb.group({});
   isSubmitButtonEnabled: boolean = true;
   message: string = '';
   processing: boolean = false;
   showForgotPasswordLink = false;
-  @Input() username: string = null;
-  @Input() verificationCode: string;
+  username: string;
+  verificationCode: string;
 
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
     private fb: FormBuilder,
     private router: Router,
+    private route: ActivatedRoute,
     private teacherService: TeacherService
   ) {}
+
+  ngOnInit(): void {
+    this.username = this.route.snapshot.queryParamMap.get('username');
+    this.verificationCode = this.route.snapshot.queryParamMap.get('verificationCode');
+  }
 
   ngAfterViewChecked(): void {
     this.changeDetectorRef.detectChanges();
@@ -63,7 +67,8 @@ export class ForgotTeacherPasswordChangeComponent {
     this.goToSuccessPage();
   }
 
-  private changePasswordError(error: PasswordErrors): void {
+  private changePasswordError(error: any): void {
+    const formError: any = {};
     switch (error.messageCode) {
       case 'tooManyVerificationCodeAttempts':
         this.setTooManyVerificationCodeAttemptsMessage();
@@ -80,13 +85,23 @@ export class ForgotTeacherPasswordChangeComponent {
       case 'verificationCodeIncorrect':
         this.setVerificationCodeIncorrectMessage();
         break;
-      case 'invalidPassword':
-        injectPasswordErrors(this.changePasswordFormGroup, error);
+      case 'invalidPasswordLength':
+        formError.minlength = true;
+        this.changePasswordFormGroup
+          .get(NewPasswordAndConfirmComponent.NEW_PASSWORD_FORM_CONTROL_NAME)
+          .setErrors(formError);
+        break;
+      case 'invalidPasswordPattern':
+        formError.pattern = true;
+        this.changePasswordFormGroup
+          .get(NewPasswordAndConfirmComponent.NEW_PASSWORD_FORM_CONTROL_NAME)
+          .setErrors(formError);
         break;
       case 'passwordDoesNotMatch':
+        formError.passwordDoesNotMatch = true;
         this.changePasswordFormGroup
           .get(NewPasswordAndConfirmComponent.CONFIRM_NEW_PASSWORD_FORM_CONTROL_NAME)
-          .setErrors({ passwordDoesNotMatch: true });
+          .setErrors(formError);
         break;
       default:
         this.setErrorOccurredMessage();

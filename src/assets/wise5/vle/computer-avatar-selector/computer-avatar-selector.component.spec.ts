@@ -1,3 +1,4 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ComputerAvatar } from '../../common/ComputerAvatar';
 import { DialogGuidanceService } from '../../components/dialogGuidance/dialogGuidanceService';
@@ -8,11 +9,8 @@ import { ProjectService } from '../../services/projectService';
 import { SessionService } from '../../services/sessionService';
 import { StudentDataService } from '../../services/studentDataService';
 import { TagService } from '../../services/tagService';
+import { UtilService } from '../../services/utilService';
 import { ComputerAvatarSelectorComponent } from './computer-avatar-selector.component';
-import { MatCardModule } from '@angular/material/card';
-import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { MatDividerModule } from '@angular/material/divider';
-import { FormsModule } from '@angular/forms';
 
 describe('ComputerAvatarSelectorComponent', () => {
   const avatars: ComputerAvatar[] = [
@@ -24,7 +22,7 @@ describe('ComputerAvatarSelectorComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [FormsModule, MatButtonToggleModule, MatCardModule, MatDividerModule],
+      imports: [HttpClientTestingModule],
       declarations: [ComputerAvatarSelectorComponent],
       providers: [
         AnnotationService,
@@ -34,7 +32,8 @@ describe('ComputerAvatarSelectorComponent', () => {
         ProjectService,
         SessionService,
         StudentDataService,
-        TagService
+        TagService,
+        UtilService
       ]
     }).compileComponents();
   });

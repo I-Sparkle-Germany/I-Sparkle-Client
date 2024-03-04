@@ -1,4 +1,3 @@
-import '../../assets/wise5/lib/jquery/jquery-global';
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { AnnotationService } from '../../assets/wise5/services/annotationService';
@@ -6,6 +5,7 @@ import { ConfigService } from '../../assets/wise5/services/configService';
 import { ProjectService } from '../../assets/wise5/services/projectService';
 import { StudentAssetService } from '../../assets/wise5/services/studentAssetService';
 import { TagService } from '../../assets/wise5/services/tagService';
+import { UtilService } from '../../assets/wise5/services/utilService';
 import { DrawService } from '../../assets/wise5/components/draw/drawService';
 import { SessionService } from '../../assets/wise5/services/sessionService';
 
@@ -25,10 +25,11 @@ describe('DrawService', () => {
         ProjectService,
         SessionService,
         StudentAssetService,
-        TagService
+        TagService,
+        UtilService
       ]
     });
-    service = TestBed.inject(DrawService);
+    service = TestBed.get(DrawService);
   });
   createComponent();
   isCompleted();

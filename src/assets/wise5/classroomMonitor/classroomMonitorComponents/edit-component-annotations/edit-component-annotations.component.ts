@@ -1,11 +1,11 @@
 'use strict';
 
+import * as angular from 'angular';
 import { Component, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AnnotationService } from '../../../services/annotationService';
 import { ConfigService } from '../../../services/configService';
 import { TeacherDataService } from '../../../services/teacherDataService';
-import { Annotation } from '../../../common/Annotation';
 
 @Component({
   selector: 'edit-component-annotations',
@@ -50,9 +50,11 @@ export class EditComponentAnnotationsComponent {
       this.periodId = toUserInfo.periodId;
     }
     this.annotationSavedToServerSubscription = this.AnnotationService.annotationSavedToServer$.subscribe(
-      (annotation: Annotation) => {
+      ({ annotation }) => {
         // TODO: we're watching this here and in the parent component's controller; probably want to optimize!
-        if (annotation.nodeId === this.nodeId && annotation.componentId === this.componentId) {
+        const annotationNodeId = annotation.nodeId;
+        const annotationComponentId = annotation.componentId;
+        if (this.nodeId === annotationNodeId && this.componentId === annotationComponentId) {
           this.processAnnotations();
         }
       }
@@ -138,7 +140,9 @@ export class EditComponentAnnotationsComponent {
   toggleEditComment() {
     this.edit = !this.edit;
     if (this.edit) {
-      document.getElementById(`commentInput_${this.componentId}_${this.toWorkgroupId}`).focus();
+      angular
+        .element(document.querySelector(`#commentInput_${this.componentId}_${this.toWorkgroupId}`))
+        .focus();
     }
   }
 }

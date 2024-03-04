@@ -2,7 +2,6 @@ import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { AnnotationService } from '../../../services/annotationService';
-import { NotificationService } from '../../../services/notificationService';
 
 @Component({
   selector: 'edit-component-score',
@@ -25,17 +24,13 @@ export class EditComponentScoreComponent {
   scoreChanged: Subject<number> = new Subject<number>();
   subscriptions: Subscription = new Subscription();
 
-  constructor(
-    private annotationService: AnnotationService,
-    private notificationService: NotificationService
-  ) {}
+  constructor(private AnnotationService: AnnotationService) {}
 
   ngOnInit() {
     this.isAutoScore = this.latestAnnotationScore?.type === 'autoScore';
     this.score = this.latestAnnotationScore?.data.value ?? 0;
     this.subscriptions.add(
       this.scoreChanged.pipe(debounceTime(1000), distinctUntilChanged()).subscribe((newScore) => {
-        this.notificationService.showSavingMessage();
         this.saveScore(newScore);
       })
     );
@@ -45,8 +40,8 @@ export class EditComponentScoreComponent {
     this.subscriptions.unsubscribe();
   }
 
-  saveScore(score: number): void {
-    const annotation = this.annotationService.createAnnotation(
+  saveScore(score: number) {
+    const annotation = this.AnnotationService.createAnnotation(
       null,
       this.runId,
       this.periodId,
@@ -61,9 +56,7 @@ export class EditComponentScoreComponent {
       { value: score },
       new Date().getTime()
     );
-    this.annotationService.saveAnnotation(annotation).then(() => {
-      this.notificationService.showSavedMessage($localize`Saved score`);
-    });
+    this.AnnotationService.saveAnnotation(annotation);
   }
 
   focusScoreInput() {

@@ -1,20 +1,34 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatListModule } from '@angular/material/list';
+import { UpgradeModule } from '@angular/upgrade/static';
 import { ConfigService } from '../../services/configService';
 import { TeacherProjectService } from '../../services/teacherProjectService';
 import { ClassroomMonitorTestingModule } from '../classroom-monitor-testing.module';
 import { StudentGradingComponent } from './student-grading.component';
-import { RouterTestingModule } from '@angular/router/testing';
+
+class MockUpgradeModule {
+  $injector: any = {
+    get() {
+      return { go: () => {}, onSuccess: () => {} };
+    }
+  };
+}
 
 let component: StudentGradingComponent;
 let fixture: ComponentFixture<StudentGradingComponent>;
 const nodeIds = ['node1', 'node2'];
 
-xdescribe('StudentGradingComponent', () => {
+describe('StudentGradingComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [StudentGradingComponent],
-      imports: [ClassroomMonitorTestingModule, MatListModule, RouterTestingModule]
+      imports: [ClassroomMonitorTestingModule, MatListModule],
+      providers: [
+        {
+          provide: UpgradeModule,
+          useClass: MockUpgradeModule
+        }
+      ]
     }).compileComponents();
   });
 

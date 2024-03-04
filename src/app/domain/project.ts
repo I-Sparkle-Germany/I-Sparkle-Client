@@ -2,25 +2,22 @@ import { Run } from './run';
 import { User } from '../domain/user';
 
 export class Project {
-  archived: boolean;
-  dateArchived: string;
-  dateCreated: string;
   id: number;
-  isHighlighted: boolean;
-  lastEdited: string;
-  license: String;
-  metadata: any;
   name: string;
-  owner: User;
-  parentId: number;
+  metadata: any;
+  dateCreated: string;
+  dateArchived: string;
+  lastEdited: string;
   projectThumb: string;
-  run: Run;
-  sharedOwners: User[] = [];
-  selected: boolean;
-  tags: string[];
   thumbStyle: any;
-  uri: String;
+  isHighlighted: boolean;
+  owner: User;
+  sharedOwners: User[] = [];
+  run: Run;
+  parentId: number;
   wiseVersion: number;
+  uri: String;
+  license: String;
 
   static readonly VIEW_PERMISSION: number = 1;
   static readonly EDIT_PERMISSION: number = 2;
@@ -91,18 +88,5 @@ export class Project {
       metadata.standardsAddressed = JSON.parse(metadata.standardsAddressed);
     }
     return metadata;
-  }
-
-  hasTag(tag: string): boolean {
-    return this.tags.includes(tag);
-  }
-
-  updateArchivedStatus(archived: boolean): void {
-    this.archived = archived;
-    if (archived) {
-      this.tags.push('archived');
-    } else {
-      this.tags.splice(this.tags.indexOf('archived'), 1);
-    }
   }
 }

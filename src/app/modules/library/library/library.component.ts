@@ -5,7 +5,6 @@ import { Standard } from '../standard';
 import { LibraryProject } from '../libraryProject';
 import { PageEvent, MatPaginator } from '@angular/material/paginator';
 import { Subscription } from 'rxjs';
-import { MatDialog } from '@angular/material/dialog';
 
 @Directive()
 export abstract class LibraryComponent implements OnInit {
@@ -31,7 +30,7 @@ export abstract class LibraryComponent implements OnInit {
 
   @ViewChildren(MatPaginator) paginators!: QueryList<MatPaginator>;
 
-  constructor(protected dialog: MatDialog, protected libraryService: LibraryService) {}
+  constructor(protected libraryService: LibraryService) {}
 
   ngOnInit() {
     this.subscriptions.add(
@@ -84,7 +83,7 @@ export abstract class LibraryComponent implements OnInit {
     this.peValue = this.filterValues.peValue;
     for (let project of this.projects) {
       let filterMatch = false;
-      const searchMatch = this.isSearchMatch(project, this.searchValue);
+      let searchMatch = this.isSearchMatch(project, this.searchValue);
       if (searchMatch) {
         filterMatch = this.isFilterMatch(project);
       }
@@ -108,28 +107,36 @@ export abstract class LibraryComponent implements OnInit {
     );
   }
 
-  private isSearchMatch(project: LibraryProject, searchValue: string): boolean {
-    const metadata: any = project.metadata;
-    metadata.id = project.id;
-    return (
-      !searchValue ||
-      Object.keys(metadata)
-        .filter((prop) =>
-          // only check for match in specific metadata fields
-          ['title', 'summary', 'keywords', 'features', 'standardsAddressed', 'id'].includes(prop)
-        )
-        .some((prop) => {
-          let value = metadata[prop];
+  isSearchMatch(project: LibraryProject, searchValue: string): boolean {
+    if (searchValue) {
+      let data: any = project.metadata;
+      data.id = project.id;
+      return Object.keys(data).some((prop) => {
+        // only check for match in specific metadata fields
+        if (
+          prop != 'title' &&
+          prop != 'summary' &&
+          prop != 'keywords' &&
+          prop != 'features' &&
+          prop != 'standardsAddressed' &&
+          prop != 'id'
+        ) {
+          return false;
+        } else {
+          let value = data[prop];
           if (prop === 'standardsAddressed') {
             value = JSON.stringify(value);
           }
-          return (
-            typeof value !== 'undefined' &&
-            value != null &&
-            value.toString().toLocaleLowerCase().indexOf(searchValue) !== -1
-          );
-        })
-    );
+          if (typeof value === 'undefined' || value === null) {
+            return false;
+          } else {
+            return value.toString().toLocaleLowerCase().indexOf(searchValue) !== -1;
+          }
+        }
+      });
+    } else {
+      return true;
+    }
   }
 
   isFilterMatch(project: LibraryProject): boolean {
@@ -179,13 +186,4 @@ export abstract class LibraryComponent implements OnInit {
   countVisibleProjects(set: LibraryProject[]): number {
     return set.filter((project) => 'project' && project.visible).length;
   }
-
-  protected showInfo(event: Event): void {
-    event.preventDefault();
-    this.dialog.open(this.getDetailsComponent(), {
-      panelClass: 'dialog-sm'
-    });
-  }
-
-  protected abstract getDetailsComponent(): any;
 }

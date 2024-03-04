@@ -6,5 +6,5 @@ import { Component, Input } from '@angular/core';
   templateUrl: 'manage-teams.component.html'
 })
 export class ManageTeamsComponent {
-  @Input() protected teams: any;
+  @Input() teams: any[];
 }

@@ -6,8 +6,8 @@ import { SessionService } from '../../../../services/sessionService';
 import { TeacherProjectService } from '../../../../services/teacherProjectService';
 import { NotificationService } from '../../../../services/notificationService';
 import { Notification } from '../../../../../../app/domain/notification';
+import { UpgradeModule } from '@angular/upgrade/static';
 import { getAvatarColorForWorkgroupId } from '../../../../common/workgroup/workgroup';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'top-bar',
@@ -28,17 +28,18 @@ export class TopBarComponent implements OnInit {
   @Input() runId: number;
   @Input() runCode: string;
   runInfo: string;
+  state: any;
   themePath: string;
   userInfo: any;
   workgroupId: number;
 
   constructor(
     private configService: ConfigService,
-    private dataService: TeacherDataService,
     private notificationService: NotificationService,
     private projectService: TeacherProjectService,
-    private router: Router,
-    private sessionService: SessionService
+    private teacherDataService: TeacherDataService,
+    private sessionService: SessionService,
+    private upgrade: UpgradeModule
   ) {}
 
   ngOnInit(): void {
@@ -58,6 +59,7 @@ export class TopBarComponent implements OnInit {
     const permissions = this.configService.getPermissions();
     this.canAuthorProject = permissions.canAuthorProject;
     this.runInfo = this.getRunInfo();
+    this.state = this.upgrade.$injector.get('$state');
     this.setNotifications();
   }
 
@@ -91,38 +93,71 @@ export class TopBarComponent implements OnInit {
     );
   }
 
-  protected isAnyPeriodPaused(): boolean {
-    return this.dataService.getPeriods().some((period) => period.paused);
+  /**
+   * Check whether any period in the run is paused
+   * @return Boolean whether any of the periods are paused
+   */
+  isAnyPeriodPaused(): boolean {
+    return this.teacherDataService.isAnyPeriodPaused();
   }
 
-  protected switchToAuthoringView(): void {
+  switchToAuthoringView(): void {
     if (
       confirm(
         $localize`Warning! You will be editing the content of a classroom unit. If students have already started working, this may result in lost data or other problems.\n\nAre you sure you want to proceed?`
       )
     ) {
-      if (/unit\/(\d*)\/node\/(\w*)$/.test(this.router.url)) {
-        this.router.navigate([
-          '/teacher/edit/unit',
-          this.projectId,
-          'node',
-          this.router.url.match(/\/node\/(\w+)$/)[1]
-        ]);
-      } else {
-        this.router.navigate(['/teacher/edit/unit', this.projectId]);
-      }
+      this.doAuthoringViewSwitch();
     }
   }
 
-  protected previewProject(): void {
-    window.open(`${this.configService.getConfigParam('previewProjectURL')}`);
+  private doAuthoringViewSwitch(): void {
+    const state = this.upgrade.$injector.get('$state');
+    if (state.current.name === 'root.cm.notebooks') {
+      state.go('root.at.project.notebook', {
+        projectId: this.projectId
+      });
+    } else if (state.current.name === 'root.cm.unit.node') {
+      state.go('root.at.project.node', {
+        projectId: this.projectId,
+        nodeId: state.params.nodeId
+      });
+    } else {
+      state.go('root.at.project', {
+        projectId: this.projectId
+      });
+    }
   }
 
-  protected goHome(): void {
-    this.sessionService.goHome();
+  previewProject(): void {
+    this.saveEvent('projectPreviewed').then(() => {
+      window.open(`${this.configService.getConfigParam('previewProjectURL')}`);
+    });
   }
 
-  protected logOut(): void {
-    this.sessionService.logOut();
+  goHome(): void {
+    this.saveEvent('goHomeButtonClicked').then(() => {
+      this.sessionService.goHome();
+    });
+  }
+
+  logOut(): void {
+    this.saveEvent('logOutButtonClicked').then(() => {
+      this.sessionService.logOut();
+    });
+  }
+
+  private saveEvent(eventName: string): any {
+    const context = 'ClassroomMonitor';
+    const category = 'Navigation';
+    const nodeId = null;
+    const componentId = null;
+    const componentType = null;
+    const data = {};
+    return this.teacherDataService
+      .saveEvent(context, nodeId, componentId, componentType, category, eventName, data)
+      .then((result) => {
+        return result;
+      });
   }
 }

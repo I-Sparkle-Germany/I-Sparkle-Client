@@ -10,7 +10,6 @@ import {
   DIFFERENT_SCORES_REGEX,
   DIFFERENT_SCORES_VALUE
 } from '../PeerGroupingLogic';
-import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'edit-peer-grouping-dialog',
@@ -24,10 +23,9 @@ export class EditPeerGroupingDialogComponent extends AuthorPeerGroupingDialogCom
     @Inject(MAT_DIALOG_DATA) public peerGrouping: PeerGrouping,
     protected dialogRef: MatDialogRef<EditPeerGroupingDialogComponent>,
     private peerGroupingAuthoringService: PeerGroupingAuthoringService,
-    protected projectService: ProjectService,
-    protected snackBar: MatSnackBar
+    protected projectService: ProjectService
   ) {
-    super(dialogRef, projectService, snackBar);
+    super(dialogRef, projectService);
   }
 
   ngOnInit(): void {
@@ -55,13 +53,8 @@ export class EditPeerGroupingDialogComponent extends AuthorPeerGroupingDialogCom
 
   save(): void {
     this.updatePeerGroupingLogic();
-    this.peerGroupingAuthoringService.updatePeerGrouping(this.peerGrouping).subscribe({
-      next: () => {
-        this.dialogRef.close();
-      },
-      error: ({ error }) => {
-        this.handleError(error);
-      }
+    this.peerGroupingAuthoringService.updatePeerGrouping(this.peerGrouping).subscribe(() => {
+      this.dialogRef.close();
     });
   }
 

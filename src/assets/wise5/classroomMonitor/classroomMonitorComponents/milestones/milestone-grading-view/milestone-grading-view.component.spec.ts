@@ -10,7 +10,6 @@ import { TeacherDataService } from '../../../../services/teacherDataService';
 import { ClassroomMonitorTestingModule } from '../../../classroom-monitor-testing.module';
 import { MilestoneGradingViewComponent } from './milestone-grading-view.component';
 import { NodeGradingViewComponentTestHelper } from '../../nodeGrading/node-grading-view/node-grading-view.component.test.helper';
-import { of } from 'rxjs';
 
 let component: MilestoneGradingViewComponent;
 let fixture: ComponentFixture<MilestoneGradingViewComponent>;
@@ -49,7 +48,9 @@ describe('MilestoneGradingViewComponent', () => {
     spyOn(TestBed.inject(TeacherDataService), 'getCurrentPeriodId').and.returnValue(1);
     spyOn(TestBed.inject(TeacherDataService), 'getCurrentPeriod').and.returnValue({ periodId: 1 });
     spyOn(TestBed.inject(ConfigService), 'getClassmateUserInfos').and.returnValue([]);
-    spyOn(TestBed.inject(TeacherDataService), 'retrieveStudentDataForNode').and.returnValue(of([]));
+    spyOn(TestBed.inject(TeacherDataService), 'retrieveStudentDataForNode').and.returnValue(
+      Promise.resolve([])
+    );
     testHelper = new NodeGradingViewComponentTestHelper();
     initializeWorkgroups(component);
     fixture.detectChanges();

@@ -15,7 +15,6 @@ import { getAvatarColorForWorkgroupId } from '../../../../common/workgroup/workg
   templateUrl: './milestone-details.component.html'
 })
 export class MilestoneDetailsComponent implements OnInit {
-  currentPeriod: any;
   description: SafeHtml;
   @Input() milestone;
   @Output() onVisitNodeGrading = new EventEmitter<string>();
@@ -33,11 +32,9 @@ export class MilestoneDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.currentPeriod = this.dataService.getCurrentPeriod();
     this.processMilestone();
     this.subscriptions.add(
       this.dataService.currentPeriodChanged$.subscribe(({ currentPeriod }) => {
-        this.currentPeriod = currentPeriod;
         this.processMilestone();
         this.saveMilestoneCurrentPeriodSelectedEvent(currentPeriod);
       })

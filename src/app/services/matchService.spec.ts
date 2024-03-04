@@ -6,6 +6,7 @@ import { ConfigService } from '../../assets/wise5/services/configService';
 import { ProjectService } from '../../assets/wise5/services/projectService';
 import { StudentAssetService } from '../../assets/wise5/services/studentAssetService';
 import { TagService } from '../../assets/wise5/services/tagService';
+import { UtilService } from '../../assets/wise5/services/utilService';
 import { SessionService } from '../../assets/wise5/services/sessionService';
 
 let service: MatchService;
@@ -22,7 +23,8 @@ describe('MatchService', () => {
         ProjectService,
         SessionService,
         StudentAssetService,
-        TagService
+        TagService,
+        UtilService
       ]
     });
     service = TestBed.get(MatchService);

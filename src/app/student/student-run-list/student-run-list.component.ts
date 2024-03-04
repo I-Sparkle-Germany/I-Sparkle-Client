@@ -5,8 +5,7 @@ import { ConfigService } from '../../services/config.service';
 import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { AddProjectDialogComponent } from '../add-project-dialog/add-project-dialog.component';
-import { runSpansDays } from '../../../assets/wise5/common/datetime/datetime';
-import { sortByRunStartTimeDesc } from '../../domain/run';
+import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-student-run-list',
@@ -62,8 +61,16 @@ export class StudentRunListComponent implements OnInit {
     });
   }
 
-  protected sortByStartTimeDesc(a: StudentRun, b: StudentRun): number {
-    return sortByRunStartTimeDesc(a, b);
+  sortByStartTimeDesc(a, b) {
+    let aStartTime = a.startTime;
+    let bStartTime = b.startTime;
+    if (aStartTime < bStartTime) {
+      return 1;
+    } else if (aStartTime > bStartTime) {
+      return -1;
+    } else {
+      return 0;
+    }
   }
 
   getRunIndex(run: StudentRun) {
@@ -76,12 +83,42 @@ export class StudentRunListComponent implements OnInit {
   }
 
   runSpansDays(run: StudentRun) {
-    return runSpansDays(run, this.localeID);
+    const startDay = formatDate(run.startTime, 'shortDate', this.localeID);
+    const endDay = formatDate(run.endTime, 'shortDate', this.localeID);
+    return startDay != endDay;
   }
 
-  protected getRunTotal(type: 'isActive' | 'isScheduled'): number {
+  activeTotal(): number {
+    let total = 0;
     const now = this.configService.getCurrentServerTime();
-    return this.filteredRuns.filter((run) => run[type](now)).length;
+    for (let run of this.filteredRuns) {
+      if (run.isActive(now)) {
+        total++;
+      }
+    }
+    return total;
+  }
+
+  completedTotal(): number {
+    let total = 0;
+    const now = this.configService.getCurrentServerTime();
+    for (let run of this.filteredRuns) {
+      if (run.isCompleted(now)) {
+        total++;
+      }
+    }
+    return total;
+  }
+
+  scheduledTotal(): number {
+    let total = 0;
+    const now = this.configService.getCurrentServerTime();
+    for (let run of this.filteredRuns) {
+      if (run.isScheduled(now)) {
+        total++;
+      }
+    }
+    return total;
   }
 
   searchUpdated(value: string) {

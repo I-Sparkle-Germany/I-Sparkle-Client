@@ -15,13 +15,3 @@ export interface ComponentContent {
   showSubmitButton?: boolean;
   type: string;
 }
-
-export function hasConnectedComponent(
-  content: ComponentContent,
-  connectedComponentType: 'importWork' | 'showWork'
-): boolean {
-  return (
-    content.connectedComponents != null &&
-    content.connectedComponents.some((c) => c.type === connectedComponentType)
-  );
-}

@@ -164,18 +164,11 @@ export class DiscussionStudent extends ComponentStudent {
       nodeId: this.nodeId,
       componentId: this.componentId
     });
-    if (this.isPreviewMode()) {
-      this.saveForAuthoringPreviewMode('submit');
-    }
   }
 
   handleStudentWorkSavedToServerAdditionalProcessing(componentState: any): void {
     this.clearComponentValues();
-    if (
-      !this.isPreviewMode() &&
-      this.isClassmateResponsesGated() &&
-      !this.retrievedClassmateResponses
-    ) {
+    if (this.isClassmateResponsesGated() && !this.retrievedClassmateResponses) {
       this.getClassmateResponses();
     } else {
       this.addClassResponse(componentState);
@@ -367,7 +360,6 @@ export class DiscussionStudent extends ComponentStudent {
     componentState.componentType = 'Discussion';
     componentState.nodeId = this.nodeId;
     componentState.componentId = this.componentId;
-    componentState.isSubmit = this.isSubmit;
     if (
       (this.ConfigService.isPreview() && !this.componentStateIdReplyingTo) ||
       this.mode === 'authoring'

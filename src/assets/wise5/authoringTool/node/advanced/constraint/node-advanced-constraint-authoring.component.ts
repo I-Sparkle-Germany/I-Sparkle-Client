@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
+import { TeacherDataService } from '../../../../services/teacherDataService';
 import { TeacherProjectService } from '../../../../services/teacherProjectService';
-import { scrollToElement, temporarilyHighlightElement } from '../../../../common/dom/dom';
+import { temporarilyHighlightElement } from '../../../../common/dom/dom';
 import { ConstraintsAuthoringComponent } from '../../../constraint/constraints-authoring/constraints-authoring.component';
-import { ActivatedRoute } from '@angular/router';
-import { Constraint } from '../../../../../../app/domain/constraint';
 
 @Component({
   selector: 'node-advanced-constraint-authoring',
@@ -11,27 +10,27 @@ import { Constraint } from '../../../../../../app/domain/constraint';
   styleUrls: ['node-advanced-constraint-authoring.component.scss']
 })
 export class NodeAdvancedConstraintAuthoringComponent extends ConstraintsAuthoringComponent {
-  constructor(protected projectService: TeacherProjectService, private route: ActivatedRoute) {
+  constructor(
+    private dataService: TeacherDataService,
+    protected projectService: TeacherProjectService
+  ) {
     super(projectService);
   }
 
   ngOnInit() {
-    this.route.parent.parent.params.subscribe((params) => {
-      const node = this.projectService.getNodeById(params.nodeId);
-      if (node.constraints == null) {
-        node.constraints = [];
-      }
-      this.content = node;
-    });
+    const node = this.projectService.getNodeById(this.dataService.getCurrentNodeId());
+    if (node.constraints == null) {
+      node.constraints = [];
+    }
+    this.content = node;
   }
 
-  protected addConstraint(): Constraint {
-    const constraint = super.addConstraint();
+  protected addConstraintAndScrollToBottom(): void {
+    const constraint = this.addConstraint();
     constraint.targetId = this.content.id;
     setTimeout(() => {
-      scrollToElement('bottom');
+      this.projectService.scrollToBottomOfPage();
       temporarilyHighlightElement(constraint.id);
     });
-    return constraint;
   }
 }

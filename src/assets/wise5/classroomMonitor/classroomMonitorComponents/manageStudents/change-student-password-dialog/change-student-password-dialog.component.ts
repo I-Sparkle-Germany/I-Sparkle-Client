@@ -5,7 +5,6 @@ import { ConfigService } from '../../../../services/configService';
 import { TeacherService } from '../../../../../../app/teacher/teacher.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { NewPasswordAndConfirmComponent } from '../../../../../../app/password/new-password-and-confirm/new-password-and-confirm.component';
-import { changePasswordError } from '../../../../../../app/common/password-helper';
 
 @Component({
   selector: 'app-change-student-password-dialog',
@@ -75,7 +74,25 @@ export class ChangeStudentPasswordDialogComponent implements OnInit {
   }
 
   private changePasswordError(error: any): void {
+    const formError: any = {};
     this.isChangingPassword = false;
-    changePasswordError(error, this.changePasswordForm, this.changePasswordForm, 'teacherPassword');
+    switch (error.messageCode) {
+      case 'incorrectPassword':
+        formError.incorrectPassword = true;
+        this.changePasswordForm.get('teacherPassword').setErrors(formError);
+        break;
+      case 'invalidPasswordLength':
+        formError.minlength = true;
+        this.changePasswordForm
+          .get(NewPasswordAndConfirmComponent.NEW_PASSWORD_FORM_CONTROL_NAME)
+          .setErrors(formError);
+        break;
+      case 'invalidPasswordPattern':
+        formError.pattern = true;
+        this.changePasswordForm
+          .get(NewPasswordAndConfirmComponent.NEW_PASSWORD_FORM_CONTROL_NAME)
+          .setErrors(formError);
+        break;
+    }
   }
 }

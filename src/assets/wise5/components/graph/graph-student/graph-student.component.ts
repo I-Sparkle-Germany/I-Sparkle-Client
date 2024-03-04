@@ -6,6 +6,7 @@ import { NotebookService } from '../../../services/notebookService';
 import { ProjectService } from '../../../services/projectService';
 import { StudentAssetService } from '../../../services/studentAssetService';
 import { StudentDataService } from '../../../services/studentDataService';
+import { UtilService } from '../../../services/utilService';
 import { ComponentStudent } from '../../component-student.component';
 import { ComponentService } from '../../componentService';
 import { GraphService } from '../graphService';
@@ -94,7 +95,8 @@ export class GraphStudent extends ComponentStudent {
     protected NotebookService: NotebookService,
     private ProjectService: ProjectService,
     protected StudentAssetService: StudentAssetService,
-    protected StudentDataService: StudentDataService
+    protected StudentDataService: StudentDataService,
+    protected UtilService: UtilService
   ) {
     super(
       AnnotationService,

@@ -95,7 +95,7 @@
       <mat-form-field appearance="fill" fxFlex>
         <mat-label i18n>School Level</mat-label>
         <mat-select formControlName="schoolLevel">
-          <mat-option *ngFor="let schoolLevel of schoolLevels" [value]="schoolLevel.code">
+          <mat-option *ngFor="let schoolLevel of schoolLevels" [value]="schoolLevel.id">
             {{ schoolLevel.label }}
           </mat-option>
         </mat-select>
@@ -137,7 +137,6 @@
       color="primary"
       type="submit"
       [disabled]="!editProfileFormGroup.valid || !changed || isSaving"
-      class="button--progress"
     >
       <mat-progress-bar mode="indeterminate" *ngIf="isSaving"></mat-progress-bar>
       <ng-container i18n>Save Changes</ng-container>

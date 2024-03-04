@@ -5,6 +5,7 @@ import { ConfigService } from '../../assets/wise5/services/configService';
 import { ProjectService } from '../../assets/wise5/services/projectService';
 import { StudentAssetService } from '../../assets/wise5/services/studentAssetService';
 import { TagService } from '../../assets/wise5/services/tagService';
+import { UtilService } from '../../assets/wise5/services/utilService';
 import { GraphService } from '../../assets/wise5/components/graph/graphService';
 import { SessionService } from '../../assets/wise5/services/sessionService';
 
@@ -23,7 +24,8 @@ describe('GraphService', () => {
         ProjectService,
         SessionService,
         StudentAssetService,
-        TagService
+        TagService,
+        UtilService
       ]
     });
     service = TestBed.get(GraphService);
@@ -61,7 +63,6 @@ function createComponentState(studentData: any, isSubmit: boolean = false) {
 
 function createComponentContent(series: any[] = [], xAxis: any = {}, yAxis: any = {}) {
   return {
-    connectedComponents: [],
     series: series,
     xAxis: xAxis,
     yAxis: yAxis
@@ -204,17 +205,16 @@ function hasSubmitComponentState() {
 }
 
 function canEdit() {
-  describe('canEdit()', () => {
-    it('should return false when they can not edit', () => {
-      const multipleSeries = [createSingleSeries([], false), createSingleSeries([], false)];
-      const content = createComponentContent(multipleSeries);
-      content.connectedComponents = [{ type: 'showWork' }];
-      expect(service.canEdit(content)).toEqual(false);
-    });
-    it('should return true when they can edit', () => {
-      const multipleSeries = [createSingleSeries([], false), createSingleSeries([], true)];
-      expect(service.canEdit(createComponentContent(multipleSeries))).toEqual(true);
-    });
+  function expectCanEdit(component: any, expectedResult: boolean) {
+    expect(service.canEdit(component)).toEqual(expectedResult);
+  }
+  it('should check if the student can edit the graph when they can not edit', () => {
+    const multipleSeries = [createSingleSeries([], false), createSingleSeries([], false)];
+    expectCanEdit(createComponentContent(multipleSeries), false);
+  });
+  it('should check if the student can edit the graph when they can edit', () => {
+    const multipleSeries = [createSingleSeries([], false), createSingleSeries([], true)];
+    expectCanEdit(createComponentContent(multipleSeries), true);
   });
 }
 

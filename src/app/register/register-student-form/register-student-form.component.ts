@@ -44,21 +44,23 @@ export class RegisterStudentFormComponent extends RegisterUserFormComponent impl
     { code: '11', label: $localize`11 (Nov)` },
     { code: '12', label: $localize`12 (Dec)` }
   ];
+  passwordsFormGroup: FormGroup = this.fb.group({});
+  processing: boolean = false;
   securityQuestions: object;
-  user: Student = new Student();
+  studentUser: Student = new Student();
 
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
     private configService: ConfigService,
-    protected fb: FormBuilder,
+    private fb: FormBuilder,
     private recaptchaV3Service: ReCaptchaV3Service,
     private router: Router,
     private route: ActivatedRoute,
-    protected snackBar: MatSnackBar,
+    private snackBar: MatSnackBar,
     private studentService: StudentService,
     private utilService: UtilService
   ) {
-    super(fb, snackBar);
+    super();
     this.studentService.retrieveSecurityQuestions().subscribe((response) => {
       this.securityQuestions = response;
     });
@@ -66,7 +68,7 @@ export class RegisterStudentFormComponent extends RegisterUserFormComponent impl
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
-      this.user.googleUserId = params['gID'];
+      this.studentUser.googleUserId = params['gID'];
       if (!this.isUsingGoogleId()) {
         this.createStudentAccountFormGroup.addControl('passwords', this.passwordsFormGroup);
         this.createStudentAccountFormGroup.addControl(
@@ -100,19 +102,19 @@ export class RegisterStudentFormComponent extends RegisterUserFormComponent impl
   }
 
   isUsingGoogleId() {
-    return this.user.googleUserId != null;
+    return this.studentUser.googleUserId != null;
   }
 
   async createAccount() {
     if (this.createStudentAccountFormGroup.valid) {
       this.processing = true;
       await this.populateStudentUser();
-      this.studentService.registerStudentAccount(this.user).subscribe(
+      this.studentService.registerStudentAccount(this.studentUser).subscribe(
         (response: any) => {
           this.createAccountSuccess(response);
         },
         (response: HttpErrorResponse) => {
-          this.handleCreateAccountError(response.error, this.user);
+          this.createAccountError(response.error);
         }
       );
     }
@@ -126,22 +128,46 @@ export class RegisterStudentFormComponent extends RegisterUserFormComponent impl
     this.processing = false;
   }
 
+  createAccountError(error: any): void {
+    const formError: any = {};
+    switch (error.messageCode) {
+      case 'invalidPasswordLength':
+        formError.minlength = true;
+        this.passwordsFormGroup
+          .get(NewPasswordAndConfirmComponent.NEW_PASSWORD_FORM_CONTROL_NAME)
+          .setErrors(formError);
+        break;
+      case 'invalidPasswordPattern':
+        formError.pattern = true;
+        this.passwordsFormGroup
+          .get(NewPasswordAndConfirmComponent.NEW_PASSWORD_FORM_CONTROL_NAME)
+          .setErrors(formError);
+        break;
+      case 'recaptchaResponseInvalid':
+        this.studentUser['isRecaptchaInvalid'] = true;
+        break;
+      default:
+        this.snackBar.open(this.translateCreateAccountErrorMessageCode(error.messageCode));
+    }
+    this.processing = false;
+  }
+
   async populateStudentUser() {
     for (let key of Object.keys(this.createStudentAccountFormGroup.controls)) {
       if (key == 'birthMonth' || key == 'birthDay') {
-        this.user[key] = parseInt(this.createStudentAccountFormGroup.get(key).value);
+        this.studentUser[key] = parseInt(this.createStudentAccountFormGroup.get(key).value);
       } else {
-        this.user[key] = this.createStudentAccountFormGroup.get(key).value;
+        this.studentUser[key] = this.createStudentAccountFormGroup.get(key).value;
       }
     }
     if (this.isRecaptchaEnabled) {
       const token = await this.recaptchaV3Service.execute('importantAction').toPromise();
-      this.user['token'] = token;
+      this.studentUser['token'] = token;
     }
     if (!this.isUsingGoogleId()) {
-      this.user['password'] = this.getPassword();
-      delete this.user['passwords'];
-      delete this.user['googleUserId'];
+      this.studentUser['password'] = this.getPassword();
+      delete this.studentUser['passwords'];
+      delete this.studentUser['googleUserId'];
     }
   }
 

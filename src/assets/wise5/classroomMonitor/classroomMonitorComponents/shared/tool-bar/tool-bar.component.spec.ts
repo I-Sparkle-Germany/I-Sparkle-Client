@@ -3,7 +3,6 @@ import { MatIconModule } from '@angular/material/icon';
 
 import { ToolBarComponent } from './tool-bar.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('ToolBarComponent', () => {
   let component: ToolBarComponent;
@@ -12,8 +11,7 @@ describe('ToolBarComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ToolBarComponent],
-      imports: [MatIconModule, MatToolbarModule],
-      schemas: [NO_ERRORS_SCHEMA]
+      imports: [MatIconModule, MatToolbarModule]
     }).compileComponents();
   });
 

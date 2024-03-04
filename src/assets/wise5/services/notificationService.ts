@@ -106,12 +106,11 @@ export class NotificationService {
   }
 
   getNewNotifications(): any[] {
-    const newNotificationAggregates = [];
-    this.notifications
-      .filter((notification) => notification.timeDismissed == null)
-      .forEach((notification) => {
-        const notificationNodeId = notification.nodeId;
-        const notificationType = notification.type;
+    let newNotificationAggregates = [];
+    for (const notification of this.notifications) {
+      if (notification.timeDismissed == null) {
+        let notificationNodeId = notification.nodeId;
+        let notificationType = notification.type;
         let newNotificationForNodeIdAndTypeExists = false;
         for (const newNotificationAggregate of newNotificationAggregates) {
           if (
@@ -139,7 +138,7 @@ export class NotificationService {
 
               const annotationId = (notification.data as any).annotationId;
               if (annotationId != null) {
-                const annotation = this.annotationService.getAnnotationById(annotationId);
+                let annotation = this.annotationService.getAnnotationById(annotationId);
                 if (annotation != null && annotation.notebookItemId != null) {
                   notebookItemId = annotation.notebookItemId;
                 }
@@ -150,19 +149,24 @@ export class NotificationService {
           } else {
             message = notification.message;
           }
-          newNotificationAggregates.push({
+          const newNotificationAggregate = {
             latestNotificationTimestamp: notification.timeGenerated,
             message: message,
             nodeId: notificationNodeId,
             notebookItemId: notebookItemId,
             notifications: [notification],
             type: notificationType
-          });
+          };
+          newNotificationAggregates.push(newNotificationAggregate);
         }
-      });
-    return newNotificationAggregates.sort(
-      (n1, n2) => n2.latestNotificationTimestamp - n1.latestNotificationTimestamp
-    );
+      }
+    }
+
+    // sort the aggregates by latestNotificationTimestamp, latest -> oldest
+    newNotificationAggregates.sort((n1, n2) => {
+      return n2.latestNotificationTimestamp - n1.latestNotificationTimestamp;
+    });
+    return newNotificationAggregates;
   }
 
   setNotificationNodePositionAndTitle(notification: Notification) {
@@ -473,27 +477,5 @@ export class NotificationService {
 
   broadcastViewCurrentAmbientNotification(args: any) {
     this.viewCurrentAmbientNotificationSource.next(args);
-  }
-
-  showSavingMessage(): void {
-    this.broadcastSetGlobalMessage({
-      globalMessage: {
-        text: $localize`Saving...`,
-        isProgressIndicatorVisible: true,
-        time: null
-      }
-    });
-  }
-
-  showSavedMessage(message: string, timeout: number = 500): void {
-    setTimeout(() => {
-      this.broadcastSetGlobalMessage({
-        globalMessage: {
-          text: message,
-          isProgressIndicatorVisible: false,
-          time: new Date().getTime()
-        }
-      });
-    }, timeout);
   }
 }

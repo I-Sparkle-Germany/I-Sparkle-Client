@@ -10,7 +10,6 @@ import { NodeConstraintAuthoringComponent } from '../../constraint/node-constrai
 import { ConstraintAuthoringModule } from '../../constraint/constraint-authoring.module';
 import { EditNodeRubricComponent } from '../editRubric/edit-node-rubric.component';
 import { WiseTinymceEditorModule } from '../../../directives/wise-tinymce-editor/wise-tinymce-editor.module';
-import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -33,11 +32,6 @@ import { RouterModule } from '@angular/router';
     NodeAdvancedPathAuthoringComponent,
     NodeConstraintAuthoringComponent
   ],
-  imports: [
-    ConstraintAuthoringModule,
-    RouterModule,
-    StudentTeacherCommonModule,
-    WiseTinymceEditorModule
-  ]
+  imports: [ConstraintAuthoringModule, StudentTeacherCommonModule, WiseTinymceEditorModule]
 })
 export class NodeAdvancedAuthoringModule {}

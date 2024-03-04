@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { TeacherNodeService } from '../../../services/teacherNodeService';
+import { NodeService } from '../../../services/nodeService';
 import { Component as WISEComponent } from '../../../common/Component';
 
 @Component({
@@ -12,7 +12,7 @@ export class SaveStarterStateComponent implements OnInit {
   protected isDirty: boolean;
   @Input() private starterState: any;
 
-  constructor(private matDialog: MatDialog, private nodeService: TeacherNodeService) {}
+  constructor(private matDialog: MatDialog, private nodeService: NodeService) {}
 
   ngOnInit(): void {}
 

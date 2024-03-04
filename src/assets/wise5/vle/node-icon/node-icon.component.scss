@@ -3,8 +3,11 @@
   margin: 8px !important;
 }
 
-.mat-mdc-button {
+.mat-button {
   text-transform: none;
-  padding: 8px;
-  height: 100%;
+  padding: 0;
+}
+
+.mat-form-field-appearance-fill .mat-form-field-flex {
+  padding: .6em
 }

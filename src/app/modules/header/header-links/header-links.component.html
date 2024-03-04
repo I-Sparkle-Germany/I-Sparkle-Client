@@ -1,8 +1,9 @@
-<nav class="header__links" [ngSwitch]="location" fxLayout="row" fxLayoutAlign="start center">
-  <span class="mat-body-1">
-    <ng-container *ngSwitchCase="'teacher'" i18n>Welcome {{ user.firstName }}!</ng-container>
-    <ng-container *ngSwitchCase="'student'" i18n>Welcome {{ user.firstName }}!</ng-container>
-  </span>
+<nav class="header__links" [ngSwitch]="true" fxLayout="row" fxLayoutAlign="start center">
+  <div class="mat-body-1">
+    <span *ngSwitchCase="location == 'teacher' || location == 'student'" i18n
+      >Welcome {{ user.firstName }}!</span
+    >
+  </div>
   <ng-container *ngSwitchDefault>
     <div>
       <a
@@ -39,5 +40,5 @@
       >
     </div>
   </ng-container>
-  <ng-container *ngIf="!roles.length"> | <app-header-signin></app-header-signin> </ng-container>
+  <ng-container *ngIf="!role"> | <app-header-signin></app-header-signin> </ng-container>
 </nav>

@@ -1,7 +1,8 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Subscription, filter } from 'rxjs';
+import { UpgradeModule } from '@angular/upgrade/static';
+import { Subscription } from 'rxjs';
 import { Notification } from '../../../app/domain/notification';
 import { DialogWithConfirmComponent } from '../directives/dialog-with-confirm/dialog-with-confirm.component';
 import { ConfigService } from '../services/configService';
@@ -11,7 +12,6 @@ import { NotificationService } from '../services/notificationService';
 import { SessionService } from '../services/sessionService';
 import { TeacherDataService } from '../services/teacherDataService';
 import { TeacherProjectService } from '../services/teacherProjectService';
-import { NavigationEnd, Router } from '@angular/router';
 
 @Component({
   selector: 'classroom-monitor',
@@ -19,6 +19,7 @@ import { NavigationEnd, Router } from '@angular/router';
   templateUrl: './classroom-monitor.component.html'
 })
 export class ClassroomMonitorComponent implements OnInit {
+  currentViewName: string;
   logoPath: string;
   menuOpen: boolean;
   notebookConfig: any;
@@ -29,11 +30,14 @@ export class ClassroomMonitorComponent implements OnInit {
   reportFullscreen: boolean;
   runCode: string;
   runId: number;
+  showGradeByStepTools: boolean;
+  showGradeByTeamTools: boolean;
   showPeriodSelect: boolean;
   subscriptions: Subscription = new Subscription();
   title: string = $localize`Classroom Monitor`;
   views: any[];
   workgroupId: number;
+  $state: any;
 
   constructor(
     private configService: ConfigService,
@@ -43,10 +47,12 @@ export class ClassroomMonitorComponent implements OnInit {
     private notebookService: NotebookService,
     private notificationService: NotificationService,
     private projectService: TeacherProjectService,
-    private router: Router,
     private sessionService: SessionService,
-    private snackBar: MatSnackBar
-  ) {}
+    private snackBar: MatSnackBar,
+    private upgrade: UpgradeModule
+  ) {
+    this.$state = this.upgrade.$injector.get('$state');
+  }
 
   ngOnInit(): void {
     this.logoPath = this.projectService.getThemePath() + '/images/WISE-logo-ffffff.svg';
@@ -60,13 +66,12 @@ export class ClassroomMonitorComponent implements OnInit {
     this.subscribeToServerConnectionStatus();
     this.subscribeToSessionWarning();
     this.subscribeToNotebookFullScreen();
-    this.subscribeToRouterEvents();
+    this.subscribeToTransitions();
     this.processUI();
   }
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
-    this.dataService.clearCurrentPeriod();
   }
 
   private initializeNotebook(): void {
@@ -80,14 +85,14 @@ export class ClassroomMonitorComponent implements OnInit {
   private initializeViews(): void {
     this.views = [
       {
-        route: ['milestones'],
+        route: 'root.cm.milestones',
         name: $localize`Milestones`,
         icon: 'flag',
         type: 'primary',
         active: this.projectService.getAchievements().isEnabled
       },
       {
-        route: ['.'],
+        route: 'root.cm.unit',
         name: $localize`Grade by Step`,
         icon: 'view_list',
         type: 'primary',
@@ -100,28 +105,28 @@ export class ClassroomMonitorComponent implements OnInit {
         active: true
       },
       {
-        route: ['team'],
-        name: $localize`Grade by Student`,
+        route: 'root.cm.teamLanding',
+        name: $localize`Grade by Team`,
         icon: 'people',
         type: 'primary',
         active: true
       },
       {
-        route: ['manage-students'],
+        route: 'root.cm.manageStudents',
         name: $localize`Manage Students`,
         icon: 'face',
         type: 'primary',
         active: true
       },
       {
-        route: ['notebook'],
+        route: 'root.cm.notebooks',
         name: $localize`Student Notebooks`,
         icon: 'chrome_reader_mode',
         type: 'primary',
         active: this.notebookService.isNotebookEnabled()
       },
       {
-        route: ['export'],
+        route: 'root.cm.export',
         name: $localize`Data Export`,
         icon: 'file_download',
         type: 'secondary',
@@ -168,16 +173,36 @@ export class ClassroomMonitorComponent implements OnInit {
     );
   }
 
-  private subscribeToRouterEvents(): void {
-    this.subscriptions.add(
-      this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe(() => {
-        this.processUI();
-      })
-    );
+  private subscribeToTransitions(): void {
+    this.upgrade.$injector.get('$transitions').onSuccess({}, () => {
+      this.menuOpen = false;
+      this.processUI();
+    });
   }
 
+  /**
+   * Update UI items based on state, show or hide relevant menus and toolbars
+   * TODO: remove/rework this and put items in their own ui states?
+   */
   private processUI(): void {
-    this.menuOpen = false;
+    const viewName = this.$state.$current.name;
+    const currentView = this.views.find((view: any) => view.route === viewName);
+    if (currentView) {
+      this.currentViewName = currentView.name;
+    }
+    this.showGradeByStepTools = false;
+    this.showGradeByTeamTools = false;
+    this.showPeriodSelect = true;
+    this.workgroupId = null;
+    if (viewName === 'root.cm.unit.node') {
+      let nodeId = this.$state.params.nodeId;
+      this.showGradeByStepTools = this.projectService.isApplicationNode(nodeId);
+    } else if (viewName === 'root.cm.team') {
+      this.workgroupId = parseInt(this.$state.params.workgroupId);
+      this.showGradeByTeamTools = true;
+    } else if (viewName === 'root.cm.export') {
+      this.showPeriodSelect = false;
+    }
   }
 
   protected toggleMenu(): void {
@@ -197,7 +222,17 @@ export class ClassroomMonitorComponent implements OnInit {
   }
 
   private logOut(): void {
-    this.sessionService.logOut();
+    this.saveEvent('logOut', 'Navigation').then(() => {
+      this.sessionService.logOut();
+    });
+  }
+
+  private saveEvent(eventName: string, category: string): Promise<any> {
+    return this.dataService
+      .saveEvent('ClassroomMonitor', null, null, null, category, eventName, {})
+      .then((result) => {
+        return result;
+      });
   }
 
   @HostListener('window:beforeunload')

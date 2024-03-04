@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MultipleChoiceContent } from '../../../../components/multipleChoice/MultipleChoiceContent';
+import { TeacherDataService } from '../../../../services/teacherDataService';
 import { TeacherProjectService } from '../../../../services/teacherProjectService';
-import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'node-advanced-path-authoring',
@@ -9,22 +9,22 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['node-advanced-path-authoring.component.scss']
 })
 export class NodeAdvancedPathAuthoringComponent implements OnInit {
-  protected canChangePathOptions = [
+  canChangePathOptions = [
     { value: true, text: $localize`True` },
     { value: false, text: $localize`False` }
   ];
-  protected howToChooseAmongAvailablePathsOptions = [
+  howToChooseAmongAvailablePathsOptions = [
     { value: 'random', text: $localize`Random` },
     { value: 'workgroupId', text: $localize`Workgroup ID` },
     { value: 'firstAvailable', text: $localize`First Available` },
     { value: 'lastAvailable', text: $localize`Last Available` },
     { value: 'tag', text: $localize`Tag` }
   ];
-  protected items: any[];
+  items: any[];
   node: any;
-  protected nodeId: string;
-  protected nodeIds: string[];
-  protected transitionCriterias = [
+  nodeId: string;
+  nodeIds: string[];
+  transitionCriterias = [
     {
       value: 'score',
       text: $localize`Get a specific score on a component`,
@@ -50,23 +50,25 @@ export class NodeAdvancedPathAuthoringComponent implements OnInit {
       params: [{ value: 'tag', text: $localize`Tag` }]
     }
   ];
-  protected whenToChoosePathOptions = [
+  whenToChoosePathOptions = [
     { value: 'enterNode', text: $localize`Enter Node` },
     { value: 'exitNode', text: $localize`Exit Node` },
     { value: 'scoreChanged', text: $localize`Score Changed` },
     { value: 'studentDataChanged', text: $localize`Student Data Changed` }
   ];
 
-  constructor(private projectService: TeacherProjectService, private route: ActivatedRoute) {}
+  constructor(
+    private ProjectService: TeacherProjectService,
+    private TeacherDataService: TeacherDataService
+  ) {}
 
   ngOnInit() {
-    this.route.parent.parent.params.subscribe((params) => {
-      this.node = this.projectService.getNodeById(params.nodeId);
-      this.nodeIds = this.projectService.getFlattenedProjectAsNodeIds(true);
-    });
+    this.nodeId = this.TeacherDataService.getCurrentNodeId();
+    this.node = this.ProjectService.getNodeById(this.nodeId);
+    this.nodeIds = this.ProjectService.getFlattenedProjectAsNodeIds(true);
   }
 
-  addNewTransition(): void {
+  addNewTransition() {
     this.addNewTransitionsIfNeeded();
     const nodeTransitions = this.node.transitionLogic.transitions;
     if (nodeTransitions.length > 0) {
@@ -87,11 +89,11 @@ export class NodeAdvancedPathAuthoringComponent implements OnInit {
     this.saveProject();
   }
 
-  protected isABranchNode(): boolean {
+  isABranchNode() {
     return this.node.transitionLogic.transitions.length > 1;
   }
 
-  protected setDefaultBranchNodeTransitionLogic(): void {
+  setDefaultBranchNodeTransitionLogic() {
     if (this.node.transitionLogic.howToChooseAmongAvailablePaths == null) {
       this.node.transitionLogic.howToChooseAmongAvailablePaths = 'workgroupId';
     }
@@ -106,13 +108,13 @@ export class NodeAdvancedPathAuthoringComponent implements OnInit {
     }
   }
 
-  protected addNewTransitionsIfNeeded(): void {
+  addNewTransitionsIfNeeded() {
     if (this.node.transitionLogic.transitions == null) {
       this.node.transitionLogic.transitions = [];
     }
   }
 
-  addNewTransitionCriteria(transition): void {
+  addNewTransitionCriteria(transition) {
     for (const nodeTransition of this.node.transitionLogic.transitions) {
       if (nodeTransition == transition) {
         if (nodeTransition.criteria == null) {
@@ -131,17 +133,17 @@ export class NodeAdvancedPathAuthoringComponent implements OnInit {
     this.saveProject();
   }
 
-  deleteTransitionCriteria(transition, transitionCriteriaIndex): void {
+  deleteTransitionCriteria(transition, transitionCriteriaIndex) {
     if (confirm($localize`Are you sure you want to delete this requirement?`)) {
       const transitionCriterias = transition.criteria;
       if (transitionCriterias != null) {
         transitionCriterias.splice(transitionCriteriaIndex, 1);
       }
-      this.projectService.saveProject();
+      this.ProjectService.saveProject();
     }
   }
 
-  protected getTransitionCriteriaParamsByName(name): any[] {
+  getTransitionCriteriaParamsByName(name) {
     for (const singleTransitionCriteria of this.transitionCriterias) {
       if (singleTransitionCriteria.value === name) {
         return singleTransitionCriteria.params;
@@ -150,7 +152,7 @@ export class NodeAdvancedPathAuthoringComponent implements OnInit {
     return [];
   }
 
-  protected transitionCriteriaNameChanged(transitionCriteria): void {
+  transitionCriteriaNameChanged(transitionCriteria) {
     let nodeId = null;
     let componentId = null;
     if (transitionCriteria.params != null) {
@@ -167,7 +169,7 @@ export class NodeAdvancedPathAuthoringComponent implements OnInit {
     this.saveProject();
   }
 
-  protected transitionCriteriaNodeIdChanged(transitionCriteria): void {
+  transitionCriteriaNodeIdChanged(transitionCriteria) {
     if (transitionCriteria != null && transitionCriteria.params != null) {
       let nodeId = transitionCriteria.params.nodeId;
       transitionCriteria.params = {};
@@ -178,7 +180,7 @@ export class NodeAdvancedPathAuthoringComponent implements OnInit {
     this.saveProject();
   }
 
-  protected transitionCriteriaComponentIdChanged(transitionCriteria): void {
+  transitionCriteriaComponentIdChanged(transitionCriteria) {
     if (transitionCriteria != null && transitionCriteria.params != null) {
       let nodeId = transitionCriteria.params.nodeId;
       let componentId = transitionCriteria.params.componentId;
@@ -193,59 +195,59 @@ export class NodeAdvancedPathAuthoringComponent implements OnInit {
     this.saveProject();
   }
 
-  protected transitionToNodeIdChanged(): void {
-    this.projectService.calculateNodeNumbers();
+  transitionToNodeIdChanged() {
+    this.ProjectService.calculateNodeNumbers();
     this.saveProject();
   }
 
-  deleteTransition(transition): void {
-    const stepTitle = this.projectService.getNodePositionAndTitle(transition.to);
+  deleteTransition(transition) {
+    const stepTitle = this.ProjectService.getNodePositionAndTitle(transition.to);
     const answer = confirm($localize`Are you sure you want to delete this path to "${stepTitle}"?`);
     if (answer) {
-      this.projectService.deleteTransition(this.node, transition);
+      this.ProjectService.deleteTransition(this.node, transition);
       this.saveProject();
     }
   }
 
-  protected saveProject(): any {
-    return this.projectService.saveProject();
+  saveProject() {
+    return this.ProjectService.saveProject();
   }
 
-  protected getChoices(nodeId: string, componentId: string): any[] {
-    return this.projectService.getChoices(nodeId, componentId);
+  getChoices(nodeId: string, componentId: string): any[] {
+    return this.ProjectService.getChoices(nodeId, componentId);
   }
 
-  protected getChoiceTypeByNodeIdAndComponentId(nodeId, componentId) {
+  getChoiceTypeByNodeIdAndComponentId(nodeId, componentId) {
     let choiceType = null;
-    let component = this.projectService.getComponent(nodeId, componentId) as MultipleChoiceContent;
+    let component = this.ProjectService.getComponent(nodeId, componentId) as MultipleChoiceContent;
     if (component != null && component.choiceType != null) {
       choiceType = component.choiceType;
     }
     return choiceType;
   }
 
-  protected getNodeTitle(nodeId: string): string {
-    return this.projectService.getNodeTitle(nodeId);
+  getNodeTitle(nodeId: string): string {
+    return this.ProjectService.getNodeTitle(nodeId);
   }
 
-  protected getNodePositionById(nodeId) {
-    return this.projectService.getNodePositionById(nodeId);
+  getNodePositionById(nodeId) {
+    return this.ProjectService.getNodePositionById(nodeId);
   }
 
-  protected isGroupNode(nodeId) {
-    return this.projectService.isGroupNode(nodeId);
+  isGroupNode(nodeId) {
+    return this.ProjectService.isGroupNode(nodeId);
   }
 
-  protected getComponents(nodeId: string): any[] {
-    return this.projectService.getComponents(nodeId);
+  getComponents(nodeId: string): any[] {
+    return this.ProjectService.getComponents(nodeId);
   }
 
-  protected scoresChanged(value: any, params: any): void {
+  scoresChanged(value: any, params: any): void {
     params.scores = value.split(',');
     this.saveProject();
   }
 
-  protected scoreIdChanged(transitionCriteria: any): void {
+  scoreIdChanged(transitionCriteria: any): void {
     if (transitionCriteria.params.scoreId === '') {
       delete transitionCriteria.params.scoreId;
     }

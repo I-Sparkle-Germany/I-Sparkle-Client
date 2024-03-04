@@ -1,53 +1,63 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { UpgradeModule } from '@angular/upgrade/static';
 import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { ComponentTypeService } from '../../../services/componentTypeService';
-import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
-  selector: 'add-your-own-node',
-  styleUrls: ['add-your-own-node.component.scss', '../../add-content.scss'],
+  styleUrls: ['add-your-own-node.component.scss'],
   templateUrl: 'add-your-own-node.component.html'
 })
 export class AddYourOwnNode {
-  protected addNodeFormGroup: FormGroup = this.fb.group({
-    title: new FormControl($localize`New Step`, [Validators.required])
+  addNodeFormGroup: FormGroup = this.fb.group({
+    title: new FormControl('', [Validators.required])
   });
-  protected componentTypes: any[];
-  protected initialComponents: string[] = [];
+  componentTypes: any[];
+  initialComponents: string[] = [];
+  title: string;
 
   constructor(
+    private upgrade: UpgradeModule,
     private componentTypeService: ComponentTypeService,
-    private fb: FormBuilder,
-    private route: ActivatedRoute,
-    private router: Router
+    private fb: FormBuilder
   ) {}
 
   ngOnInit() {
     this.componentTypes = this.componentTypeService.getComponentTypes();
   }
 
-  protected addComponent(componentType: any): void {
+  @ViewChild('titleField') titleField: ElementRef;
+  ngAfterViewInit() {
+    this.titleField.nativeElement.focus();
+  }
+
+  addComponent(componentType: any) {
     this.initialComponents.push(componentType);
   }
 
-  protected deleteComponent(index: number): void {
+  deleteComponent(index: number) {
     this.initialComponents.splice(index, 1);
   }
 
-  protected drop(event: CdkDragDrop<string[]>): void {
+  drop(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.initialComponents, event.previousIndex, event.currentIndex);
   }
 
-  protected chooseLocation(): void {
+  chooseLocation() {
     if (this.addNodeFormGroup.valid) {
-      this.router.navigate(['..', 'choose-location'], {
-        relativeTo: this.route,
-        state: {
-          initialComponents: this.initialComponents,
-          title: this.addNodeFormGroup.controls['title'].value
-        }
+      this.upgrade.$injector.get('$state').go('root.at.project.add-node.choose-location', {
+        initialComponents: this.initialComponents,
+        title: this.addNodeFormGroup.controls['title'].value
       });
     }
+  }
+
+  back() {
+    this.upgrade.$injector.get('$state').go('root.at.project.add-node.choose-template');
+  }
+
+  cancel(event: Event) {
+    this.upgrade.$injector.get('$state').go('root.at.project');
+    event.preventDefault();
   }
 }

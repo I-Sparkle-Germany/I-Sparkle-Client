@@ -1,25 +1,21 @@
 @import 'style/abstracts/variables';
 
-.mat-mdc-card {
+.mat-card {
   padding: 8px;
 }
 
-.questions {
+mat-card-content {
   margin-top: 8px;
   padding: 8px;
   border-radius: $button-border-radius;
   overflow: auto;
 }
 
-.question-button {
-  text-transform: none;
-  text-align: start;
-  min-height: 36px;
-  height: auto;
+.question {
+  font-style: italic;
 }
 
 ul {
-  margin: 0;
   padding: 0;
   list-style-type: none;
 }
@@ -30,9 +26,4 @@ li {
   &:last-of-type {
     margin-bottom: 0;
   }
-}
-
-.question-used-indicator {
-  width: 40px;
-  height: 24px;
 }

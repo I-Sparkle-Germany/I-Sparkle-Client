@@ -4,8 +4,7 @@ import { Input, Component } from '@angular/core';
 
 @Component({
   selector: 'workgroup-node-score',
-  templateUrl: 'workgroup-node-score.component.html',
-  styleUrls: ['workgroup-node-score.component.scss']
+  templateUrl: 'workgroup-node-score.component.html'
 })
 export class WorkgroupNodeScoreComponent {
   @Input()

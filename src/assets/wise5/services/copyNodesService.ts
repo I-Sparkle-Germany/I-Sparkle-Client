@@ -1,3 +1,4 @@
+import * as angular from 'angular';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ConfigService } from './configService';
@@ -8,8 +9,8 @@ import { copy } from '../common/object/object';
 export class CopyNodesService {
   constructor(
     protected http: HttpClient,
-    protected configService: ConfigService,
-    protected projectService: TeacherProjectService
+    protected ConfigService: ConfigService,
+    protected ProjectService: TeacherProjectService
   ) {}
 
   /**
@@ -19,8 +20,8 @@ export class CopyNodesService {
    */
   copyNodeInside(nodeId: string, groupId: string): any {
     const newNode = this.copyNode(nodeId);
-    this.projectService.createNodeInside(newNode, groupId);
-    this.projectService.parseProject();
+    this.ProjectService.createNodeInside(newNode, groupId);
+    this.ProjectService.parseProject();
     return newNode;
   }
 
@@ -33,18 +34,12 @@ export class CopyNodesService {
     const newNodes = [];
     for (const nodeId of nodeIds) {
       const newNode = this.copyNode(nodeId);
-      this.projectService.createNodeAfter(newNode, nodeIdAfter);
+      this.ProjectService.createNodeAfter(newNode, nodeIdAfter);
       nodeIdAfter = newNode.id;
-      this.projectService.parseProject();
+      this.ProjectService.parseProject();
       newNodes.push(newNode);
     }
     return newNodes;
-  }
-
-  copyNodesInsideGroup(nodeIds: string[], groupNodeId: string): any[] {
-    const firstNode: any = this.copyNodeInside(nodeIds[0], groupNodeId);
-    const otherNodes = this.copyNodesAfter(nodeIds.slice(1), firstNode.id);
-    return [firstNode].concat(otherNodes);
   }
 
   /**
@@ -53,18 +48,19 @@ export class CopyNodesService {
    * @return copied node
    */
   private copyNode(nodeId: string): any {
-    const node = copy(this.projectService.getNodeById(nodeId));
-    node.id = this.projectService.getNextAvailableNodeId();
-    node.transitionLogic = {};
-    node.constraints = [];
+    const node = this.ProjectService.getNodeById(nodeId);
+    const nodeCopy = copy(node);
+    nodeCopy.id = this.ProjectService.getNextAvailableNodeId();
+    nodeCopy.transitionLogic = {};
+    nodeCopy.constraints = [];
 
     const newComponentIds = [];
-    for (const component of node.components) {
-      const newComponentId = this.projectService.getUnusedComponentId(newComponentIds);
+    for (const component of nodeCopy.components) {
+      const newComponentId = this.ProjectService.getUnusedComponentId(newComponentIds);
       newComponentIds.push(newComponentId);
       component.id = newComponentId;
     }
-    return node;
+    return nodeCopy;
   }
 
   /**
@@ -81,8 +77,8 @@ export class CopyNodesService {
    * @returns an observable with an array of copied nodes
    */
   copyNodes(nodes: any[], fromProjectId: number, toProjectId: number) {
-    return this.http.post(this.configService.getConfigParam('importStepsURL'), {
-      steps: JSON.stringify(nodes),
+    return this.http.post(this.ConfigService.getConfigParam('importStepsURL'), {
+      steps: angular.toJson(nodes),
       fromProjectId: fromProjectId,
       toProjectId: toProjectId
     });

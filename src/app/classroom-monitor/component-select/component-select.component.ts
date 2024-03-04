@@ -1,19 +1,11 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  Output,
-  SimpleChanges,
-  ViewEncapsulation
-} from '@angular/core';
+import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
 import { ComponentTypeService } from '../../../assets/wise5/services/componentTypeService';
 import { TeacherProjectService } from '../../../assets/wise5/services/teacherProjectService';
 
 @Component({
   selector: 'component-select',
   styleUrls: ['component-select.component.scss'],
-  templateUrl: 'component-select.component.html',
-  encapsulation: ViewEncapsulation.None
+  templateUrl: 'component-select.component.html'
 })
 export class ComponentSelectComponent {
   components: any[];

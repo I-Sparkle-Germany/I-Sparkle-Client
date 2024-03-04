@@ -6,12 +6,9 @@ import { MatInputModule } from '@angular/material/input';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { PeerChatMembersComponent } from '../peer-chat-members/peer-chat-members.component';
 import { PeerChatMessageInputComponent } from '../peer-chat-message-input/peer-chat-message-input.component';
-import { PeerChatChatBoxComponent } from './peer-chat-chat-box.component';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { ConfigService } from '../../../services/configService';
-import { StompService } from '../../../services/stompService';
 
-class MockConfigService {}
+import { PeerChatChatBoxComponent } from './peer-chat-chat-box.component';
+
 describe('PeerChatChatBoxComponent', () => {
   let component: PeerChatChatBoxComponent;
   let fixture: ComponentFixture<PeerChatChatBoxComponent>;
@@ -29,9 +26,7 @@ describe('PeerChatChatBoxComponent', () => {
         PeerChatChatBoxComponent,
         PeerChatMembersComponent,
         PeerChatMessageInputComponent
-      ],
-      providers: [{ provide: ConfigService, useClass: MockConfigService }, StompService],
-      schemas: [NO_ERRORS_SCHEMA]
+      ]
     }).compileComponents();
   });
 

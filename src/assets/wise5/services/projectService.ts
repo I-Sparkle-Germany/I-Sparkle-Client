@@ -3,7 +3,7 @@
 import { ConfigService } from './configService';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, Subject, tap } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { Node } from '../common/Node';
 import { PeerGrouping } from '../../../app/domain/peerGrouping';
 import { ComponentServiceLookupService } from './componentServiceLookupService';
@@ -15,9 +15,6 @@ import { MultipleChoiceContent } from '../components/multipleChoice/MultipleChoi
 import { TransitionLogic } from '../common/TransitionLogic';
 import { Transition } from '../common/Transition';
 import { ReferenceComponent } from '../../../app/domain/referenceComponent';
-import { QuestionBank } from '../components/peerChat/peer-chat-question-bank/QuestionBank';
-import { DynamicPrompt } from '../directives/dynamic-prompt/DynamicPrompt';
-import { Component } from '../common/Component';
 
 @Injectable()
 export class ProjectService {
@@ -64,9 +61,7 @@ export class ProjectService {
     this.inactiveStepNodes = [];
     this.inactiveGroupNodes = [];
     this.groupNodes = [];
-    Object.keys(this.idToNode).forEach((key) => {
-      delete this.idToNode[key];
-    });
+    this.idToNode = {};
     this.metadata = {};
     this.rootNode = null;
     this.idToOrder = {};
@@ -105,12 +100,6 @@ export class ProjectService {
 
   getGroupNodes(): any[] {
     return this.groupNodes;
-  }
-
-  getOrderedGroupNodes(): any[] {
-    return this.groupNodes
-      .filter((groupNode) => groupNode.id !== 'group0')
-      .sort((a, b) => this.idToOrder[a.id].order - this.idToOrder[b.id].order);
   }
 
   addNode(node: any): void {
@@ -602,7 +591,7 @@ export class ProjectService {
 
   isNodeDescendentOfGroup(node: any, group: any): boolean {
     if (node != null && group != null) {
-      const descendents = this.getDescendentIdsOfGroup(group);
+      const descendents = this.getDescendentsOfGroup(group);
       const nodeId = node.id;
       if (descendents.indexOf(nodeId) != -1) {
         return true;
@@ -611,7 +600,7 @@ export class ProjectService {
     return false;
   }
 
-  getDescendentIdsOfGroup(group: any): string[] {
+  getDescendentsOfGroup(group: any): any {
     let descendents = [];
     if (group != null) {
       const childIds = group.ids;
@@ -620,7 +609,7 @@ export class ProjectService {
         for (let childId of childIds) {
           const node = this.getNodeById(childId);
           if (node != null) {
-            const childDescendents = this.getDescendentIdsOfGroup(node);
+            const childDescendents = this.getDescendentsOfGroup(node);
             descendents = descendents.concat(childDescendents);
           }
         }
@@ -780,29 +769,24 @@ export class ProjectService {
    * Retrieves the project JSON from Config.projectURL and returns it.
    * If Config.projectURL is undefined, returns null.
    */
-  retrieveProject(): Observable<any> {
-    return this.makeProjectRequest().pipe(
-      tap((projectJSON: any) => {
-        this.setProject(projectJSON);
-        return projectJSON;
-      })
-    );
-  }
-
-  retrieveProjectWithoutParsing(): Observable<any> {
-    return this.makeProjectRequest().pipe(
-      tap((projectJSON: any) => {
-        this.project = projectJSON;
-        this.metadata = projectJSON.metadata;
-        return projectJSON;
-      })
-    );
-  }
-
-  private makeProjectRequest(): Observable<any> {
-    const projectURL = this.configService.getConfigParam('projectURL');
+  retrieveProject(parseProject: boolean = true): any {
+    let projectURL = this.configService.getConfigParam('projectURL');
+    if (projectURL == null) {
+      return null;
+    }
     const headers = new HttpHeaders().set('cache-control', 'no-cache');
-    return this.http.get(projectURL, { headers: headers });
+    return this.http
+      .get(projectURL, { headers: headers })
+      .toPromise()
+      .then((projectJSON: any) => {
+        if (parseProject) {
+          this.setProject(projectJSON);
+        } else {
+          this.project = projectJSON;
+          this.metadata = projectJSON.metadata;
+        }
+        return projectJSON;
+      });
   }
 
   getThemePath(): string {
@@ -1452,304 +1436,308 @@ export class ProjectService {
   }
 
   /**
-   * Recursively calculate the node numbers by traversing the project tree using transitions
+   * Recursively calcualte the node numbers by traversing the project tree
+   * using transitions
    * @param nodeId the current node id we are on
    * @param currentActivityNumber the current activity number
    * @param currentStepNumber the current step number
-   * @param branchLetterCode (optional) the character code for the branch letter e.g. 0=A, 1=B, etc.
+   * @param branchLetterCode (optional) the character code for the branch
+   * letter e.g. 1=A, 2=B, etc.
    */
-  private calculateNodeNumbersHelper(
+  calculateNodeNumbersHelper(
     nodeId: string,
     currentActivityNumber: any,
     currentStepNumber: number,
-    branchLetterCode: number = null
+    branchLetterCode = null
   ): number {
-    if (this.isApplicationNode(nodeId)) {
-      currentStepNumber = this.calculateNodeNumberForStep(
-        nodeId,
-        currentActivityNumber,
-        currentStepNumber,
-        branchLetterCode
-      );
-    } else {
-      currentStepNumber = this.calculateNodeNumberForLesson(
-        nodeId,
-        currentActivityNumber,
-        currentStepNumber,
-        branchLetterCode
-      );
-    }
-    return currentStepNumber;
-  }
+    if (nodeId != null) {
+      if (this.isApplicationNode(nodeId)) {
+        const node = this.getNodeById(nodeId);
+        if (node != null) {
+          const parentGroup = this.getParentGroup(nodeId);
+          if (parentGroup != null) {
+            if (this.nodeIdToNumber[parentGroup.id] == null) {
+              /*
+               * the parent group has not been assigned a number so
+               * we will assign a number now
+               */
 
-  private calculateNodeNumberForStep(
-    nodeId: string,
-    currentActivityNumber: any,
-    currentStepNumber: number,
-    branchLetterCode: number = null
-  ): number {
-    ({ currentActivityNumber, currentStepNumber, branchLetterCode } = this.getCurrentActivityNumber(
-      nodeId,
-      currentActivityNumber,
-      currentStepNumber,
-      branchLetterCode
-    ));
-    if (this.isBranchStartPoint(nodeId)) {
-      currentStepNumber = this.calculateNodeNumberForBranchStartPoint(
-        nodeId,
-        currentActivityNumber,
-        currentStepNumber
-      );
-    } else {
-      currentStepNumber = this.calculateNodeNumberForRegularStep(
-        nodeId,
-        currentActivityNumber,
-        currentStepNumber,
-        branchLetterCode
-      );
-    }
-    return currentStepNumber;
-  }
+              currentActivityNumber = parseInt(currentActivityNumber) + 1;
 
-  private getCurrentActivityNumber(
-    nodeId: string,
-    currentActivityNumber: any,
-    currentStepNumber: number,
-    branchLetterCode: number = null
-  ): any {
-    const parentGroup = this.getParentGroup(nodeId);
-    if (parentGroup != null) {
-      if (this.nodeIdToNumber[parentGroup.id] == null) {
-        // the parent group has not been assigned a number so we will assign a number now
-        currentActivityNumber = parseInt(currentActivityNumber) + 1;
+              /*
+               * set the current step number to 1 now that we have
+               * entered a new group
+               */
+              currentStepNumber = 1;
 
-        // set the current step number to 1 now that we have entered a new group
-        currentStepNumber = 1;
-        this.nodeIdToNumber[parentGroup.id] = '' + currentActivityNumber;
+              this.nodeIdToNumber[parentGroup.id] = '' + currentActivityNumber;
+            } else {
+              /*
+               * the parent group has previously been assigned a number so we
+               * will use it
+               */
+              currentActivityNumber = this.nodeIdToNumber[parentGroup.id];
+            }
+          }
+
+          if (this.isBranchMergePoint(nodeId)) {
+            /*
+             * the node is a merge point so we will not use a letter
+             * anymore now that we are no longer in a branch path
+             */
+            branchLetterCode = null;
+          }
+
+          if (this.isBranchStartPoint(nodeId)) {
+            const branchesByBranchStartPointNodeId = this.getBranchesByBranchStartPointNodeId(
+              nodeId
+            );
+            const branches = branchesByBranchStartPointNodeId[0];
+
+            /*
+             * been used in the branch paths so that we know what
+             * step number to give the merge end point
+             * this is used to obtain the max step number that has
+             */
+            let maxCurrentStepNumber = 0;
+
+            // set the step number for the branch start point
+            this.nodeIdToNumber[nodeId] = currentActivityNumber + '.' + currentStepNumber;
+
+            currentStepNumber++;
+            const branchPaths = branches.paths;
+
+            for (let bp = 0; bp < branchPaths.length; bp++) {
+              const branchPath = branchPaths[bp];
+              let branchCurrentStepNumber = currentStepNumber;
+
+              // get the letter code e.g. 1=A, 2=B, etc.
+              const branchLetterCode = bp;
+
+              for (let bpn = 0; bpn < branchPath.length; bpn++) {
+                if (bpn == 0) {
+                  if (this.getParentGroupId(nodeId) !== this.getParentGroupId(branchPath[bpn])) {
+                    branchCurrentStepNumber = 1;
+                  }
+
+                  /*
+                   * Recursively call calculateNodeNumbersHelper on the
+                   * first step in this branch path. This will recursively
+                   * calculate the numbers for all the nodes in this
+                   * branch path.
+                   */
+                  const branchPathNodeId = branchPath[bpn];
+                  branchCurrentStepNumber = this.calculateNodeNumbersHelper(
+                    branchPathNodeId,
+                    currentActivityNumber,
+                    branchCurrentStepNumber,
+                    branchLetterCode
+                  );
+                }
+
+                /*
+                 * update the max current step number if we have found
+                 * a larger number
+                 */
+                if (branchCurrentStepNumber > maxCurrentStepNumber) {
+                  maxCurrentStepNumber = branchCurrentStepNumber;
+                }
+              }
+            }
+
+            // get the step number we should use for the end point
+            currentStepNumber = maxCurrentStepNumber;
+
+            const branchEndPointNodeId = branches.endPoint;
+
+            /*
+             * calculate the node number for the branch end point and
+             * continue calculating node numbers for the nodes that
+             * come after it
+             */
+            this.calculateNodeNumbersHelper(
+              branchEndPointNodeId,
+              currentActivityNumber,
+              currentStepNumber
+            );
+          } else {
+            // the node is not a branch start point
+
+            /*
+             * check if we have already set the number for this node so
+             * that we don't need to unnecessarily re-calculate the
+             * node number
+             */
+            if (this.nodeIdToNumber[nodeId] == null) {
+              // we have not calculated the node number yet
+
+              let number = null;
+
+              if (branchLetterCode == null) {
+                // we do not need to add a branch letter
+
+                // get the node number e.g. 1.5
+                number = currentActivityNumber + '.' + currentStepNumber;
+              } else {
+                // we need to add a branch letter
+
+                // get the branch letter
+                const branchLetter = String.fromCharCode(65 + branchLetterCode);
+
+                // get the node number e.g. 1.5 A
+                number = currentActivityNumber + '.' + currentStepNumber + ' ' + branchLetter;
+
+                // remember the branch path letter for this node
+                this.nodeIdToBranchPathLetter[nodeId] = branchLetter;
+              }
+
+              // set the number for the node
+              this.nodeIdToNumber[nodeId] = number;
+            } else {
+              /*
+               * We have calculated the node number before so we
+               * will return. This will prevent infinite looping
+               * within the project.
+               */
+              return;
+            }
+
+            // increment the step number for the next node to use
+            currentStepNumber++;
+
+            let transitions = [];
+
+            if (node.transitionLogic != null && node.transitionLogic.transitions) {
+              transitions = node.transitionLogic.transitions;
+            }
+
+            if (transitions.length > 0) {
+              /*
+               * loop through all the transitions, there should only
+               * be one but we will loop through them just to be complete.
+               * if there was more than one transition, it would mean
+               * this node is a branch start point in which case we
+               * would have gone inside the other block of code where
+               * this.isBranchStartPoint() is true.
+               */
+              for (let transition of transitions) {
+                if (transition != null) {
+                  if (this.isBranchMergePoint(transition.to)) {
+                  } else {
+                    if (this.getParentGroupId(nodeId) !== this.getParentGroupId(transition.to)) {
+                      currentStepNumber = 1;
+                    }
+                    currentStepNumber = this.calculateNodeNumbersHelper(
+                      transition.to,
+                      currentActivityNumber,
+                      currentStepNumber,
+                      branchLetterCode
+                    );
+                  }
+                }
+              }
+            } else {
+              // if there are no transitions, check if the parent group has a transition
+
+              if (
+                parentGroup != null &&
+                parentGroup.transitionLogic != null &&
+                parentGroup.transitionLogic.transitions != null &&
+                parentGroup.transitionLogic.transitions.length > 0
+              ) {
+                for (let transition of parentGroup.transitionLogic.transitions) {
+                  if (transition != null) {
+                    this.calculateNodeNumbersHelper(
+                      transition.to,
+                      currentActivityNumber,
+                      currentStepNumber,
+                      branchLetterCode
+                    );
+                  }
+                }
+              }
+            }
+          }
+        }
       } else {
-        // the parent group has previously been assigned a number so we will use it
-        currentActivityNumber = this.nodeIdToNumber[parentGroup.id];
-      }
-    }
-    if (this.isBranchMergePoint(nodeId)) {
-      // the node is a merge point so we will not use a letter anymore now that we are no longer in
-      // a branch path
-      branchLetterCode = null;
-    }
-    return { currentActivityNumber, currentStepNumber, branchLetterCode };
-  }
+        // the node is a group node
 
-  private calculateNodeNumberForBranchStartPoint(
-    nodeId: string,
-    currentActivityNumber: any,
-    currentStepNumber: number
-  ): number {
-    this.nodeIdToNumber[nodeId] = currentActivityNumber + '.' + currentStepNumber;
-    currentStepNumber++;
-    let maxCurrentStepNumber = 0;
-    const branchesByBranchStartPointNodeId = this.getBranchesByBranchStartPointNodeId(nodeId);
-    const branches = branchesByBranchStartPointNodeId[0];
-    const branchPaths = branches.paths;
-    for (let branchPathNumber = 0; branchPathNumber < branchPaths.length; branchPathNumber++) {
-      maxCurrentStepNumber = this.calculateBranchPathNodeNumbers(
-        nodeId,
-        currentActivityNumber,
-        currentStepNumber,
-        branchPaths[branchPathNumber],
-        branchPathNumber,
-        maxCurrentStepNumber
-      );
-    }
-    currentStepNumber = maxCurrentStepNumber;
-    this.calculateNodeNumbersHelper(branches.endPoint, currentActivityNumber, currentStepNumber);
-    return currentStepNumber;
-  }
+        const node = this.getNodeById(nodeId);
+        if (node != null) {
+          // check if the group has previously been assigned a number
+          if (this.nodeIdToNumber[nodeId] == null) {
+            /*
+             * the group has not been assigned a number so
+             * we will assign a number now
+             */
+            if (nodeId == 'group0') {
+              // group 0 will always be given the activity number of 0
+              this.nodeIdToNumber[nodeId] = '' + 0;
+            } else {
+              // set the activity number
+              currentActivityNumber = parseInt(currentActivityNumber) + 1;
 
-  private calculateBranchPathNodeNumbers(
-    nodeId: string,
-    currentActivityNumber: any,
-    currentStepNumber: number,
-    branchPath: any,
-    branchPathNumber: number,
-    maxCurrentStepNumber: number
-  ): number {
-    // get the letter code e.g. 0=A, 1=B, etc.
-    const branchLetterCode = branchPathNumber;
-    let branchCurrentStepNumber = currentStepNumber;
-    for (let bpn = 0; bpn < branchPath.length; bpn++) {
-      if (bpn == 0) {
-        if (this.getParentGroupId(nodeId) !== this.getParentGroupId(branchPath[bpn])) {
-          branchCurrentStepNumber = 1;
+              /*
+               * set the current step number to 1 now that we have
+               * entered a new group
+               */
+              currentStepNumber = 1;
+
+              // set the activity number
+              this.nodeIdToNumber[nodeId] = '' + currentActivityNumber;
+            }
+          } else {
+            /*
+             * We have calculated the node number before so we
+             * will return. This will prevent infinite looping
+             * within the project.
+             */
+            return;
+          }
+
+          if (node.startId != null && node.startId != '') {
+            /*
+             * calculate the node number for the first step in this
+             * activity and any steps after it
+             */
+            this.calculateNodeNumbersHelper(
+              node.startId,
+              currentActivityNumber,
+              currentStepNumber,
+              branchLetterCode
+            );
+          } else {
+            /*
+             * this activity doesn't have a start step so we will
+             * look for a transition
+             */
+
+            if (
+              node != null &&
+              node.transitionLogic != null &&
+              node.transitionLogic.transitions != null &&
+              node.transitionLogic.transitions.length > 0
+            ) {
+              for (let transition of node.transitionLogic.transitions) {
+                if (transition != null) {
+                  /*
+                   * calculate the node number for the next group
+                   * and all its children steps
+                   */
+                  this.calculateNodeNumbersHelper(
+                    transition.to,
+                    currentActivityNumber,
+                    currentStepNumber,
+                    branchLetterCode
+                  );
+                }
+              }
+            }
+          }
         }
-        // Calculate the node numbers for the steps in this branch path
-        const branchPathNodeId = branchPath[bpn];
-        branchCurrentStepNumber = this.calculateNodeNumbersHelper(
-          branchPathNodeId,
-          currentActivityNumber,
-          branchCurrentStepNumber,
-          branchLetterCode
-        );
-      }
-      if (branchCurrentStepNumber > maxCurrentStepNumber) {
-        maxCurrentStepNumber = branchCurrentStepNumber;
-      }
-    }
-    return maxCurrentStepNumber;
-  }
-
-  private calculateNodeNumberForRegularStep(
-    nodeId: string,
-    currentActivityNumber: any,
-    currentStepNumber: number,
-    branchLetterCode: number = null
-  ): number {
-    // Check if we have already set the number for this node so that we don't need to unnecessarily
-    // re-calculate the node number
-    if (this.nodeIdToNumber[nodeId] == null) {
-      this.setStepNodeNumber(nodeId, currentActivityNumber, currentStepNumber, branchLetterCode);
-    } else {
-      // We have calculated the node number before so we will return.
-      // This will prevent infinite looping within the project.
-      return currentStepNumber;
-    }
-    currentStepNumber++;
-    const node = this.getNodeById(nodeId);
-    const transitions = node.transitionLogic.transitions;
-    if (transitions.length > 0) {
-      currentStepNumber = this.calculateNodeNumberForRegularStepThatHasTransitions(
-        nodeId,
-        currentActivityNumber,
-        currentStepNumber,
-        branchLetterCode
-      );
-    } else {
-      currentStepNumber = this.calculateNodeNumberForRegularStepThatDoesNotHaveTransitions(
-        nodeId,
-        currentActivityNumber,
-        currentStepNumber,
-        branchLetterCode
-      );
-    }
-    return currentStepNumber;
-  }
-
-  private calculateNodeNumberForRegularStepThatHasTransitions(
-    nodeId: string,
-    currentActivityNumber: any,
-    currentStepNumber: number,
-    branchLetterCode: number = null
-  ) {
-    const node = this.getNodeById(nodeId);
-    for (const transition of node.transitionLogic.transitions) {
-      if (!this.isBranchMergePoint(transition.to)) {
-        if (this.getParentGroupId(nodeId) !== this.getParentGroupId(transition.to)) {
-          currentStepNumber = 1;
-        }
-        currentStepNumber = this.calculateNodeNumbersHelper(
-          transition.to,
-          currentActivityNumber,
-          currentStepNumber,
-          branchLetterCode
-        );
       }
     }
     return currentStepNumber;
-  }
-
-  private calculateNodeNumberForRegularStepThatDoesNotHaveTransitions(
-    nodeId: string,
-    currentActivityNumber: any,
-    currentStepNumber: number,
-    branchLetterCode: number = null
-  ): number {
-    const parentGroup = this.getParentGroup(nodeId);
-    if (parentGroup.transitionLogic?.transitions != null) {
-      for (const transition of parentGroup.transitionLogic.transitions) {
-        currentStepNumber = this.calculateNodeNumbersHelper(
-          transition.to,
-          currentActivityNumber,
-          currentStepNumber,
-          branchLetterCode
-        );
-      }
-    }
-    return currentStepNumber;
-  }
-
-  private setStepNodeNumber(
-    nodeId: string,
-    currentActivityNumber: any,
-    currentStepNumber: number,
-    branchLetterCode: number
-  ) {
-    let number = null;
-    if (branchLetterCode == null) {
-      number = currentActivityNumber + '.' + currentStepNumber;
-    } else {
-      const branchLetter = String.fromCharCode(65 + branchLetterCode);
-      number = `${currentActivityNumber}.${currentStepNumber} ${branchLetter}`;
-      this.nodeIdToBranchPathLetter[nodeId] = branchLetter;
-    }
-    this.nodeIdToNumber[nodeId] = number;
-  }
-
-  private calculateNodeNumberForLesson(
-    nodeId: string,
-    currentActivityNumber: any,
-    currentStepNumber: number,
-    branchLetterCode: number = null
-  ): number {
-    // check if the group has previously been assigned a number
-    if (this.nodeIdToNumber[nodeId] == null) {
-      ({ currentActivityNumber, currentStepNumber } = this.setLessonNodeNumber(
-        nodeId,
-        currentActivityNumber,
-        currentStepNumber
-      ));
-    } else {
-      // We have calculated the node number before so we will return.
-      // This will prevent infinite looping within the project.
-      return currentStepNumber;
-    }
-    const node = this.getNodeById(nodeId);
-    if (node.startId != '') {
-      // calculate the node number for the first step in this activity and any steps after it
-      this.calculateNodeNumbersHelper(
-        node.startId,
-        currentActivityNumber,
-        currentStepNumber,
-        branchLetterCode
-      );
-    } else if (node.transitionLogic != null) {
-      for (const transition of node.transitionLogic.transitions) {
-        // calculate the node number for the next node and all its children steps
-        this.calculateNodeNumbersHelper(
-          transition.to,
-          currentActivityNumber,
-          currentStepNumber,
-          branchLetterCode
-        );
-      }
-    }
-    return currentStepNumber;
-  }
-
-  private setLessonNodeNumber(
-    nodeId: string,
-    currentActivityNumber: any,
-    currentStepNumber: number
-  ): any {
-    // the group has not been assigned a number so we will assign a number now/
-    if (nodeId == 'group0') {
-      // group 0 will always be given the activity number of 0
-      this.nodeIdToNumber[nodeId] = '0';
-    } else {
-      // set the current step number to 1 now that we have entered a new group
-      currentStepNumber = 1;
-      currentActivityNumber = parseInt(currentActivityNumber) + 1;
-      this.nodeIdToNumber[nodeId] = '' + currentActivityNumber;
-    }
-    return { currentActivityNumber, currentStepNumber };
   }
 
   getProjectScript(): any {
@@ -1984,22 +1972,12 @@ export class ProjectService {
    * }
    * @returns the referenceComponent object from a component
    */
-  getReferenceComponentForField(
+  getReferenceComponent(
     nodeId: string,
     componentId: string,
-    fieldName: 'dynamicPrompt' | 'questionBank'
+    fieldName: string
   ): ReferenceComponent {
     const component = this.getComponent(nodeId, componentId);
     return component[fieldName]?.referenceComponent;
-  }
-
-  getReferenceComponent(content: QuestionBank | DynamicPrompt): Component {
-    const nodeId = content.getReferenceNodeId();
-    const componentId = content.getReferenceComponentId();
-    return new Component(this.getComponent(nodeId, componentId), nodeId);
-  }
-
-  getSpeechToTextSettings(): any {
-    return this.project.speechToText;
   }
 }

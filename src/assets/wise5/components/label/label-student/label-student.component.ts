@@ -5,6 +5,7 @@ import { ConfigService } from '../../../services/configService';
 import { NodeService } from '../../../services/nodeService';
 import { NotebookService } from '../../../services/notebookService';
 import { StudentDataService } from '../../../services/studentDataService';
+import { UtilService } from '../../../services/utilService';
 import { ComponentStudent } from '../../component-student.component';
 import { ComponentService } from '../../componentService';
 import { LabelService } from '../labelService';
@@ -12,7 +13,6 @@ import { StudentAssetService } from '../../../services/studentAssetService';
 import { MatDialog } from '@angular/material/dialog';
 import { convertToPNGFile } from '../../../common/canvas/canvas';
 import { wordWrap } from '../../../common/string/string';
-import { hasConnectedComponent } from '../../../common/ComponentContent';
 
 @Component({
   selector: 'label-student',
@@ -55,7 +55,8 @@ export class LabelStudent extends ComponentStudent {
     protected NodeService: NodeService,
     protected NotebookService: NotebookService,
     protected StudentAssetService: StudentAssetService,
-    protected StudentDataService: StudentDataService
+    protected StudentDataService: StudentDataService,
+    protected UtilService: UtilService
   ) {
     super(
       AnnotationService,
@@ -286,7 +287,7 @@ export class LabelStudent extends ComponentStudent {
   }
 
   initializeStudentWork(componentContent: any, componentState: any): void {
-    if (hasConnectedComponent(componentContent, 'showWork')) {
+    if (this.UtilService.hasShowWorkConnectedComponent(componentContent)) {
       this.handleConnectedComponents();
     } else if (this.LabelService.componentStateHasStudentWork(componentState, componentContent)) {
       this.setStudentWork(componentState);

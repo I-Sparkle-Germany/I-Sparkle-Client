@@ -10,7 +10,6 @@ import { Message } from '@stomp/stompjs';
 import { NotebookService } from './notebookService';
 import { StompService } from './stompService';
 import { ConfigService } from './configService';
-import { Annotation } from '../common/Annotation';
 
 @Injectable()
 export class StudentWebSocketService {
@@ -37,7 +36,8 @@ export class StudentWebSocketService {
         const studentWork = JSON.parse(body.content);
         this.StudentDataService.broadcastStudentWorkReceived(studentWork);
       } else if (body.type === 'annotation') {
-        this.AnnotationService.broadcastAnnotationReceived(JSON.parse(body.content));
+        const annotation = JSON.parse(body.content);
+        this.AnnotationService.broadcastAnnotationReceived({ annotation: annotation });
       } else if (body.type === 'goToNode') {
         this.goToStep(body.content);
       } else if (body.type === 'node') {
@@ -54,9 +54,9 @@ export class StudentWebSocketService {
     this.stompService.workgroupMessage$.subscribe((message: Message) => {
       const body = JSON.parse(message.body);
       if (body.type === 'annotation') {
-        const annotation = JSON.parse(body.content);
-        this.AnnotationService.addOrUpdateAnnotation(annotation);
-        this.handleAnnotationReceived(annotation);
+        const annotationData = JSON.parse(body.content);
+        this.AnnotationService.addOrUpdateAnnotation(annotationData);
+        this.handleAnnotationReceived(annotationData);
       } else if (body.type === 'tagsToWorkgroup') {
         const tags = JSON.parse(body.content);
         this.TagService.setTags(tags);
@@ -72,12 +72,12 @@ export class StudentWebSocketService {
     });
   }
 
-  private handleAnnotationReceived(annotation: Annotation): void {
+  handleAnnotationReceived(annotation: any): void {
     this.StudentDataService.studentData.annotations.push(annotation);
     if (annotation.notebookItemId) {
-      this.notebookService.broadcastNotebookItemAnnotationReceived(annotation);
+      this.notebookService.broadcastNotebookItemAnnotationReceived({ annotation: annotation });
     } else {
-      this.AnnotationService.broadcastAnnotationReceived(annotation);
+      this.AnnotationService.broadcastAnnotationReceived({ annotation: annotation });
     }
   }
 

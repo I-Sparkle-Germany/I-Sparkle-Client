@@ -6,22 +6,25 @@ import { UserService } from '../../../services/user.service';
 import { Teacher } from '../../../domain/teacher';
 import { TeacherService } from '../../teacher.service';
 import { MatDialog } from '@angular/material/dialog';
+import { UnlinkGoogleAccountConfirmComponent } from '../../../modules/shared/unlink-google-account-confirm/unlink-google-account-confirm.component';
 import { Subscription } from 'rxjs';
-import { SchoolLevel, schoolLevels } from '../../../domain/profile.constants';
-import { EditProfileComponent } from '../../../common/edit-profile/edit-profile.component';
 
 @Component({
-  selector: 'teacher-edit-profile',
+  selector: 'app-edit-profile',
   templateUrl: './edit-profile.component.html',
-  styleUrls: [
-    '../../../common/edit-profile/edit-profile.component.scss',
-    './edit-profile.component.scss'
-  ]
+  styleUrls: ['./edit-profile.component.scss']
 })
-export class TeacherEditProfileComponent extends EditProfileComponent {
+export class EditProfileComponent {
   user: Teacher;
-  schoolLevels: SchoolLevel[] = schoolLevels;
+  schoolLevels: any[] = [
+    { id: 'ELEMENTARY_SCHOOL', label: $localize`Elementary School` },
+    { id: 'MIDDLE_SCHOOL', label: $localize`Middle School` },
+    { id: 'HIGH_SCHOOL', label: $localize`High School` },
+    { id: 'COLLEGE', label: $localize`College` },
+    { id: 'OTHER', label: $localize`Other` }
+  ];
   languages: object[];
+  changed: boolean = false;
   isSaving: boolean = false;
   subscriptions: Subscription = new Subscription();
 
@@ -45,9 +48,7 @@ export class TeacherEditProfileComponent extends EditProfileComponent {
     private userService: UserService,
     public dialog: MatDialog,
     public snackBar: MatSnackBar
-  ) {
-    super(dialog, snackBar);
-  }
+  ) {}
 
   getUser() {
     this.subscriptions.add(
@@ -138,5 +139,20 @@ export class TeacherEditProfileComponent extends EditProfileComponent {
 
   getControlFieldValue(fieldName) {
     return this.editProfileFormGroup.get(fieldName).value;
+  }
+
+  handleUpdateProfileResponse(response) {
+    if (response.status === 'success') {
+      this.changed = false;
+      this.snackBar.open($localize`Profile updated.`);
+    } else {
+      this.snackBar.open($localize`An error occurred. Please try again.`);
+    }
+  }
+
+  unlinkGoogleAccount() {
+    this.dialog.open(UnlinkGoogleAccountConfirmComponent, {
+      panelClass: 'dialog-sm'
+    });
   }
 }

@@ -1,6 +1,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
@@ -14,8 +14,6 @@ import { ClassroomMonitorTestingModule } from '../../../classroom-monitor-testin
 import { SelectPeriodComponent } from '../../select-period/select-period.component';
 import { MilestoneDetailsComponent } from '../milestone-details/milestone-details.component';
 import { MilestoneDetailsDialogComponent } from './milestone-details-dialog.component';
-import { NavItemProgressComponent } from '../../../../../../app/classroom-monitor/nav-item-progress/nav-item-progress.component';
-import { MatTooltipModule } from '@angular/material/tooltip';
 
 const milestoneName: string = 'Checkpoint #1';
 
@@ -28,19 +26,16 @@ describe('MilestoneDetailsDialogComponent', () => {
       declarations: [
         MilestoneDetailsComponent,
         MilestoneDetailsDialogComponent,
-        NavItemProgressComponent,
         SelectPeriodComponent
       ],
       imports: [
         ClassroomMonitorTestingModule,
         HttpClientTestingModule,
-        MatDialogModule,
         MatFormFieldModule,
         MatInputModule,
         MatListModule,
         MatProgressBarModule,
-        MatSelectModule,
-        MatTooltipModule
+        MatSelectModule
       ],
       providers: [
         {
@@ -65,7 +60,7 @@ describe('MilestoneDetailsDialogComponent', () => {
   });
 
   it('should show the milestone name', () => {
-    const title = fixture.debugElement.query(By.css('[mat-dialog-title]'));
-    expect(title.nativeElement.textContent).toContain(milestoneName);
+    const h1 = fixture.debugElement.query(By.css('h1'));
+    expect(h1.nativeElement.textContent).toContain(milestoneName);
   });
 });

@@ -9,19 +9,13 @@ import { User } from '../../../domain/user';
 import { Observable } from 'rxjs';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ConfigService } from '../../../services/config.service';
-import { ArchiveProjectService } from '../../../services/archive-project.service';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
-import { LibraryProjectMenuHarness } from './library-project-menu.harness';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 export class MockUserService {
   getUser(): Observable<User[]> {
     const user: User = new User();
     user.firstName = 'Demo';
     user.lastName = 'Teacher';
-    user.roles = ['teacher'];
+    user.role = 'teacher';
     user.username = 'DemoTeacher';
     user.id = 123456;
     return Observable.create((observer) => {
@@ -49,34 +43,24 @@ export class MockConfigService {
   }
 }
 
-let component: LibraryProjectMenuComponent;
-let fixture: ComponentFixture<LibraryProjectMenuComponent>;
-let harness: LibraryProjectMenuHarness;
-
 describe('LibraryProjectMenuComponent', () => {
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        imports: [
-          BrowserAnimationsModule,
-          HttpClientTestingModule,
-          MatDialogModule,
-          MatMenuModule,
-          MatSnackBarModule
-        ],
-        declarations: [LibraryProjectMenuComponent],
-        providers: [
-          ArchiveProjectService,
-          { provide: TeacherService, useClass: MockTeacherService },
-          { provide: UserService, useClass: MockUserService },
-          { provide: ConfigService, useClass: MockConfigService }
-        ],
-        schemas: [NO_ERRORS_SCHEMA]
-      }).compileComponents();
-    })
-  );
+  let component: LibraryProjectMenuComponent;
+  let fixture: ComponentFixture<LibraryProjectMenuComponent>;
 
-  beforeEach(async () => {
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      imports: [MatMenuModule, MatDialogModule],
+      declarations: [LibraryProjectMenuComponent],
+      providers: [
+        { provide: TeacherService, useClass: MockTeacherService },
+        { provide: UserService, useClass: MockUserService },
+        { provide: ConfigService, useClass: MockConfigService }
+      ],
+      schemas: [NO_ERRORS_SCHEMA]
+    }).compileComponents();
+  }));
+
+  beforeEach(() => {
     fixture = TestBed.createComponent(LibraryProjectMenuComponent);
     component = fixture.componentInstance;
     const project: Project = new Project();
@@ -87,32 +71,11 @@ describe('LibraryProjectMenuComponent', () => {
     user.username = 'Spongebob Squarepants';
     user.displayName = 'Spongebob Squarepants';
     project.owner = user;
-    project.tags = [];
     component.project = project;
     fixture.detectChanges();
-    harness = await TestbedHarnessEnvironment.harnessForFixture(fixture, LibraryProjectMenuHarness);
   });
 
-  showsArchiveButton();
-  showsRestoreButton();
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
 });
-
-function showsArchiveButton() {
-  describe('project does not have archived tag', () => {
-    it('shows archive button', async () => {
-      expect(await harness.hasArchiveMenuButton()).toBe(true);
-    });
-  });
-}
-
-function showsRestoreButton() {
-  describe('project has archived tag', () => {
-    beforeEach(() => {
-      component.project.tags = ['archived'];
-      component.ngOnInit();
-    });
-    it('shows restore button', async () => {
-      expect(await harness.hasRestoreMenuButton()).toBe(true);
-    });
-  });
-}

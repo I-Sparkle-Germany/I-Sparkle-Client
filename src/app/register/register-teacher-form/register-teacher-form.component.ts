@@ -10,7 +10,6 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ReCaptchaV3Service } from 'ng-recaptcha';
 import { NewPasswordAndConfirmComponent } from '../../password/new-password-and-confirm/new-password-and-confirm.component';
 import { ConfigService } from '../../services/config.service';
-import { SchoolLevel, schoolLevels } from '../../domain/profile.constants';
 
 @Component({
   selector: 'register-teacher-form',
@@ -37,26 +36,32 @@ export class RegisterTeacherFormComponent extends RegisterUserFormComponent impl
   isSubmitted = false;
   passwordsFormGroup = this.fb.group({});
   processing: boolean = false;
-  schoolLevels: SchoolLevel[] = schoolLevels;
-  user: Teacher = new Teacher();
+  schoolLevels: any[] = [
+    { code: 'ELEMENTARY_SCHOOL', label: $localize`Elementary School` },
+    { code: 'MIDDLE_SCHOOL', label: $localize`Middle School` },
+    { code: 'HIGH_SCHOOL', label: $localize`High School` },
+    { code: 'COLLEGE', label: $localize`College` },
+    { code: 'OTHER', label: $localize`Other` }
+  ];
+  teacherUser: Teacher = new Teacher();
 
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
     private configService: ConfigService,
-    protected fb: FormBuilder,
+    private fb: FormBuilder,
     private recaptchaV3Service: ReCaptchaV3Service,
     private router: Router,
     private route: ActivatedRoute,
-    protected snackBar: MatSnackBar,
+    private snackBar: MatSnackBar,
     private teacherService: TeacherService,
     private utilService: UtilService
   ) {
-    super(fb, snackBar);
+    super();
   }
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
-      this.user.googleUserId = params['gID'];
+      this.teacherUser.googleUserId = params['gID'];
       if (!this.isUsingGoogleId()) {
         this.createTeacherAccountFormGroup.addControl('passwords', this.passwordsFormGroup);
       }
@@ -74,7 +79,7 @@ export class RegisterTeacherFormComponent extends RegisterUserFormComponent impl
   }
 
   private isUsingGoogleId(): boolean {
-    return this.user.googleUserId != null;
+    return this.teacherUser.googleUserId != null;
   }
 
   private setControlFieldValue(name: string, value: string): void {
@@ -86,12 +91,12 @@ export class RegisterTeacherFormComponent extends RegisterUserFormComponent impl
     if (this.createTeacherAccountFormGroup.valid) {
       this.processing = true;
       await this.populateTeacherUser();
-      this.teacherService.registerTeacherAccount(this.user).subscribe(
+      this.teacherService.registerTeacherAccount(this.teacherUser).subscribe(
         (response: any) => {
           this.createAccountSuccess(response);
         },
         (response: HttpErrorResponse) => {
-          this.handleCreateAccountError(response.error, this.user);
+          this.createAccountError(response.error);
         }
       );
     }
@@ -105,18 +110,42 @@ export class RegisterTeacherFormComponent extends RegisterUserFormComponent impl
     this.processing = false;
   }
 
+  private createAccountError(error: any): void {
+    const formError: any = {};
+    switch (error.messageCode) {
+      case 'invalidPasswordLength':
+        formError.minlength = true;
+        this.passwordsFormGroup
+          .get(NewPasswordAndConfirmComponent.NEW_PASSWORD_FORM_CONTROL_NAME)
+          .setErrors(formError);
+        break;
+      case 'invalidPasswordPattern':
+        formError.pattern = true;
+        this.passwordsFormGroup
+          .get(NewPasswordAndConfirmComponent.NEW_PASSWORD_FORM_CONTROL_NAME)
+          .setErrors(formError);
+        break;
+      case 'recaptchaResponseInvalid':
+        this.teacherUser['isRecaptchaInvalid'] = true;
+        break;
+      default:
+        this.snackBar.open(this.translateCreateAccountErrorMessageCode(error.messageCode));
+    }
+    this.processing = false;
+  }
+
   private async populateTeacherUser() {
     for (let key of Object.keys(this.createTeacherAccountFormGroup.controls)) {
-      this.user[key] = this.createTeacherAccountFormGroup.get(key).value;
+      this.teacherUser[key] = this.createTeacherAccountFormGroup.get(key).value;
     }
     if (this.isRecaptchaEnabled) {
       const token = await this.recaptchaV3Service.execute('importantAction').toPromise();
-      this.user['token'] = token;
+      this.teacherUser['token'] = token;
     }
     if (!this.isUsingGoogleId()) {
-      this.user['password'] = this.getPassword();
-      delete this.user['passwords'];
-      delete this.user['googleUserId'];
+      this.teacherUser['password'] = this.getPassword();
+      delete this.teacherUser['passwords'];
+      delete this.teacherUser['googleUserId'];
     }
   }
 

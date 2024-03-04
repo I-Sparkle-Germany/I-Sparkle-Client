@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { CRaterService } from '../../assets/wise5/services/cRaterService';
 import { ConfigService } from '../../assets/wise5/services/configService';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { UtilService } from '../../assets/wise5/services/utilService';
 import { CRaterIdea } from '../../assets/wise5/components/common/cRater/CRaterIdea';
 import { CRaterScore } from '../../assets/wise5/components/common/cRater/CRaterScore';
 import { RawCRaterResponse } from '../../assets/wise5/components/common/cRater/RawCRaterResponse';
@@ -13,7 +14,7 @@ describe('CRaterService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [ConfigService, CRaterService]
+      providers: [ConfigService, CRaterService, UtilService]
     });
     http = TestBed.inject(HttpTestingController);
     configService = TestBed.inject(ConfigService);

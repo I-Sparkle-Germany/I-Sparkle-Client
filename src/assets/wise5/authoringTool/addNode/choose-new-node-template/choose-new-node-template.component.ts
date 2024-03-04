@@ -1,39 +1,40 @@
 import { Component } from '@angular/core';
+import { UpgradeModule } from '@angular/upgrade/static';
 import { NewNodeTemplate } from '../NewNodeTemplate';
-import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
-  selector: 'choose-new-node-template',
   templateUrl: 'choose-new-node-template.component.html',
-  styleUrls: ['choose-new-node-template.component.scss', '../../add-content.scss']
+  styleUrls: ['choose-new-node-template.component.scss']
 })
 export class ChooseNewNodeTemplate {
-  protected templates: NewNodeTemplate[] = [
+  templates: NewNodeTemplate[] = [
     {
       label: $localize`Create Your Own`,
+      description: $localize`Create Your Own Description`,
       icon: 'mode_edit',
-      route: 'add-your-own'
-    },
-    {
-      label: $localize`Import From Another Unit`,
-      icon: 'system_update_alt',
-      route: 'import-step/choose-unit'
+      route: 'root.at.project.add-node.add-your-own'
     },
     {
       label: $localize`Automated Assessment`,
+      description: $localize`Automated Assessment Description`,
       icon: 'fact_check',
-      route: 'automated-assessment/choose-item'
+      route: 'root.at.project.add-node.automated-assessment.choose-item'
     },
     {
       label: $localize`Interactive Simulation`,
+      description: $localize`Add an existing interactive simulation`,
       icon: 'video_settings',
-      route: 'simulation/choose-item'
+      route: 'root.at.project.add-node.simulation.choose-item'
     }
   ];
 
-  constructor(private route: ActivatedRoute, private router: Router) {}
+  constructor(private upgrade: UpgradeModule) {}
 
-  protected chooseTemplate(template: NewNodeTemplate) {
-    this.router.navigate(['..', ...template.route.split('/')], { relativeTo: this.route });
+  chooseTemplate(template: NewNodeTemplate) {
+    this.upgrade.$injector.get('$state').go(template.route, {});
+  }
+
+  cancel() {
+    this.upgrade.$injector.get('$state').go('root.at.project');
   }
 }

@@ -4,13 +4,11 @@ import { Component } from '@angular/core';
 import { ProjectAssetService } from '../../../../../app/services/projectAssetService';
 import { AbstractComponentAuthoring } from '../../../authoringTool/components/AbstractComponentAuthoring';
 import { ConfigService } from '../../../services/configService';
+import { NodeService } from '../../../services/nodeService';
 import { TeacherProjectService } from '../../../services/teacherProjectService';
+import { UtilService } from '../../../services/utilService';
 import { GraphService } from '../graphService';
 import { isMultipleYAxes } from '../util';
-import { MatDialog } from '@angular/material/dialog';
-import { AssetChooser } from '../../../authoringTool/project-asset-authoring/asset-chooser';
-import { filter } from 'rxjs/operators';
-import { TeacherNodeService } from '../../../services/teacherNodeService';
 
 @Component({
   selector: 'graph-authoring',
@@ -132,11 +130,11 @@ export class GraphAuthoring extends AbstractComponentAuthoring {
 
   constructor(
     protected ConfigService: ConfigService,
-    private dialog: MatDialog,
     private GraphService: GraphService,
-    protected NodeService: TeacherNodeService,
+    protected NodeService: NodeService,
     protected ProjectAssetService: ProjectAssetService,
-    protected ProjectService: TeacherProjectService
+    protected ProjectService: TeacherProjectService,
+    protected UtilService: UtilService
   ) {
     super(ConfigService, NodeService, ProjectAssetService, ProjectService);
   }
@@ -247,7 +245,7 @@ export class GraphAuthoring extends AbstractComponentAuthoring {
       ) {
         series.data.push([]);
       } else if (this.componentContent.xAxis.type === 'categories') {
-        series.data.push(0);
+        series.data.push(null);
       }
     }
     this.componentChanged();
@@ -562,15 +560,5 @@ export class GraphAuthoring extends AbstractComponentAuthoring {
 
   customTrackBy(index: number): number {
     return index;
-  }
-
-  chooseBackground(): void {
-    new AssetChooser(this.dialog, this.nodeId, this.componentId)
-      .open('background')
-      .afterClosed()
-      .pipe(filter((data) => data != null))
-      .subscribe((data: any) => {
-        return this.assetSelected(data);
-      });
   }
 }

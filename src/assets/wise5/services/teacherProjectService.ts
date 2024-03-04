@@ -1,6 +1,7 @@
 'use strict';
+import * as angular from 'angular';
 import { ProjectService } from './projectService';
-import { Injectable, Signal, WritableSignal, signal } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { BranchService } from './branchService';
 import { ComponentServiceLookupService } from './componentServiceLookupService';
@@ -9,9 +10,7 @@ import { ConfigService } from './configService';
 import { PathService } from './pathService';
 import { copy } from '../common/object/object';
 import { generateRandomKey } from '../common/string/string';
-import { branchPathBackgroundColors } from '../common/color/color';
-import { reduceByUniqueId } from '../common/array/array';
-import { NodeTypeSelected } from '../authoringTool/domain/node-type-selected';
+import { ComponentContent } from '../common/ComponentContent';
 
 @Injectable()
 export class TeacherProjectService extends ProjectService {
@@ -21,9 +20,10 @@ export class TeacherProjectService extends ProjectService {
   public nodeChanged$: Observable<boolean> = this.nodeChangedSource.asObservable();
   private refreshProjectSource: Subject<void> = new Subject<void>();
   public refreshProject$ = this.refreshProjectSource.asObservable();
+  private scrollToBottomOfPageSource: Subject<void> = new Subject<void>();
+  public scrollToBottomOfPage$ = this.scrollToBottomOfPageSource.asObservable();
   private errorSavingProjectSource: Subject<void> = new Subject<void>();
   public errorSavingProject$: Observable<void> = this.errorSavingProjectSource.asObservable();
-  private nodeTypeSelected: WritableSignal<NodeTypeSelected> = signal(null);
   private notAllowedToEditThisProjectSource: Subject<void> = new Subject<void>();
   public notAllowedToEditThisProject$: Observable<void> = this.notAllowedToEditThisProjectSource.asObservable();
   private projectSavedSource: Subject<void> = new Subject<void>();
@@ -241,6 +241,22 @@ export class TeacherProjectService extends ProjectService {
   }
 
   /**
+   * Replace a component
+   * @param nodeId the node id
+   * @param componentId the component id
+   * @param component the new component
+   */
+  replaceComponent(nodeId, componentId, component) {
+    const components = this.getComponents(nodeId);
+    for (let c = 0; c < components.length; c++) {
+      if (components[c].id === componentId) {
+        components[c] = component;
+        break;
+      }
+    }
+  }
+
+  /**
    * Create a new group
    * @param title the title of the group
    * @returns the group object
@@ -346,8 +362,8 @@ export class TeacherProjectService extends ProjectService {
    */
   createNodeAfter(newNode, nodeId) {
     if (this.isInactive(nodeId)) {
-      this.setIdToNode(newNode.id, newNode);
       this.addInactiveNodeInsertAfter(newNode, nodeId);
+      this.setIdToNode(newNode.id, newNode);
     } else {
       this.addNode(newNode);
       this.setIdToNode(newNode.id, newNode);
@@ -570,6 +586,22 @@ export class TeacherProjectService extends ProjectService {
     return numRubrics;
   }
 
+  /**
+   * Delete a component from a node
+   * @param nodeId the node id containing the node
+   * @param componentId the component id
+   */
+  deleteComponent(nodeId: string, componentId: string): ComponentContent {
+    const node = this.getNodeById(nodeId);
+    const components = node.components;
+    for (let c = 0; c < components.length; c++) {
+      if (components[c].id === componentId) {
+        return components.splice(c, 1)[0];
+      }
+    }
+    return null;
+  }
+
   deleteTransition(node, transition) {
     const nodeTransitions = node.transitionLogic.transitions;
     const index = nodeTransitions.indexOf(transition);
@@ -585,14 +617,13 @@ export class TeacherProjectService extends ProjectService {
     }
   }
 
-  getBackgroundColor(nodeId: string): string {
-    const branchPathLetter = this.nodeIdToBranchPathLetter[nodeId];
-    if (branchPathLetter != null) {
-      const letterASCIICode = branchPathLetter.charCodeAt(0);
-      const branchPathNumber = letterASCIICode - 65;
-      return branchPathBackgroundColors[branchPathNumber];
-    }
-    return null;
+  /**
+   * Get the branch path letter
+   * @param nodeId get the branch path letter for this node if it is in a branch
+   * @return the branch path letter for the node if it is in a branch
+   */
+  getBranchPathLetter(nodeId) {
+    return this.nodeIdToBranchPathLetter[nodeId];
   }
 
   /**
@@ -619,6 +650,24 @@ export class TeacherProjectService extends ProjectService {
 
   getIdToNode() {
     return this.idToNode;
+  }
+
+  turnOnSaveButtonForAllComponents(node) {
+    for (const component of node.components) {
+      const service = this.componentServiceLookupService.getService(component.type);
+      if (service.componentUsesSaveButton()) {
+        component.showSaveButton = true;
+      }
+    }
+  }
+
+  turnOffSaveButtonForAllComponents(node) {
+    for (const component of node.components) {
+      const service = this.componentServiceLookupService.getService(component.type);
+      if (service.componentUsesSaveButton()) {
+        component.showSaveButton = false;
+      }
+    }
   }
 
   checkPotentialStartNodeIdChangeThenSaveProject() {
@@ -723,10 +772,10 @@ export class TeacherProjectService extends ProjectService {
       this.insertNodeAfterInactiveNode(node, nodeIdToInsertAfter);
     }
     if (node.type === 'group') {
-      this.inactiveGroupNodes.push(node);
+      this.inactiveGroupNodes.push(node.id);
       this.addGroupChildNodesToInactive(node);
     } else {
-      this.inactiveStepNodes.push(node);
+      this.inactiveStepNodes.push(node.id);
     }
   }
 
@@ -805,10 +854,10 @@ export class TeacherProjectService extends ProjectService {
       this.insertNodeInsideInactiveNode(node, nodeIdToInsertInside);
     }
     if (node.type === 'group') {
-      this.inactiveGroupNodes.push(node);
+      this.inactiveGroupNodes.push(node.id);
       this.addGroupChildNodesToInactive(node);
     } else {
-      this.inactiveStepNodes.push(node);
+      this.inactiveStepNodes.push(node.id);
     }
   }
 
@@ -899,6 +948,10 @@ export class TeacherProjectService extends ProjectService {
     this.refreshProjectSource.next();
   }
 
+  scrollToBottomOfPage() {
+    this.scrollToBottomOfPageSource.next();
+  }
+
   nodeHasConstraint(nodeId: string): boolean {
     const constraints = this.getConstraintsOnNode(nodeId);
     return constraints.length > 0;
@@ -906,7 +959,7 @@ export class TeacherProjectService extends ProjectService {
 
   getConstraintsOnNode(nodeId: string): any {
     const node = this.getNodeById(nodeId);
-    return node.constraints ?? [];
+    return node.constraints;
   }
 
   /**
@@ -994,25 +1047,28 @@ export class TeacherProjectService extends ProjectService {
    * Saves the project to Config.saveProjectURL and returns commit history promise.
    * if Config.saveProjectURL or Config.projectId are undefined, does not save and returns null
    */
-  saveProject(): Promise<any> {
+  saveProject(): any {
     if (!this.configService.getConfigParam('canEditProject')) {
       this.broadcastNotAllowedToEditThisProject();
       return null;
     }
     this.broadcastSavingProject();
     this.cleanupBeforeSave();
-    this.project.metadata.authors = reduceByUniqueId(
+    this.project.metadata.authors = this.getUniqueAuthors(
       this.addCurrentUserToAuthors(this.getAuthors())
     );
     return this.http
-      .post(this.configService.getConfigParam('saveProjectURL'), JSON.stringify(this.project))
+      .post(
+        this.configService.getConfigParam('saveProjectURL'),
+        angular.toJson(this.project, false)
+      )
       .toPromise()
       .then((response: any) => {
         this.handleSaveProjectResponse(response);
       });
   }
 
-  private getAuthors(): any[] {
+  getAuthors(): any[] {
     return this.project.metadata.authors ? this.project.metadata.authors : [];
   }
 
@@ -1028,6 +1084,18 @@ export class TeacherProjectService extends ProjectService {
     }
     authors.push(userInfo);
     return authors;
+  }
+
+  getUniqueAuthors(authors = []): any[] {
+    const idToAuthor = {};
+    const uniqueAuthors = [];
+    for (const author of authors) {
+      if (idToAuthor[author.id] == null) {
+        uniqueAuthors.push(author);
+        idToAuthor[author.id] = author;
+      }
+    }
+    return uniqueAuthors;
   }
 
   handleSaveProjectResponse(response: any): any {
@@ -1197,8 +1265,8 @@ export class TeacherProjectService extends ProjectService {
   }
 
   copyTransitions(previousNode, node) {
-    const transitionsJSONString = JSON.stringify(previousNode.transitionLogic.transitions);
-    const transitionsCopy = JSON.parse(transitionsJSONString);
+    const transitionsJSONString = angular.toJson(previousNode.transitionLogic.transitions);
+    const transitionsCopy = angular.fromJson(transitionsJSONString);
     node.transitionLogic.transitions = transitionsCopy;
   }
 
@@ -1527,7 +1595,40 @@ export class TeacherProjectService extends ProjectService {
     }
 
     const parentIdOfNodeToRemove = this.getParentGroupId(nodeId);
-    this.updateParentGroupStartId(nodeId);
+    const parentGroup = this.getNodeById(parentIdOfNodeToRemove);
+
+    // update the start id if we are removing the start node of a group
+    if (parentGroup != null) {
+      const parentGroupStartId = parentGroup.startId;
+      if (parentGroupStartId != null) {
+        if (parentGroupStartId === nodeId) {
+          // the node we are removing is the start node
+
+          if (nodeToRemoveTransitions != null && nodeToRemoveTransitions.length > 0) {
+            for (let nodeToRemoveTransition of nodeToRemoveTransitions) {
+              if (nodeToRemoveTransition != null) {
+                const toNodeId = nodeToRemoveTransition.to;
+                if (toNodeId != null) {
+                  /*
+                   * we need to check that the to node id is in the
+                   * same group. some transitions point to a node id
+                   * in the next group which we would not want to use
+                   * for the start id.
+                   */
+                  if (this.getParentGroupId(toNodeId) == parentIdOfNodeToRemove) {
+                    // set the new start id
+                    parentGroup.startId = toNodeId;
+                  }
+                }
+              }
+            }
+          } else {
+            // there are no transitions so we will have an empty start id
+            parentGroup.startId = '';
+          }
+        }
+      }
+    }
 
     for (let n = 0; n < nodesByToNodeId.length; n++) {
       const node = nodesByToNodeId[n];
@@ -1543,7 +1644,8 @@ export class TeacherProjectService extends ProjectService {
               // we have found the transition to the node we are removing
 
               // copy the transitions from the node we are removing
-              let transitionsCopy = copy(nodeToRemoveTransitions);
+              let transitionsCopy = angular.toJson(nodeToRemoveTransitions);
+              transitionsCopy = angular.fromJson(transitionsCopy);
 
               /*
                * if the parent from group is different than the parent removing group
@@ -1745,30 +1847,6 @@ export class TeacherProjectService extends ProjectService {
 
     if (this.isGroupNode(nodeId)) {
       this.removeTransitionsOutOfGroup(nodeId);
-    }
-  }
-
-  /**
-   * Update the parent group start id if the node we are removing is the start id
-   * @param nodeId The node we are removing
-   */
-  private updateParentGroupStartId(nodeId: string): void {
-    const parentGroup = this.getParentGroup(nodeId);
-    if (parentGroup != null && parentGroup.startId === nodeId) {
-      const transitions = this.getTransitionsFromNode(this.getNodeById(nodeId));
-      if (transitions.length > 0) {
-        for (const transition of transitions) {
-          const toNodeId = transition.to;
-          // Make sure the to node id is in the same group because a step can transition to a step
-          // in a different group. If the to node id is in a different group, we would not want to
-          // use it as the start id of this group.
-          if (this.getParentGroupId(toNodeId) === parentGroup.id) {
-            parentGroup.startId = toNodeId;
-          }
-        }
-      } else {
-        parentGroup.startId = '';
-      }
     }
   }
 
@@ -2574,11 +2652,9 @@ export class TeacherProjectService extends ProjectService {
    */
   addGroupChildNodesToInactive(node) {
     for (const childId of node.ids) {
-      if (!this.isInactive(childId)) {
-        const childNode = this.getNodeById(childId);
-        this.project.inactiveNodes.push(childNode);
-        this.inactiveStepNodes.push(childNode);
-      }
+      const childNode = this.getNodeById(childId);
+      this.project.inactiveNodes.push(childNode);
+      this.inactiveStepNodes.push(childNode);
     }
   }
 
@@ -3050,7 +3126,7 @@ export class TeacherProjectService extends ProjectService {
     return a.order - b.order;
   }
 
-  private broadcastSavingProject(): void {
+  broadcastSavingProject() {
     this.savingProjectSource.next();
   }
 
@@ -3080,23 +3156,5 @@ export class TeacherProjectService extends ProjectService {
       objects.splice(index, 1);
       objects.splice(index + 1, 0, object);
     }
-  }
-
-  getNodesInOrder(): any[] {
-    return Object.entries(this.idToOrder)
-      .map((entry: any) => {
-        return { key: entry[0], id: entry[0], order: entry[1].order };
-      })
-      .sort((a: any, b: any) => {
-        return a.order - b.order;
-      });
-  }
-
-  setNodeTypeSelected(nodeTypeSelected: NodeTypeSelected): void {
-    this.nodeTypeSelected.set(nodeTypeSelected);
-  }
-
-  getNodeTypeSelected(): Signal<NodeTypeSelected> {
-    return this.nodeTypeSelected.asReadonly();
   }
 }

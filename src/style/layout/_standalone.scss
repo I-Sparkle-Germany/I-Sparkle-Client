@@ -1,9 +1,15 @@
 .standalone {
-  p:last-child {
-    margin-bottom: 0;
+  height: 100%;
+
+  .mat-card-content {
+    margin-bottom: 16px;
+
+    @media (min-width: breakpoint('sm.min')) {
+      margin-bottom: 24px;
+    }
   }
 
-  .mat-mdc-card-actions {
+  .mat-card-actions {
     margin: 0;
     padding: 16px 0;
 
@@ -23,6 +29,10 @@
 
   @media (min-width: breakpoint('sm.min')) {
     margin: 32px auto;
+
+    &.mat-card {
+      padding: 24px !important;
+    }
   }
 }
 

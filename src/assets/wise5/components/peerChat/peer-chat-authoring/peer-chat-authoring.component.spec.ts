@@ -11,14 +11,13 @@ import { EditComponentPrompt } from '../../../../../app/authoring-tool/edit-comp
 import { ProjectAssetService } from '../../../../../app/services/projectAssetService';
 import { copy } from '../../../common/object/object';
 import { ConfigService } from '../../../services/configService';
+import { NodeService } from '../../../services/nodeService';
 import { ProjectService } from '../../../services/projectService';
 import { SessionService } from '../../../services/sessionService';
 import { TeacherProjectService } from '../../../services/teacherProjectService';
+import { UtilService } from '../../../services/utilService';
 import { MockNodeService } from '../../common/MockNodeService';
 import { PeerChatAuthoringComponent } from './peer-chat-authoring.component';
-import { StudentTeacherCommonServicesModule } from '../../../../../app/student-teacher-common-services.module';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { TeacherNodeService } from '../../../services/teacherNodeService';
 
 const componentContent = {
   id: 'qn3savv52r',
@@ -54,19 +53,18 @@ describe('PeerChatAuthoringComponent', () => {
         MatFormFieldModule,
         MatIconModule,
         MatInputModule,
-        MatSelectModule,
-        StudentTeacherCommonServicesModule
+        MatSelectModule
       ],
       declarations: [EditComponentPrompt, PeerChatAuthoringComponent],
       providers: [
         ConfigService,
-        { provide: TeacherNodeService, useClass: MockNodeService },
+        { provide: NodeService, useClass: MockNodeService },
         ProjectAssetService,
         ProjectService,
         SessionService,
-        TeacherProjectService
-      ],
-      schemas: [NO_ERRORS_SCHEMA]
+        TeacherProjectService,
+        UtilService
+      ]
     }).compileComponents();
   });
 
@@ -85,9 +83,5 @@ describe('PeerChatAuthoringComponent', () => {
     spyOn(component, 'componentChanged').and.callFake(() => {});
     component.componentContent = copy(componentContent);
     fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
   });
 });

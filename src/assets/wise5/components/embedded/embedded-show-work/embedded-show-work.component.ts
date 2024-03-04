@@ -4,6 +4,7 @@ import { AnnotationService } from '../../../services/annotationService';
 import { ConfigService } from '../../../services/configService';
 import { NodeService } from '../../../services/nodeService';
 import { ProjectService } from '../../../services/projectService';
+import { UtilService } from '../../../services/utilService';
 import { ComponentShowWorkDirective } from '../../component-show-work.directive';
 import { EmbeddedService } from '../embeddedService';
 
@@ -24,6 +25,7 @@ export class EmbeddedShowWorkComponent extends ComponentShowWorkDirective {
     private EmbeddedService: EmbeddedService,
     protected nodeService: NodeService,
     protected ProjectService: ProjectService,
+    protected UtilService: UtilService,
     private sanitizer: DomSanitizer
   ) {
     super(nodeService, ProjectService);

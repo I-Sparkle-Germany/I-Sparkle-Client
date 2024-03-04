@@ -2,7 +2,6 @@ import { Component, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AnnotationService } from '../../../assets/wise5/services/annotationService';
 import { TeacherDataService } from '../../../assets/wise5/services/teacherDataService';
-import { Annotation } from '../../../assets/wise5/common/Annotation';
 
 @Component({
   selector: 'component-new-work-badge',
@@ -30,8 +29,10 @@ export class ComponentNewWorkBadgeComponent {
   ngOnInit() {
     this.checkHasNewWork();
     this.annotationSavedToServerSubscription = this.AnnotationService.annotationSavedToServer$.subscribe(
-      (annotation: Annotation) => {
-        if (annotation.nodeId === this.nodeId && annotation.componentId === this.componentId) {
+      ({ annotation }) => {
+        const annotationNodeId = annotation.nodeId;
+        const annotationComponentId = annotation.componentId;
+        if (this.nodeId === annotationNodeId && this.componentId === annotationComponentId) {
           this.checkHasNewWork();
         }
       }
@@ -62,7 +63,7 @@ export class ComponentNewWorkBadgeComponent {
       }
       let latestTeacherScore = null;
       if (latestAnnotations && latestAnnotations.score) {
-        if (latestAnnotations.score.type !== 'autoScore') {
+        if (latestAnnotations.score !== 'autoScore') {
           latestTeacherScore = latestAnnotations.score;
         }
       }

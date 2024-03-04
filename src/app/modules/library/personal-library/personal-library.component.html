@@ -1,38 +1,8 @@
 <div class="content-block library-teacher__paginate">
-  <div class="personal-library-header" fxLayoutAlign="center center" fxLayoutGap="8px">
-    <a class="mat-caption" href="#" (click)="showInfo($event)" i18n>What are My Units?</a>
-    <span fxFlex></span>
-    <mat-form-field [subscriptSizing]="'dynamic'">
-      <mat-label>View</mat-label>
-      <mat-select [(ngModel)]="showArchivedView" (selectionChange)="switchActiveArchivedView()">
-        <mat-option [value]="false" i18n>Active</mat-option>
-        <mat-option [value]="true" i18n>Archived</mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
-  <mat-divider></mat-divider>
-  <div fxLayoutAlign="start center" fxLayout.xs="column" fxLayoutGap="8px">
-    <div fxLayoutAlign="center center" fxLayoutGap="4px" fxFlexAlign.xs="start" fxFlexOrder.xs="1">
-      <select-all-items-checkbox
-        [label]="projectsLabel"
-        [numAllItems]="numProjectsInView"
-        [numSelectedItems]="numSelectedProjects()"
-        (allSelectedEvent)="selectAllProjects()"
-        (noneSelectedEvent)="unselectAllProjects()"
-      ></select-all-items-checkbox>
-      <span *ngIf="numSelectedProjects() > 0" class="secondary-text" i18n>
-        {{ numSelectedProjects() }} selected
-      </span>
-      <archive-projects-button
-        *ngIf="selectedProjects().length > 0"
-        [showArchive]="!showArchivedView"
-        [projects]="selectedProjects()"
-        (archiveActionEvent)="refreshProjects()"
-      ></archive-projects-button>
-    </div>
+  <div fxLayoutAlign="center center" fxLayout.xs="column">
+    <a class="info mat-caption" [routerLink]="" (click)="showInfo()" i18n>What are My Units?</a>
     <span fxFlex fxHide.xs></span>
     <mat-paginator
-      fxFlexAlign="end"
       [length]="filteredProjects.length"
       [pageSize]="pageSize"
       [pageSizeOptions]="pageSizeOptions"
@@ -46,9 +16,6 @@
       <app-library-project
         *ngIf="isOnPage(i)"
         [project]="project"
-        [myUnit]="true"
-        [checked]="projectIdToIsSelected()[project.id]"
-        (projectSelectionEvent)="updateSelectedProjects($event)"
         fxFlex.sm="50"
         fxFlex.md="33"
         fxFlex.gt-md="25"

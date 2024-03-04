@@ -4,7 +4,6 @@ import { generateRandomKey } from '../../../assets/wise5/common/string/string';
 import { EditFeedbackRulesComponent } from '../../../assets/wise5/components/common/feedbackRule/edit-feedback-rules/edit-feedback-rules.component';
 import { QuestionBankRule } from '../../../assets/wise5/components/peerChat/peer-chat-question-bank/QuestionBankRule';
 import { TeacherProjectService } from '../../../assets/wise5/services/teacherProjectService';
-import { Question } from '../../../assets/wise5/components/peerChat/peer-chat-question-bank/Question';
 
 @Component({
   selector: 'edit-question-bank-rules',
@@ -21,11 +20,7 @@ export class EditQuestionBankRulesComponent extends EditFeedbackRulesComponent {
   }
 
   protected createNewFeedbackRule(): Partial<QuestionBankRule> {
-    if (this.version === 2) {
-      return { id: generateRandomKey(), expression: '', questions: [new Question()] };
-    } else {
-      return { id: generateRandomKey(), expression: '', questions: [''] };
-    }
+    return { id: generateRandomKey(), expression: '', questions: [''] };
   }
 
   deleteRule(ruleIndex: number): void {
@@ -36,11 +31,7 @@ export class EditQuestionBankRulesComponent extends EditFeedbackRulesComponent {
   }
 
   addNewFeedbackToRule(rule: Partial<QuestionBankRule>): void {
-    if (this.version === 2) {
-      (rule.questions as any[]).push(new Question());
-    } else {
-      (rule.questions as string[]).push('');
-    }
+    (rule.questions as string[]).push('');
     this.projectService.nodeChanged();
   }
 
