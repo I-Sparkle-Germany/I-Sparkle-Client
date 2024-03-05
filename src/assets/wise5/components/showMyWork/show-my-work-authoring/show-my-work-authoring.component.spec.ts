@@ -7,12 +7,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { UpgradeModule } from '@angular/upgrade/static';
 import { EditComponentPrompt } from '../../../../../app/authoring-tool/edit-component-prompt/edit-component-prompt.component';
 import { ProjectAssetService } from '../../../../../app/services/projectAssetService';
 import { StudentTeacherCommonServicesModule } from '../../../../../app/student-teacher-common-services.module';
 import { TeacherProjectService } from '../../../services/teacherProjectService';
 import { ShowMyWorkAuthoringComponent } from './show-my-work-authoring.component';
+import { TeacherNodeService } from '../../../services/teacherNodeService';
 
 describe('ShowMyWorkAuthoringComponent', () => {
   let component: ShowMyWorkAuthoringComponent;
@@ -41,11 +41,10 @@ describe('ShowMyWorkAuthoringComponent', () => {
         MatFormFieldModule,
         MatInputModule,
         MatSelectModule,
-        StudentTeacherCommonServicesModule,
-        UpgradeModule
+        StudentTeacherCommonServicesModule
       ],
       declarations: [EditComponentPrompt, ShowMyWorkAuthoringComponent],
-      providers: [ProjectAssetService, TeacherProjectService]
+      providers: [ProjectAssetService, TeacherNodeService, TeacherProjectService]
     }).compileComponents();
   });
 

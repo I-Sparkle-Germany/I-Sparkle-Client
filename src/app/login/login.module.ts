@@ -13,7 +13,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { GoogleSignInModule } from '../modules/google-sign-in/google-sign-in.module';
-import { StandaloneModule } from '../standalone/standalone.module';
+import { StandaloneLogoComponent } from '../common/standalone-logo/standalone-logo.comonent';
 
 const materialModules = [
   MatButtonModule,
@@ -35,9 +35,9 @@ const materialModules = [
     materialModules,
     RecaptchaModule,
     RecaptchaFormsModule,
-    StandaloneModule
+    StandaloneLogoComponent
   ],
   declarations: [LoginComponent, LoginHomeComponent, LoginComponent],
-  exports: [LoginComponent]
+  exports: [LoginComponent, StandaloneLogoComponent]
 })
 export class LoginModule {}
