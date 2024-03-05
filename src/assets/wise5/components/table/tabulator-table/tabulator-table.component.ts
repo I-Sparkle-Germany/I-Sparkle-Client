@@ -78,7 +78,6 @@ export class TabulatorTableComponent implements OnChanges, AfterViewInit {
         this.setupRowSelection();
       }
       this.setupSorting();
-      this.table.setSort();
       this.ready.emit();
     });
     this.tableContainer.nativeElement.appendChild(this.tableEl);

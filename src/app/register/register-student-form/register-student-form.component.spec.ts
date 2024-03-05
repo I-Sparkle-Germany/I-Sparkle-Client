@@ -20,13 +20,12 @@ import { BrowserModule, By } from '@angular/platform-browser';
 import { RecaptchaV3Module, ReCaptchaV3Service, RECAPTCHA_V3_SITE_KEY } from 'ng-recaptcha';
 import { PasswordModule } from '../../password/password.module';
 import { ConfigService } from '../../services/config.service';
-import { PasswordRequirementComponent } from '../../password/password-requirement/password-requirement.component';
 
 let router: Router;
 let component: RegisterStudentFormComponent;
 let configService: ConfigService;
 let fixture: ComponentFixture<RegisterStudentFormComponent>;
-const PASSWORD: string = PasswordRequirementComponent.VALID_PASSWORD;
+const PASSWORD: string = 'Abcd1234';
 let recaptchaV3Service: ReCaptchaV3Service;
 let studentService: StudentService;
 let snackBar: MatSnackBar;
@@ -55,14 +54,14 @@ describe('RegisterStudentFormComponent', () => {
         declarations: [RegisterStudentFormComponent],
         imports: [
           BrowserAnimationsModule,
-          BrowserModule,
-          MatInputModule,
-          MatSelectModule,
-          MatSnackBarModule,
           PasswordModule,
+          RouterTestingModule,
           ReactiveFormsModule,
-          RecaptchaV3Module,
-          RouterTestingModule
+          MatSelectModule,
+          MatInputModule,
+          MatSnackBarModule,
+          BrowserModule,
+          RecaptchaV3Module
         ],
         providers: [
           { provide: ConfigService, useClass: MockConfigService },
@@ -78,9 +77,9 @@ describe('RegisterStudentFormComponent', () => {
   beforeEach(() => {
     configService = TestBed.inject(ConfigService);
     fixture = TestBed.createComponent(RegisterStudentFormComponent);
-    studentService = TestBed.inject(StudentService);
+    studentService = TestBed.get(StudentService);
     recaptchaV3Service = TestBed.inject(ReCaptchaV3Service);
-    router = TestBed.inject(Router);
+    router = TestBed.get(Router);
     snackBar = TestBed.inject(MatSnackBar);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -154,31 +153,29 @@ async function createAccount() {
     );
 
     it('should show error when Recaptcha is invalid', () => {
-      waitForAsync(async () => {
-        component.isRecaptchaEnabled = true;
-        component.createStudentAccountFormGroup.setValue(
-          createAccountFormValue(
-            'Patrick',
-            'Star',
-            'Male',
-            '01',
-            '01',
-            'Who lives in a pineapple under the sea?',
-            'Spongebob Squarepants',
-            PASSWORD,
-            PASSWORD
-          )
-        );
-        component.user.isRecaptchaInvalid = true;
-        spyOn(recaptchaV3Service, 'execute').and.returnValue(of(''));
-        const errorMessage = 'recaptchaResponseInvalid';
-        const response: any = helpers.createAccountErrorResponse(errorMessage);
-        spyOn(studentService, 'registerStudentAccount').and.returnValue(of(response));
-        component.createAccount();
-        fixture.detectChanges();
-        const recaptchaError = fixture.debugElement.queryAll(By.css('.recaptchaError'));
-        expect(recaptchaError).not.toHaveSize(0);
-      });
+      component.isRecaptchaEnabled = true;
+      component.createStudentAccountFormGroup.setValue(
+        createAccountFormValue(
+          'Patrick',
+          'Star',
+          'Male',
+          '01',
+          '01',
+          'Who lives in a pineapple under the sea?',
+          'Spongebob Squarepants',
+          PASSWORD,
+          PASSWORD
+        )
+      );
+      component.studentUser.isRecaptchaInvalid = true;
+      spyOn(recaptchaV3Service, 'execute').and.returnValue(of(''));
+      const errorMessage = 'recaptchaResponseInvalid';
+      const response: any = helpers.createAccountErrorResponse(errorMessage);
+      spyOn(studentService, 'registerStudentAccount').and.returnValue(throwError(response));
+      component.createAccount();
+      fixture.detectChanges();
+      const recaptchaError = fixture.debugElement.queryAll(By.css('.recaptchaError'));
+      expect(recaptchaError).not.toHaveSize(0);
     });
 
     it(

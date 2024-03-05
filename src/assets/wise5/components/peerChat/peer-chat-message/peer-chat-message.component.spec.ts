@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconModule } from '@angular/material/icon';
 import { By } from '@angular/platform-browser';
 import { ConfigService } from '../../../services/configService';
+import { UtilService } from '../../../services/utilService';
 import { PeerChatMessage } from '../PeerChatMessage';
 import { PeerChatMessageComponent } from './peer-chat-message.component';
 
@@ -15,7 +16,7 @@ describe('PeerChatMessageComponent', () => {
     await TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, MatIconModule],
       declarations: [PeerChatMessageComponent],
-      providers: [ConfigService]
+      providers: [ConfigService, UtilService]
     }).compileComponents();
   });
 

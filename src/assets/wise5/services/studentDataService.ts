@@ -185,6 +185,16 @@ export class StudentDataService extends DataService {
     );
   }
 
+  getNotebookItemsByNodeId(notebook, nodeId) {
+    const notebookItemsByNodeId = [];
+    for (const notebookItem of notebook.allItems) {
+      if (notebookItem.nodeId === nodeId) {
+        notebookItemsByNodeId.push(notebookItem);
+      }
+    }
+    return notebookItemsByNodeId;
+  }
+
   populateHistories(events) {
     this.stackHistory = [];
     for (const event of events) {
@@ -481,7 +491,7 @@ export class StudentDataService extends DataService {
           this.setRemoteIdIntoLocalId(savedAnnotation, localAnnotation);
           this.setRemoteServerSaveTimeIntoLocalServerSaveTime(savedAnnotation, localAnnotation);
           this.clearRequestToken(localAnnotation);
-          this.AnnotationService.broadcastAnnotationSavedToServer(localAnnotation);
+          this.AnnotationService.broadcastAnnotationSavedToServer({ annotation: localAnnotation });
           break;
         }
       }
@@ -541,29 +551,63 @@ export class StudentDataService extends DataService {
     return null;
   }
 
-  getComponentStates(): any[] {
+  getStudentWorkByStudentWorkId(studentWorkId) {
+    for (const componentState of this.studentData.componentStates) {
+      if (componentState.id === studentWorkId) {
+        return componentState;
+      }
+    }
+    return null;
+  }
+
+  getComponentStates() {
     return this.studentData.componentStates;
   }
 
-  getComponentStatesByNodeId(nodeId: string): any[] {
-    return this.studentData.componentStates.filter(
-      (componentState) => componentState.nodeId === nodeId
-    );
+  getComponentStatesByNodeId(nodeId) {
+    const componentStatesByNodeId = [];
+    for (const componentState of this.studentData.componentStates) {
+      if (componentState.nodeId === nodeId) {
+        componentStatesByNodeId.push(componentState);
+      }
+    }
+    return componentStatesByNodeId;
   }
 
-  getComponentStatesByNodeIdAndComponentId(nodeId: string, componentId: string): any[] {
-    return this.studentData.componentStates.filter(
-      (componentState) =>
-        componentState.nodeId === nodeId && componentState.componentId === componentId
-    );
+  getComponentStatesByNodeIdAndComponentId(nodeId, componentId) {
+    const componentStatesByNodeIdAndComponentId = [];
+    for (const componentState of this.studentData.componentStates) {
+      if (componentState.nodeId === nodeId && componentState.componentId === componentId) {
+        componentStatesByNodeIdAndComponentId.push(componentState);
+      }
+    }
+    return componentStatesByNodeIdAndComponentId;
   }
 
-  getEvents(): any[] {
+  getEvents() {
     return this.studentData.events;
   }
 
-  getEventsByNodeId(nodeId: string): any[] {
-    return this.studentData.events.filter((event) => event.nodeId === nodeId);
+  getEventsByNodeId(nodeId) {
+    const eventsByNodeId = [];
+    const events = this.studentData.events;
+    for (const event of events) {
+      if (event.nodeId === nodeId) {
+        eventsByNodeId.push(event);
+      }
+    }
+    return eventsByNodeId;
+  }
+
+  getEventsByNodeIdAndComponentId(nodeId, componentId) {
+    const eventsByNodeId = [];
+    const events = this.studentData.events;
+    for (const event of events) {
+      if (event.nodeId === nodeId && event.componentId === componentId) {
+        eventsByNodeId.push(event);
+      }
+    }
+    return eventsByNodeId;
   }
 
   /**

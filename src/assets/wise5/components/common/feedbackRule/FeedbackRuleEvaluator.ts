@@ -1,28 +1,15 @@
-import { Component } from '../../../common/Component';
-import { ConfigService } from '../../../services/configService';
-import { ConstraintService } from '../../../services/constraintService';
 import { FeedbackRuleComponent } from '../../feedbackRule/FeedbackRuleComponent';
-import { PeerGroup } from '../../peerChat/PeerGroup';
 import { CRaterResponse } from '../cRater/CRaterResponse';
 import { FeedbackRule } from './FeedbackRule';
 import { FeedbackRuleExpression } from './FeedbackRuleExpression';
-import { Response } from './Response';
 import { TermEvaluator } from './TermEvaluator/TermEvaluator';
 import { TermEvaluatorFactory } from './TermEvaluator/TermEvaluatorFactory';
 
-export class FeedbackRuleEvaluator<T extends Response[]> {
+export class FeedbackRuleEvaluator<T extends CRaterResponse[]> {
   defaultFeedback = $localize`Thanks for submitting your response.`;
-  protected factory;
-  protected referenceComponent: Component;
-  protected peerGroup: PeerGroup;
+  protected factory = new TermEvaluatorFactory();
 
-  constructor(
-    protected component: FeedbackRuleComponent,
-    protected configService: ConfigService,
-    protected constraintService: ConstraintService
-  ) {
-    this.factory = new TermEvaluatorFactory(configService, constraintService);
-  }
+  constructor(protected component: FeedbackRuleComponent) {}
 
   getFeedbackRule(responses: T): FeedbackRule {
     return (
@@ -51,7 +38,7 @@ export class FeedbackRuleEvaluator<T extends Response[]> {
     return (
       this.hasMaxSubmitAndIsFinalSubmitRule(rule) &&
       this.component.hasMaxSubmitCountAndUsedAllSubmits(
-        responses[responses.length - 1].submitCounter
+        (responses[responses.length - 1] as CRaterResponse).submitCounter
       )
     );
   }
@@ -63,7 +50,7 @@ export class FeedbackRuleEvaluator<T extends Response[]> {
   protected satisfiesSecondToLastSubmitRule(responses: T, rule: FeedbackRule): boolean {
     return (
       this.hasMaxSubmitAndIsSecondToLastSubmitRule(rule) &&
-      this.isSecondToLastSubmit(responses[responses.length - 1].submitCounter)
+      this.isSecondToLastSubmit((responses[responses.length - 1] as CRaterResponse).submitCounter)
     );
   }
 
@@ -127,7 +114,6 @@ export class FeedbackRuleEvaluator<T extends Response[]> {
 
   protected evaluateTerm(term: string, responses: T): boolean {
     const evaluator: TermEvaluator = this.factory.getTermEvaluator(term);
-    evaluator.setReferenceComponent(this.referenceComponent);
     return TermEvaluator.requiresAllResponses(term)
       ? evaluator.evaluate(responses)
       : evaluator.evaluate(responses[responses.length - 1]);
@@ -144,13 +130,5 @@ export class FeedbackRuleEvaluator<T extends Response[]> {
           : this.defaultFeedback
       })
     );
-  }
-
-  setPeerGroup(peerGroup: PeerGroup): void {
-    this.peerGroup = peerGroup;
-  }
-
-  setReferenceComponent(referenceComponent: Component): void {
-    this.referenceComponent = referenceComponent;
   }
 }

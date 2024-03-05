@@ -12,7 +12,6 @@ import { of } from 'rxjs';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
-import { QuestionBankService } from './questionBank.service';
 
 let component: PeerChatQuestionBankComponent;
 let fixture: ComponentFixture<PeerChatQuestionBankComponent>;
@@ -33,8 +32,7 @@ describe('PeerChatQuestionBankComponent', () => {
         MatIconModule,
         StudentTeacherCommonServicesModule
       ],
-      declarations: [PeerChatQuestionBankComponent],
-      providers: [QuestionBankService]
+      declarations: [PeerChatQuestionBankComponent]
     }).compileComponents();
     fixture = TestBed.createComponent(PeerChatQuestionBankComponent);
     peerGroupService = TestBed.inject(PeerGroupService);

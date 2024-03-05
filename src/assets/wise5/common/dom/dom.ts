@@ -31,16 +31,3 @@ export function temporarilyHighlightElement(id: string, duration: number = 1000)
     }, 2000);
   }, duration);
 }
-
-export function scrollToElement(elementId: string): void {
-  $('#content').animate(
-    {
-      scrollTop: $(`#${elementId}`).prop('offsetTop')
-    },
-    1000
-  );
-}
-
-export function scrollToTopOfPage(): void {
-  document.getElementById('top').scrollIntoView();
-}

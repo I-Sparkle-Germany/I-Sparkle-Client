@@ -7,6 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
+import { UpgradeModule } from '@angular/upgrade/static';
 import { AuthorUrlParametersComponent } from '../../../../../app/authoring-tool/author-url-parameters/author-url-parameters.component';
 import { EditComponentPrompt } from '../../../../../app/authoring-tool/edit-component-prompt/edit-component-prompt.component';
 import { ProjectAssetService } from '../../../../../app/services/projectAssetService';
@@ -19,6 +20,7 @@ import { StudentAssetService } from '../../../services/studentAssetService';
 import { StudentDataService } from '../../../services/studentDataService';
 import { TagService } from '../../../services/tagService';
 import { TeacherProjectService } from '../../../services/teacherProjectService';
+import { UtilService } from '../../../services/utilService';
 import { EmbeddedService } from '../embeddedService';
 import { EmbeddedAuthoring } from './embedded-authoring.component';
 
@@ -32,7 +34,8 @@ import { EmbeddedAuthoring } from './embedded-authoring.component';
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
-    MatRadioModule
+    MatRadioModule,
+    UpgradeModule
   ],
   providers: [
     AnnotationService,
@@ -45,7 +48,8 @@ import { EmbeddedAuthoring } from './embedded-authoring.component';
     StudentAssetService,
     StudentDataService,
     TagService,
-    TeacherProjectService
+    TeacherProjectService,
+    UtilService
   ],
   exports: [EmbeddedAuthoring, EditComponentPrompt, AuthorUrlParametersComponent]
 })

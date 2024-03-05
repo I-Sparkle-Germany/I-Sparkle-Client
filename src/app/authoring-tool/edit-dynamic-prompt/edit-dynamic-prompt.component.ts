@@ -8,7 +8,7 @@ import { DynamicPrompt } from '../../../assets/wise5/directives/dynamic-prompt/D
   styleUrls: ['./edit-dynamic-prompt.component.scss']
 })
 export class EditDynamicPromptComponent implements OnInit {
-  protected allowedReferenceComponentTypes: string[] = ['MultipleChoice', 'OpenResponse'];
+  allowedReferenceComponentTypes: string[] = ['OpenResponse'];
   @Input() componentContent: any;
   @Output() dynamicPromptChangedEvent = new EventEmitter<void>();
 

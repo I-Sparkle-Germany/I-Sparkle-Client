@@ -7,12 +7,11 @@ import { QuestionBankRule } from '../../../assets/wise5/components/peerChat/peer
 import { TeacherProjectService } from '../../../assets/wise5/services/teacherProjectService';
 import { StudentTeacherCommonServicesModule } from '../../student-teacher-common-services.module';
 import { EditQuestionBankRulesComponent } from './edit-question-bank-rules.component';
-import { Question } from '../../../assets/wise5/components/peerChat/peer-chat-question-bank/Question';
 
 let component: EditQuestionBankRulesComponent;
 let fixture: ComponentFixture<EditQuestionBankRulesComponent>;
 let projectService: TeacherProjectService;
-let nodeChangedSpy: jasmine.Spy;
+let nodeChangedSpy;
 
 describe('EditQuestionBankRulesComponent', () => {
   beforeEach(async () => {
@@ -43,42 +42,19 @@ describe('EditQuestionBankRulesComponent', () => {
 
 function addNewFeedbackToRule() {
   describe('addNewFeedbackToRule()', () => {
-    addNewFeedbackToRuleVersion1();
-    addNewFeedbackToRuleVersion2();
-  });
-}
-
-function addNewFeedbackToRuleVersion1() {
-  describe('using question bank content version 1', () => {
-    it('adds new question to rule', () => {
-      component.version = undefined;
-      const rule = new QuestionBankRule({ questions: [] });
+    it('should add new question to rule', () => {
+      const rule = new QuestionBankRule({ questions: ['Q1'] });
       component.addNewFeedbackToRule(rule);
       expect(nodeChangedSpy).toHaveBeenCalled();
-      expect(rule.questions.length).toEqual(1);
-      expect(rule.questions[0]).toEqual('');
-    });
-  });
-}
-
-function addNewFeedbackToRuleVersion2() {
-  describe('using question bank content version 2', () => {
-    it('adds new question to rule', () => {
-      component.version = 2;
-      const rule = new QuestionBankRule({ questions: [] });
-      component.addNewFeedbackToRule(rule);
-      expect(nodeChangedSpy).toHaveBeenCalled();
-      expect(rule.questions.length).toEqual(1);
-      const question = rule.questions[0] as Question;
-      expect(question.hasOwnProperty('id')).toEqual(true);
-      expect(question.text).toEqual('');
+      expect(rule.questions.length).toEqual(2);
+      expect(rule.questions[1]).toEqual('');
     });
   });
 }
 
 function deleteFeedbackInRule() {
   describe('deleteFeedbackInRule()', () => {
-    it('deletes specified feedback', () => {
+    it('should delete specified feedback', () => {
       const rule = new QuestionBankRule({ questions: ['Q1', 'Q2'] });
       spyOn(window, 'confirm').and.returnValue(true);
       component.deleteFeedbackInRule(rule, 0);

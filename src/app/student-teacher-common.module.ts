@@ -1,7 +1,7 @@
-import '../assets/wise5/lib/jquery/jquery-global';
 import { NgModule } from '@angular/core';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { UpgradeModule } from '@angular/upgrade/static';
 import { CommonModule } from '@angular/common';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
@@ -37,19 +37,16 @@ import { EditNotebookItemDialogModule } from '../assets/wise5/themes/default/not
 import { StudentTeacherCommonServicesModule } from './student-teacher-common-services.module';
 import { MathModule } from './math/math.module';
 import { MatMenuModule } from '@angular/material/menu';
-import { MainMenuComponent } from '../assets/wise5/common/main-menu/main-menu.component';
-import { SideMenuComponent } from '../assets/wise5/common/side-menu/side-menu.component';
 
 @NgModule({
   declarations: [
     DialogResponseComponent,
     DialogResponsesComponent,
-    MainMenuComponent,
     NodeIconComponent,
-    NodeStatusIcon,
-    SideMenuComponent
+    NodeStatusIcon
   ],
   imports: [
+    UpgradeModule,
     CommonModule,
     DragDropModule,
     EditNotebookItemDialogModule,
@@ -92,7 +89,6 @@ import { SideMenuComponent } from '../assets/wise5/common/side-menu/side-menu.co
     EditorModule,
     FlexLayoutModule,
     FormsModule,
-    MainMenuComponent,
     MatAutocompleteModule,
     MatButtonModule,
     MatButtonToggleModule,
@@ -120,8 +116,7 @@ import { SideMenuComponent } from '../assets/wise5/common/side-menu/side-menu.co
     NodeIconComponent,
     NodeStatusIcon,
     NotebookModule,
-    ReactiveFormsModule,
-    SideMenuComponent
+    ReactiveFormsModule
   ]
 })
 export class StudentTeacherCommonModule {}

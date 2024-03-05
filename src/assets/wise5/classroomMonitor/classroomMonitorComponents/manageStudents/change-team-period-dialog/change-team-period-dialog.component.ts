@@ -44,23 +44,20 @@ export class ChangeTeamPeriodDialogComponent {
         }/change-period`,
         this.selectedPeriod.periodId
       )
-      .subscribe({
-        next: () => {
+      .subscribe(
+        (response) => {
           this.isChangingPeriod = false;
-          this.configService
-            .retrieveConfig(`/api/config/classroomMonitor/${this.configService.getRunId()}`)
-            .subscribe({
-              next: () => {
-                this.snackBar.open(
-                  $localize`Moved Team ${this.team.workgroupId} to Period ${this.selectedPeriod.periodName}.`
-                );
-                this.dialog.closeAll();
-              }
-            });
+          this.configService.retrieveConfig(
+            `/api/config/classroomMonitor/${this.configService.getRunId()}`
+          );
+          this.snackBar.open(
+            $localize`Moved Team ${this.team.workgroupId} to Period ${this.selectedPeriod.periodName}.`
+          );
+          this.dialog.closeAll();
         },
-        error: () => {
+        (err) => {
           this.isChangingPeriod = false;
         }
-      });
+      );
   }
 }

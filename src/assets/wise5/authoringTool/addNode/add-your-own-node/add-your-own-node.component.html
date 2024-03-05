@@ -1,14 +1,23 @@
 <form role="form" [formGroup]="addNodeFormGroup">
   <mat-form-field appearance="fill" class="title-field">
     <mat-label i18n>Step Title</mat-label>
-    <input matInput type="text" id="title" name="title" formControlName="title" required />
+    <input
+      #titleField
+      autofocus
+      matInput
+      type="text"
+      id="title"
+      name="title"
+      formControlName="title"
+      required
+    />
     <mat-error *ngIf="addNodeFormGroup.controls['title'].hasError('required')" i18n>
       Step Title is required
     </mat-error>
   </mat-form-field>
   <h5 i18n>Select components to add to your new step (optional):</h5>
   <div fxLayout="column" fxLayout.gt-sm="row">
-    <div class="initial-components notice-bg-bg" fxFlex="100" fxFlex.gt-sm="25">
+    <div class="initial-components notice-bg-bg" fxFlex="100" fxFlex.gt-sm="33">
       <div *ngIf="initialComponents.length == 0" class="mat-small" i18n>No components added</div>
       <div
         class="component-list"
@@ -38,13 +47,12 @@
         </div>
       </div>
     </div>
-    <div fxFlex="100" fxFlex.gt-sm="75">
-      <div class="component-types" fxLayout="row wrap" fxLayoutAlign="start start">
+    <div fxFlex="100" fxFlex.gt-sm="67">
+      <div fxLayout="row wrap" fxLayoutAlign="start start">
         <div class="component-type" *ngFor="let componentType of componentTypes">
-          <component-type-button
-            [componentType]="componentType.type"
-            (componentSelectedEvent)="addComponent(componentType)"
-          ></component-type-button>
+          <button mat-stroked-button (click)="addComponent(componentType)">
+            {{ componentType.name }}
+          </button>
         </div>
       </div>
       <p class="info mat-small" i18n>
@@ -52,22 +60,21 @@
       </p>
     </div>
   </div>
-  <div class="nav-controls">
-    <mat-divider></mat-divider>
-    <div>
-      <button mat-button class="mat-primary" routerLink="../choose-template" i18n>Back</button>
-      <span fxFlex></span>
-      <button mat-button class="mat-primary" routerLink="../.." i18n>Cancel</button>
-      <button
-        mat-raised-button
-        color="primary"
-        [disabled]="!addNodeFormGroup.valid"
-        (click)="chooseLocation()"
-        aria-label="next"
-        i18n
-      >
-        Next
-      </button>
-    </div>
+  <mat-divider></mat-divider>
+  <div fxLayout="row">
+    <button mat-button class="mat-primary" (click)="back()" aria-label="back" i18n>Back</button>
+    <span fxFlex></span>
+    <button mat-button class="mat-primary" (click)="cancel($event)" aria-label="cancel" i18n>
+      Cancel
+    </button>
+    <button
+      mat-button
+      class="mat-raised-button mat-primary"
+      (click)="chooseLocation()"
+      aria-label="next"
+      i18n
+    >
+      Next
+    </button>
   </div>
 </form>

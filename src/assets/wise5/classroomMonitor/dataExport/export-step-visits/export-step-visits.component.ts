@@ -3,6 +3,7 @@ import { ConfigService } from '../../../services/configService';
 import { DataExportService } from '../../../services/dataExportService';
 import { TeacherProjectService } from '../../../services/teacherProjectService';
 import ExportController from '../exportController';
+import { UpgradeModule } from '@angular/upgrade/static';
 import { millisecondsToDateTime } from '../../../common/datetime/datetime';
 
 @Component({
@@ -33,7 +34,8 @@ export class ExportStepVisitsComponent extends ExportController {
   constructor(
     private configService: ConfigService,
     private dataExportService: DataExportService,
-    private projectService: TeacherProjectService
+    private projectService: TeacherProjectService,
+    private upgrade: UpgradeModule
   ) {
     super();
   }
@@ -238,6 +240,10 @@ export class ExportStepVisitsComponent extends ExportController {
     }
   }
 
+  goBack(): void {
+    this.upgrade.$injector.get('$state').go('root.cm.export');
+  }
+
   export(): void {
     this.rowCounter = 1;
     this.checkedItems = this.getCheckedItems();
@@ -245,7 +251,7 @@ export class ExportStepVisitsComponent extends ExportController {
     const includeTeacherEvents = false;
     this.dataExportService
       .retrieveEventsExport(includeStudentEvents, includeTeacherEvents, this.includeStudentNames)
-      .subscribe(({ events }: any) => {
+      .then((events: any) => {
         this.handleExportCallback(events);
       });
   }

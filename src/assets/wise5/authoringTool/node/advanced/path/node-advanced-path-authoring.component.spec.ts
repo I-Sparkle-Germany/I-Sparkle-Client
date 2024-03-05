@@ -9,10 +9,6 @@ import { TeacherWebSocketService } from '../../../../services/teacherWebSocketSe
 import { NodeAdvancedPathAuthoringComponent } from './node-advanced-path-authoring.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { StudentTeacherCommonServicesModule } from '../../../../../../app/student-teacher-common-services.module';
-import { NodeAdvancedAuthoringComponent } from '../node-advanced-authoring/node-advanced-authoring.component';
-import { RouterTestingModule } from '@angular/router/testing';
-import { ActivatedRoute } from '@angular/router';
-import { of } from 'rxjs';
 
 describe('NodeAdvancedPathAuthoringComponent', () => {
   let component: NodeAdvancedPathAuthoringComponent;
@@ -25,21 +21,14 @@ describe('NodeAdvancedPathAuthoringComponent', () => {
         MatDialogModule,
         MatFormFieldModule,
         MatIconModule,
-        RouterTestingModule,
         StudentTeacherCommonServicesModule
       ],
-      declarations: [NodeAdvancedAuthoringComponent, NodeAdvancedPathAuthoringComponent],
+      declarations: [NodeAdvancedPathAuthoringComponent],
       providers: [
         ClassroomStatusService,
         TeacherDataService,
         TeacherProjectService,
-        TeacherWebSocketService,
-        {
-          provide: ActivatedRoute,
-          useValue: {
-            parent: { parent: { params: of({ nodeId: 'node1' }) } }
-          }
-        }
+        TeacherWebSocketService
       ]
     }).compileComponents();
   });

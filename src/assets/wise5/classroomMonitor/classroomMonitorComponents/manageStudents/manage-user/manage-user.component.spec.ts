@@ -5,8 +5,6 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ConfigService } from '../../../../services/configService';
 import { ManageUserComponent } from './manage-user.component';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { of } from 'rxjs';
 
 class ConfigServiceStub {
   getPermissions() {}
@@ -14,7 +12,7 @@ class ConfigServiceStub {
     return 123;
   }
   retrieveConfig() {
-    return of({});
+    return {};
   }
 }
 
@@ -31,8 +29,7 @@ describe('ManageUserComponent', () => {
       providers: [
         { provide: ConfigService, useClass: ConfigServiceStub },
         { provide: MatDialog, useValue: {} }
-      ],
-      schemas: [NO_ERRORS_SCHEMA]
+      ]
     });
     configService = TestBed.inject(ConfigService);
     http = TestBed.inject(HttpTestingController);

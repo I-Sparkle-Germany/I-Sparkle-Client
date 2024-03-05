@@ -1,11 +1,10 @@
 import { CRaterResponse } from '../cRater/CRaterResponse';
 import { FeedbackRule } from './FeedbackRule';
 import { FeedbackRuleEvaluator } from './FeedbackRuleEvaluator';
-import { Response } from './Response';
 import { TermEvaluator } from './TermEvaluator/TermEvaluator';
 
-export class FeedbackRuleEvaluatorMultipleStudents extends FeedbackRuleEvaluator<Response[]> {
-  getFeedbackRules(responses: Response[]): FeedbackRule[] {
+export class FeedbackRuleEvaluatorMultipleStudents extends FeedbackRuleEvaluator<CRaterResponse[]> {
+  getFeedbackRules(responses: CRaterResponse[]): FeedbackRule[] {
     const matchedRules = this.component
       .getFeedbackRules()
       .filter((rule) => this.satisfiesRule(responses, Object.assign(new FeedbackRule(), rule)));
@@ -14,7 +13,10 @@ export class FeedbackRuleEvaluatorMultipleStudents extends FeedbackRuleEvaluator
       : [this.getDefaultRule(this.component.getFeedbackRules())];
   }
 
-  protected satisfiesFinalSubmitRule(responses: Response[], feedbackRule: FeedbackRule): boolean {
+  protected satisfiesFinalSubmitRule(
+    responses: CRaterResponse[],
+    feedbackRule: FeedbackRule
+  ): boolean {
     return (
       this.hasMaxSubmitAndIsFinalSubmitRule(feedbackRule) &&
       responses.some((response: CRaterResponse) => {
@@ -24,12 +26,12 @@ export class FeedbackRuleEvaluatorMultipleStudents extends FeedbackRuleEvaluator
   }
 
   protected satisfiesSecondToLastSubmitRule(
-    responses: Response[],
+    responses: CRaterResponse[],
     feedbackRule: FeedbackRule
   ): boolean {
     return (
       this.hasMaxSubmitAndIsSecondToLastSubmitRule(feedbackRule) &&
-      responses.some((response: Response) => {
+      responses.some((response: CRaterResponse) => {
         return this.isSecondToLastSubmit(response.submitCounter);
       })
     );
@@ -47,11 +49,9 @@ export class FeedbackRuleEvaluatorMultipleStudents extends FeedbackRuleEvaluator
     );
   }
 
-  protected evaluateTerm(term: string, responses: Response[]): boolean {
+  protected evaluateTerm(term: string, responses: CRaterResponse[]): boolean {
     const evaluator: TermEvaluator = this.factory.getTermEvaluator(term);
-    evaluator.setPeerGroup(this.peerGroup);
-    evaluator.setReferenceComponent(this.referenceComponent);
-    return responses.some((response: Response) => {
+    return responses.some((response: CRaterResponse) => {
       return evaluator.evaluate(response);
     });
   }

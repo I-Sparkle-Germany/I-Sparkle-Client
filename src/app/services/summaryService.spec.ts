@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { SummaryService } from '../../assets/wise5/components/summary/summaryService';
+import { UtilService } from '../../assets/wise5/services/utilService';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { ConfigService } from '../../assets/wise5/services/configService';
 import { AnnotationService } from '../../assets/wise5/services/annotationService';
@@ -43,7 +44,8 @@ describe('SummaryService', () => {
         ProjectService,
         SessionService,
         SummaryService,
-        TagService
+        TagService,
+        UtilService
       ]
     });
     service = TestBed.get(SummaryService);

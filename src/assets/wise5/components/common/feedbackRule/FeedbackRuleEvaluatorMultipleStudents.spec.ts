@@ -15,9 +15,7 @@ let evaluator: FeedbackRuleEvaluatorMultipleStudents;
 describe('FeedbackRuleEvaluatorMultipleStudents', () => {
   beforeEach(() => {
     evaluator = new FeedbackRuleEvaluatorMultipleStudents(
-      new FeedbackRuleComponent(DEFAULT_FEEDBACK_RULES, 5, true),
-      null,
-      null
+      new FeedbackRuleComponent(DEFAULT_FEEDBACK_RULES, 5, true)
     );
   });
   matchRules_OneIdea();
@@ -40,9 +38,7 @@ function matchRules_HasKIScore() {
   describe('hasKIScoreScore', () => {
     beforeEach(() => {
       evaluator = new FeedbackRuleEvaluatorMultipleStudents(
-        new FeedbackRuleComponent(HAS_KI_SCORE_FEEDBACK_RULES, 5, true),
-        null,
-        null
+        new FeedbackRuleComponent(HAS_KI_SCORE_FEEDBACK_RULES, 5, true)
       );
     });
     matchRules_hasKIScoreScoreInRange_ShouldMatchRule();
@@ -73,11 +69,7 @@ function matchNoRule_ReturnDefault() {
 function matchNoRule_NoDefaultFeedbackAuthored_ReturnApplicationDefault() {
   it(`should return application default rule when no rule is matched and no default is
       authored`, () => {
-    evaluator = new FeedbackRuleEvaluatorMultipleStudents(
-      new FeedbackRuleComponent([], 5, true),
-      null,
-      null
-    );
+    evaluator = new FeedbackRuleEvaluatorMultipleStudents(new FeedbackRuleComponent([], 5, true));
     expectRules([createCRaterResponse(['idea10', 'idea11'], [KI_SCORE_1], 1)], ['default']);
   });
 }

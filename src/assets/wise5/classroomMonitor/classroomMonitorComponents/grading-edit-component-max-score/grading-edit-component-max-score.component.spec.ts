@@ -23,7 +23,7 @@ describe('GradingEditComponentMaxScoreComponent', () => {
     projectService = TestBed.inject(TeacherProjectService);
     fixture = TestBed.createComponent(GradingEditComponentMaxScoreComponent);
     component = fixture.componentInstance;
-    saveProjectSpy = spyOn(projectService, 'saveProject').and.callFake(() => new Promise(() => {}));
+    saveProjectSpy = spyOn(projectService, 'saveProject').and.callFake(() => {});
     setMaxScoreForComponentSpy = spyOn(
       projectService,
       'setMaxScoreForComponent'

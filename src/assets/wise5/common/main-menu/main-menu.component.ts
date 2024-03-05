@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'main-menu',
@@ -7,17 +6,18 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./main-menu.component.scss']
 })
 export class MainMenuComponent implements OnInit {
+  @Input() state: any;
   @Input() title: string;
-  @Input() views: any = [];
+  @Input() views: any[];
 
-  constructor(private route: ActivatedRoute, private router: Router) {}
+  constructor() {}
 
   ngOnInit(): void {}
 
-  protected goToView(view: any): void {
+  goToView(view: any): void {
     if (view.action != null) {
       view.action();
     }
-    this.router.navigate(view.route, { relativeTo: this.route });
+    this.state.go(view.route);
   }
 }

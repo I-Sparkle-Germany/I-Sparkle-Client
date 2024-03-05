@@ -4,6 +4,12 @@
   'style/abstracts/mixins',
   'style/abstracts/functions';
 
+.library-teacher {
+  .mat-tab-link {
+    flex-grow: 1;
+  }
+}
+
 .library-teacher__header {
   h3 {
     font-weight: 500;
@@ -22,6 +28,10 @@
   @media (min-width: breakpoint('sm.min')) {
     padding-top: 20px;
   }
+}
+
+.mat-tab-links {
+  margin: 0 1px;
 }
 
 .library .mat-divider.library-teacher-divider {

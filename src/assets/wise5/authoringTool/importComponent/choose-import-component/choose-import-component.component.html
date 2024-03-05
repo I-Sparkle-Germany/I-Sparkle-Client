@@ -1,6 +1,16 @@
 <h4 i18n>Import Component(s)</h4>
 <div fxLayoutGap="20px">
   <span i18n>Choose a unit to import from and then choose which component(s) to import</span>
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="cancel()"
+    aria-label="Cancel"
+    i18n-aria-label
+    i18n
+  >
+    Cancel
+  </button>
 </div>
 <mat-form-field class="unit-select">
   <mat-label i18n>My Units</mat-label>
@@ -63,7 +73,7 @@
       matTooltipPosition="above"
       i18n-matTooltip
     >
-      <mat-icon>preview</mat-icon>
+      <mat-icon>visibility</mat-icon>
     </button>
   </div>
   <div
@@ -82,11 +92,13 @@
         color="primary"
         *ngIf="importItem.node.type !== 'group'"
         (click)="previewImportNode(importItem.node)"
+        aria-label="Preview Step"
+        i18n-aria-label
         matTooltip="Preview Step"
         matTooltipPosition="above"
         i18n-matTooltip
       >
-        <mat-icon>preview</mat-icon>
+        <mat-icon>visibility</mat-icon>
       </button>
     </div>
     <div
@@ -105,11 +117,13 @@
             color="primary"
             *ngIf="importItem.node.type !== 'group'"
             (click)="previewImportNode(importItem.node)"
+            aria-label="Preview Component"
+            i18n-aria-label
             matTooltip="Preview Component"
             matTooltipPosition="above"
             i18n-matTooltip
           >
-            <mat-icon>preview</mat-icon>
+            <mat-icon>visibility</mat-icon>
           </button>
         </div>
       </div>
@@ -126,7 +140,3 @@
     <mat-icon>vertical_align_bottom</mat-icon>
   </button>
 </span>
-<hr />
-<div fxLayout="row">
-  <button mat-button color="primary" (click)="cancel()" aria-label="Cancel" i18n>Cancel</button>
-</div>

@@ -1,48 +1,40 @@
 import { removeHTMLTags } from '../../../common/string/string';
+import { AbstractDataExportStrategy } from './AbstractDataExportStrategy';
 import { millisecondsToDateTime } from '../../../common/datetime/datetime';
-import { AbstractComponentDataExportStrategy } from './AbstractComponentDataExportStrategy';
 
-export class DiscussionComponentDataExportStrategy extends AbstractComponentDataExportStrategy {
-  protected defaultColumnNames = [
-    '#',
-    'Workgroup ID',
-    'User ID 1',
-    'Student Name 1',
-    'User ID 2',
-    'Student Name 2',
-    'User ID 3',
-    'Student Name 3',
-    'Class Period',
-    'Project ID',
-    'Project Name',
-    'Run ID',
-    'Start Date',
-    'End Date',
-    'Server Timestamp',
-    'Client Timestamp',
-    'Node ID',
-    'Component ID',
-    'Component Part Number',
-    'Step Title',
-    'Component Type',
-    'Component Prompt',
-    'Student Data',
-    'Thread ID',
-    'Student Work ID',
-    'Post Level',
-    'Post Text'
-  ];
-
-  protected generateComponentHeaderRow(component: any): string[] {
-    return [...this.defaultColumnNames];
+export class DiscussionComponentDataExportStrategy extends AbstractDataExportStrategy {
+  constructor(private nodeId: string, private component: any) {
+    super();
   }
 
-  protected generateComponentWorkRows(
-    component: any,
-    columnNames: string[],
-    columnNameToNumber: any,
-    nodeId: string
-  ) {
+  /**
+   * Generate an export for a specific Discussion component.
+   * TODO: Move these Discussion export functions to the DiscussionService.
+   * @param nodeId The node id.
+   * @param component The component content object.
+   */
+  export() {
+    this.controller.showDownloadingExportMessage();
+    const components = [{ nodeId: this.nodeId, componentId: this.component.id }];
+    this.dataExportService.retrieveStudentData(components, true, false, true).then((result) => {
+      const columnNames = [];
+      const columnNameToNumber = {};
+      let rows = [this.generateDiscussionComponentHeaderRow(columnNames, columnNameToNumber)];
+      rows = rows.concat(
+        this.generateDiscussionComponentWorkRows(
+          this.component,
+          columnNames,
+          columnNameToNumber,
+          this.nodeId
+        )
+      );
+      const fileName = this.generateDiscussionExportFileName(this.nodeId, this.component.id);
+      this.controller.generateCSVFile(rows, fileName);
+      this.controller.hideDownloadingExportMessage();
+    });
+  }
+
+  private generateDiscussionComponentWorkRows(component, columnNames, columnNameToNumber, nodeId) {
     const rows = [];
     const componentStates = this.teacherDataService.getComponentStatesByComponentId(component.id);
     const structuredPosts = this.getStructuredPosts(componentStates);
@@ -118,7 +110,16 @@ export class DiscussionComponentDataExportStrategy extends AbstractComponentData
         userId3 = userInfo.users[2].id;
         studentName3 = userInfo.users[2].name;
       }
-      this.setStudentInfo(row, columnNameToNumber, componentState);
+      this.controller.setStudentIDsAndNames(
+        row,
+        columnNameToNumber,
+        userId1,
+        studentName1,
+        userId2,
+        studentName2,
+        userId3,
+        studentName3
+      );
       row[columnNameToNumber['Class Period']] = userInfo.periodName;
     }
 
@@ -126,16 +127,7 @@ export class DiscussionComponentDataExportStrategy extends AbstractComponentData
     row[columnNameToNumber['Project ID']] = this.configService.getProjectId();
     row[columnNameToNumber['Project Name']] = this.projectService.getProjectTitle();
     row[columnNameToNumber['Run ID']] = this.configService.getRunId();
-    this.setColumnValue(
-      row,
-      columnNameToNumber,
-      'Start Date',
-      millisecondsToDateTime(this.configService.getStartDate())
-    );
-    const endDate = this.configService.getEndDate();
-    if (endDate != null) {
-      this.setColumnValue(row, columnNameToNumber, 'End Date', millisecondsToDateTime(endDate));
-    }
+
     if (componentState.serverSaveTime != null) {
       row[columnNameToNumber['Server Timestamp']] = millisecondsToDateTime(
         componentState.serverSaveTime
@@ -157,7 +149,7 @@ export class DiscussionComponentDataExportStrategy extends AbstractComponentData
     row[columnNameToNumber['Component Prompt']] = removeHTMLTags(component.prompt);
     row[columnNameToNumber['Student Data']] = componentState.studentData;
     row[columnNameToNumber['Student Work ID']] = componentState.id;
-    row[columnNameToNumber['Thread ID']] = Number(threadId);
+    row[columnNameToNumber['Thread ID']] = threadId;
     row[columnNameToNumber['Workgroup ID']] = workgroupId;
     row[columnNameToNumber['Post Level']] = this.getPostLevel(componentState);
     row[columnNameToNumber['Post Text']] = removeHTMLTags(componentState.studentData.response);
@@ -201,7 +193,56 @@ export class DiscussionComponentDataExportStrategy extends AbstractComponentData
     parentPost.replies.push(replyComponentState);
   }
 
-  protected getComponentTypeWithUnderscore(): string {
-    return 'discussion';
+  private generateDiscussionComponentHeaderRow(columnNames, columnNameToNumber) {
+    this.populateDiscussionColumnNames(columnNames, columnNameToNumber);
+    const headerRow = [];
+    for (let columnName of columnNames) {
+      headerRow.push(columnName);
+    }
+    return headerRow;
+  }
+
+  private populateDiscussionColumnNames(columnNames, columnNameToNumber) {
+    const defaultDiscussionColumnNames = [
+      '#',
+      'Workgroup ID',
+      'User ID 1',
+      'Student Name 1',
+      'User ID 2',
+      'Student Name 2',
+      'User ID 3',
+      'Student Name 3',
+      'Class Period',
+      'Project ID',
+      'Project Name',
+      'Run ID',
+      'Start Date',
+      'End Date',
+      'Server Timestamp',
+      'Client Timestamp',
+      'Node ID',
+      'Component ID',
+      'Component Part Number',
+      'Step Title',
+      'Component Type',
+      'Component Prompt',
+      'Student Data',
+      'Thread ID',
+      'Student Work ID',
+      'Post Level',
+      'Post Text'
+    ];
+    for (let c = 0; c < defaultDiscussionColumnNames.length; c++) {
+      const defaultDiscussionColumnName = defaultDiscussionColumnNames[c];
+      columnNameToNumber[defaultDiscussionColumnName] = c;
+      columnNames.push(defaultDiscussionColumnName);
+    }
+  }
+
+  private generateDiscussionExportFileName(nodeId, componentId) {
+    const runId = this.configService.getRunId();
+    const stepNumber = this.projectService.getNodePositionById(nodeId);
+    const componentNumber = this.projectService.getComponentPosition(nodeId, componentId) + 1;
+    return runId + '_step_' + stepNumber + '_component_' + componentNumber + '_discussion_work.csv';
   }
 }

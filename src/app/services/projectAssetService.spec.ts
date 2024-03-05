@@ -2,6 +2,7 @@ import { TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { ConfigService } from '../../assets/wise5/services/configService';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { ProjectAssetService } from './projectAssetService';
+import { UpgradeModule } from '@angular/upgrade/static';
 import { StudentTeacherCommonServicesModule } from '../student-teacher-common-services.module';
 let service: ProjectAssetService;
 let configService: ConfigService;
@@ -11,7 +12,7 @@ let spongeBobAndPatrickAssets: any;
 describe('ProjectAssetService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, StudentTeacherCommonServicesModule],
+      imports: [HttpClientTestingModule, UpgradeModule, StudentTeacherCommonServicesModule],
       providers: [ProjectAssetService]
     });
     http = TestBed.inject(HttpTestingController);
@@ -50,7 +51,7 @@ describe('ProjectAssetService', () => {
 
 function retrieveProjectAssets() {
   it('should make a request to retrieve project assets', fakeAsync(() => {
-    service.retrieveProjectAssets().subscribe();
+    service.retrieveProjectAssets();
     const request = http.expectOne({ url: '/author/project/asset/1', method: 'GET' });
     request.flush(spongeBobAndPatrickAssets);
     expect(service.totalSizeMax).toEqual(10000);

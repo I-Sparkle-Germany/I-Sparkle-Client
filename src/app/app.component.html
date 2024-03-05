@@ -12,6 +12,7 @@
     <app-header *ngIf="showHeaderAndFooter" class="top-content"></app-header>
     <div fxFlex>
       <router-outlet></router-outlet>
+      <div ui-view [ngStyle]="{ height: isShowUIView ? '100%' : '0' }"></div>
     </div>
     <app-footer *ngIf="showHeaderAndFooter"></app-footer>
     <div
@@ -19,7 +20,7 @@
       class="to-top"
       [ngClass]="{ active: scroll, inactive: !scroll }"
     >
-      <button mat-raised-button (click)="scrollToTop()">
+      <button mat-fab class="mat-fab--extended" color="default" (click)="scrollToTop()">
         <mat-icon>arrow_upward</mat-icon>
         &nbsp;<ng-container i18n>Back to Top</ng-container>
       </button>

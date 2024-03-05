@@ -16,17 +16,20 @@ import { copy } from '../../../../assets/wise5/common/object/object';
   encapsulation: ViewEncapsulation.None
 })
 export class WorkgroupSelectAutocompleteComponent extends WorkgroupSelectComponent {
-  filteredWorkgroups: Observable<any>;
   myControl = new FormControl();
+  filteredWorkgroups: Observable<any>;
 
-  constructor(protected configService: ConfigService, protected dataService: TeacherDataService) {
-    super(configService, dataService);
+  constructor(
+    protected ConfigService: ConfigService,
+    protected TeacherDataService: TeacherDataService
+  ) {
+    super(ConfigService, TeacherDataService);
   }
 
   ngOnInit() {
     super.ngOnInit();
     this.updateFilteredWorkgroups();
-    const currentWorkgroup = this.dataService.getCurrentWorkgroup();
+    const currentWorkgroup = this.TeacherDataService.getCurrentWorkgroup();
     if (currentWorkgroup) {
       this.myControl.setValue(currentWorkgroup.displayNames);
     }
@@ -63,10 +66,6 @@ export class WorkgroupSelectAutocompleteComponent extends WorkgroupSelectCompone
     this.updateFilteredWorkgroups();
   }
 
-  protected setWorkgroup(workgroup: any): void {
-    this.updateWorkgroupDisplay(workgroup);
-  }
-
   getStudentsFromWorkgroups() {
     const students = [];
     for (const workgroup of this.workgroups) {
@@ -93,20 +92,10 @@ export class WorkgroupSelectAutocompleteComponent extends WorkgroupSelectCompone
 
   itemSelected(workgroup: any) {
     this.setCurrentWorkgroup(workgroup);
-    this.updateWorkgroupDisplay(workgroup);
-  }
-
-  private updateWorkgroupDisplay(workgroup: any): void {
     if (workgroup) {
       this.myControl.setValue(workgroup.displayNames);
     } else {
       this.myControl.setValue('');
-    }
-  }
-
-  closed(event: any) {
-    if (this.myControl.value === '') {
-      this.itemSelected(null);
     }
   }
 }

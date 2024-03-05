@@ -50,8 +50,8 @@ export class NavItemComponent implements OnInit {
     private notificationService: NotificationService,
     private projectService: TeacherProjectService,
     private snackBar: MatSnackBar,
-    private dataService: TeacherDataService,
-    private webSocketService: TeacherWebSocketService
+    private teacherDataService: TeacherDataService,
+    private teacherWebSocketService: TeacherWebSocketService
   ) {}
 
   ngOnInit(): void {
@@ -59,15 +59,15 @@ export class NavItemComponent implements OnInit {
     this.isGroup = this.projectService.isGroupNode(this.nodeId);
     this.nodeHasWork = this.projectService.nodeHasWork(this.nodeId);
     this.nodeTitle = this.projectService.nodeIdToNumber[this.nodeId] + ': ' + this.item.title;
-    this.currentNode = this.dataService.currentNode;
+    this.currentNode = this.teacherDataService.currentNode;
     this.isCurrentNode = this.currentNode.id === this.nodeId;
     if (this.isCurrentNode) {
       this.expanded = true;
       this.onExpandedEvent.emit({ nodeId: this.nodeId, expanded: this.expanded });
       this.zoomToElement();
     }
-    this.currentPeriod = this.dataService.getCurrentPeriod();
-    this.currentWorkgroup = this.dataService.getCurrentWorkgroup();
+    this.currentPeriod = this.teacherDataService.getCurrentPeriod();
+    this.currentWorkgroup = this.teacherDataService.getCurrentWorkgroup();
     this.setCurrentNodeStatus();
     this.maxScore = this.projectService.getMaxScoreForNode(this.nodeId);
     this.icon = this.projectService.getNode(this.nodeId).getIcon();
@@ -103,7 +103,7 @@ export class NavItemComponent implements OnInit {
 
   private subscribeCurrentPeriodChanged(): void {
     this.subscriptions.add(
-      this.dataService.currentPeriodChanged$.subscribe(({ currentPeriod }) => {
+      this.teacherDataService.currentPeriodChanged$.subscribe(({ currentPeriod }) => {
         this.currentPeriod = currentPeriod;
         this.getAlertNotifications();
       })
@@ -112,7 +112,7 @@ export class NavItemComponent implements OnInit {
 
   private subscribeCurrentNodeChanged(): void {
     this.subscriptions.add(
-      this.dataService.currentNodeChanged$.subscribe((previousAndCurrentNode) => {
+      this.teacherDataService.currentNodeChanged$.subscribe((previousAndCurrentNode) => {
         const oldNode = previousAndCurrentNode.previousNode;
         const newNode = previousAndCurrentNode.currentNode;
         this.currentNode = newNode;
@@ -192,13 +192,13 @@ export class NavItemComponent implements OnInit {
       return (
         (this.isShowingAllPeriods() && this.isLockedForAll(constraints)) ||
         (!this.isShowingAllPeriods() &&
-          this.isLockedForPeriod(constraints, this.dataService.getCurrentPeriod().periodId))
+          this.isLockedForPeriod(constraints, this.teacherDataService.getCurrentPeriod().periodId))
       );
     }
   }
 
   private isLockedForAll(constraints: any): boolean {
-    for (const period of this.dataService.getPeriods()) {
+    for (const period of this.teacherDataService.getPeriods()) {
       if (period.periodId !== -1 && !this.isLockedForPeriod(constraints, period.periodId)) {
         return false;
       }
@@ -219,7 +219,7 @@ export class NavItemComponent implements OnInit {
     return false;
   }
 
-  protected toggleLockNode(): void {
+  toggleLockNode(): void {
     const node = this.projectService.getNodeById(this.nodeId);
     const isLocked = this.isLocked();
     if (isLocked) {
@@ -234,11 +234,13 @@ export class NavItemComponent implements OnInit {
   }
 
   private showToggleLockNodeConfirmation(isLocked: boolean): void {
-    this.snackBar.open(
-      isLocked
-        ? $localize`${this.nodeTitle} has been locked for ${this.getPeriodLabel()}.`
-        : $localize`${this.nodeTitle} has been unlocked for ${this.getPeriodLabel()}.`
-    );
+    let message = '';
+    if (isLocked) {
+      message = $localize`${this.nodeTitle} has been locked for ${this.getPeriodLabel()}.`;
+    } else {
+      message = $localize`${this.nodeTitle} has been unlocked for ${this.getPeriodLabel()}.`;
+    }
+    this.snackBar.open(message);
   }
 
   private unlockNode(node: any): void {
@@ -247,7 +249,7 @@ export class NavItemComponent implements OnInit {
     } else {
       this.projectService.removeTeacherRemovalConstraint(
         node,
-        this.dataService.getCurrentPeriod().periodId
+        this.teacherDataService.getCurrentPeriod().periodId
       );
     }
   }
@@ -258,19 +260,19 @@ export class NavItemComponent implements OnInit {
     } else {
       this.projectService.addTeacherRemovalConstraint(
         node,
-        this.dataService.getCurrentPeriod().periodId
+        this.teacherDataService.getCurrentPeriod().periodId
       );
     }
   }
 
   private unlockNodeForAllPeriods(node: any): void {
-    for (const period of this.dataService.getPeriods()) {
+    for (const period of this.teacherDataService.getPeriods()) {
       this.projectService.removeTeacherRemovalConstraint(node, period.periodId);
     }
   }
 
   private lockNodeForAllPeriods(node: any): void {
-    for (const period of this.dataService.getPeriods()) {
+    for (const period of this.teacherDataService.getPeriods()) {
       if (period.periodId !== -1 && !this.isLockedForPeriod(node.constraints, period.periodId)) {
         this.projectService.addTeacherRemovalConstraint(node, period.periodId);
       }
@@ -278,7 +280,7 @@ export class NavItemComponent implements OnInit {
   }
 
   private isShowingAllPeriods(): boolean {
-    return this.dataService.getCurrentPeriod().periodId === -1;
+    return this.teacherDataService.getCurrentPeriod().periodId === -1;
   }
 
   private sendNodeToClass(node: any): void {
@@ -290,7 +292,7 @@ export class NavItemComponent implements OnInit {
   }
 
   private sendNodeToAllPeriods(node: any): void {
-    for (const period of this.dataService.getPeriods()) {
+    for (const period of this.teacherDataService.getPeriods()) {
       if (period.periodId !== -1) {
         this.sendNodeToPeriod(node, period.periodId);
       }
@@ -298,7 +300,7 @@ export class NavItemComponent implements OnInit {
   }
 
   private sendNodeToPeriod(node: any, periodId: number): void {
-    this.webSocketService.sendNodeToClass(periodId, node);
+    this.teacherWebSocketService.sendNodeToClass(periodId, node);
   }
 
   getNodeCompletion(): number {
@@ -342,7 +344,12 @@ export class NavItemComponent implements OnInit {
   }
 
   private hasNewAlert(): boolean {
-    return this.alertNotifications.some((alert) => !alert.timeDismissed);
+    for (const alert of this.alertNotifications) {
+      if (!alert.timeDismissed) {
+        return true;
+      }
+    }
+    return false;
   }
 
   private getPeriodLabel(): string {
@@ -351,9 +358,11 @@ export class NavItemComponent implements OnInit {
       : $localize`Period: ${this.currentPeriod.periodName}`;
   }
 
-  protected getNodeLockedText(): string {
-    return this.isLocked()
-      ? $localize`Unlock for ${this.getPeriodLabel()}`
-      : $localize`Lock for ${this.getPeriodLabel()}`;
+  getNodeLockedText(): string {
+    if (this.isLocked()) {
+      return $localize`Unlock for ${this.getPeriodLabel()}`;
+    } else {
+      return $localize`Lock for ${this.getPeriodLabel()}`;
+    }
   }
 }

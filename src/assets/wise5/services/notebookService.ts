@@ -8,7 +8,6 @@ import { StudentAssetService } from './studentAssetService';
 import { Subject } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { EditNotebookItemDialogComponent } from '../themes/default/notebook/edit-notebook-item-dialog/edit-notebook-item-dialog.component';
-import { Annotation } from '../common/Annotation';
 
 @Injectable()
 export class NotebookService {
@@ -53,7 +52,7 @@ export class NotebookService {
   reports = [];
   publicNotebookItems = {};
   notebooksByWorkgroup = {};
-  private notebookItemAnnotationReceivedSource: Subject<Annotation> = new Subject<Annotation>();
+  private notebookItemAnnotationReceivedSource: Subject<any> = new Subject<any>();
   public notebookItemAnnotationReceived$ = this.notebookItemAnnotationReceivedSource.asObservable();
   private notebookItemChosenSource: Subject<any> = new Subject<any>();
   public notebookItemChosen$ = this.notebookItemChosenSource.asObservable();
@@ -78,7 +77,7 @@ export class NotebookService {
     private StudentAssetService: StudentAssetService
   ) {}
 
-  broadcastNotebookItemAnnotationReceived(annotation: Annotation) {
+  broadcastNotebookItemAnnotationReceived(annotation: any) {
     this.notebookItemAnnotationReceivedSource.next(annotation);
   }
 

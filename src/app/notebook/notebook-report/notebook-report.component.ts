@@ -10,7 +10,6 @@ import {
   insertWiseLinks,
   replaceWiseLinks
 } from '../../../assets/wise5/common/wise-link/wise-link';
-import { Annotation } from '../../../assets/wise5/common/Annotation';
 
 @Component({
   selector: 'notebook-report',
@@ -68,7 +67,7 @@ export class NotebookReportComponent extends NotebookParentComponent {
     this.isAddNoteButtonAvailable = this.isNoteEnabled();
 
     this.subscriptions.add(
-      this.NotebookService.notebookItemAnnotationReceived$.subscribe((annotation: Annotation) => {
+      this.NotebookService.notebookItemAnnotationReceived$.subscribe(({ annotation }: any) => {
         if (annotation.localNotebookItemId === this.reportId) {
           this.hasNewAnnotation = true;
           this.latestAnnotations = this.AnnotationService.getLatestNotebookItemAnnotations(

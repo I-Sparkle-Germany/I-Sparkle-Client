@@ -76,7 +76,7 @@ export class StudentPeerGroupService extends PeerGroupService {
     peerGroupId: number,
     nodeId: string,
     componentId: string,
-    fieldName: 'dynamicPrompt' | 'questionBank',
+    fieldName: string,
     urlEnding: string
   ): Observable<PeerGroupStudentData[]> {
     if (this.configService.isPreview()) {
@@ -90,9 +90,9 @@ export class StudentPeerGroupService extends PeerGroupService {
   private getPreviewPeerGroupStudentData(
     nodeId: string,
     componentId: string,
-    fieldName: 'dynamicPrompt' | 'questionBank'
+    fieldName: string
   ): Observable<PeerGroupStudentData[]> {
-    const referenceComponent = this.projectService.getReferenceComponentForField(
+    const referenceComponent = this.projectService.getReferenceComponent(
       nodeId,
       componentId,
       fieldName

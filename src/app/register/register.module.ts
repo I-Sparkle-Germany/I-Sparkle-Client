@@ -22,7 +22,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSelectModule } from '@angular/material/select';
 import { GoogleSignInModule } from '../modules/google-sign-in/google-sign-in.module';
 import { PasswordModule } from '../password/password.module';
-import { StandaloneLogoComponent } from '../common/standalone-logo/standalone-logo.comonent';
+import { StandaloneModule } from '../standalone/standalone.module';
 
 const materialModules = [
   MatButtonModule,
@@ -44,8 +44,8 @@ const materialModules = [
     PasswordModule,
     RegisterRoutingModule,
     ReactiveFormsModule,
-    StandaloneLogoComponent,
-    materialModules
+    materialModules,
+    StandaloneModule
   ],
   declarations: [
     RegisterComponent,
@@ -58,6 +58,6 @@ const materialModules = [
     RegisterStudentComponent,
     RegisterGoogleUserAlreadyExistsComponent
   ],
-  exports: [RegisterComponent, StandaloneLogoComponent]
+  exports: [RegisterComponent]
 })
 export class RegisterModule {}

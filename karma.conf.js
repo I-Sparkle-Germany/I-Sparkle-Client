@@ -4,9 +4,10 @@
 module.exports = function (config) {
   config.set({
     basePath: '',
-    frameworks: ['jasmine', '@angular-devkit/build-angular'],
+    frameworks: ['parallel', 'jasmine', '@angular-devkit/build-angular'],
     plugins: [
       require('karma-jasmine'),
+      require('karma-parallel'),
       require('karma-chrome-launcher'),
       require('karma-spec-reporter'),
       require('karma-coverage-istanbul-reporter'),
@@ -26,7 +27,6 @@ module.exports = function (config) {
     specReporter: {
       suppressSkipped: true
     },
-    browserNoActivityTimeout: 500000,
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,

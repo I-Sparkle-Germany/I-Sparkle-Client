@@ -1,6 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TeacherService } from '../../../teacher/teacher.service';
 import { finalize } from 'rxjs/operators';
 
@@ -9,8 +9,8 @@ import { finalize } from 'rxjs/operators';
   templateUrl: './forgot-teacher-password-verify.component.html',
   styleUrls: ['./forgot-teacher-password-verify.component.scss']
 })
-export class ForgotTeacherPasswordVerifyComponent {
-  @Input() username: string = null;
+export class ForgotTeacherPasswordVerifyComponent implements OnInit {
+  username: string;
   verificationCodeFormGroup: FormGroup = this.fb.group({
     verificationCode: new FormControl('', [Validators.required])
   });
@@ -23,8 +23,13 @@ export class ForgotTeacherPasswordVerifyComponent {
   constructor(
     private fb: FormBuilder,
     private router: Router,
+    private route: ActivatedRoute,
     private teacherService: TeacherService
   ) {}
+
+  ngOnInit() {
+    this.username = this.route.snapshot.queryParamMap.get('username');
+  }
 
   getControlField(fieldName) {
     return this.verificationCodeFormGroup.get(fieldName);

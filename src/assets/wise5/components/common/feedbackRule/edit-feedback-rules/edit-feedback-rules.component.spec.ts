@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { EditFeedbackRulesComponent } from './edit-feedback-rules.component';
 import { TeacherProjectService } from '../../../../services/teacherProjectService';
+import { UtilService } from '../../../../services/utilService';
 import { FeedbackRule } from '../FeedbackRule';
 import { MatDialog } from '@angular/material/dialog';
 import { FeedbackRuleHelpComponent } from '../feedback-rule-help/feedback-rule-help.component';
@@ -29,7 +30,8 @@ describe('EditFeedbackRulesComponent', () => {
       declarations: [EditFeedbackRulesComponent],
       providers: [
         { provide: MatDialog, useClass: MockMatDialog },
-        { provide: TeacherProjectService, useClass: MockTeacherProjectService }
+        { provide: TeacherProjectService, useClass: MockTeacherProjectService },
+        UtilService
       ],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();

@@ -8,7 +8,6 @@ import { StudentService } from '../../../student/student.service';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { PasswordModule } from '../../../password/password.module';
-import { PasswordRequirementComponent } from '../../../password/password-requirement/password-requirement.component';
 
 export class MockStudentService {
   changePassword(
@@ -26,6 +25,8 @@ export class MockStudentService {
     });
   }
 }
+
+const PASSWORD = 'Abcd1234';
 
 describe('ForgotStudentPasswordChangeComponent', () => {
   let component: ForgotStudentPasswordChangeComponent;
@@ -64,9 +65,8 @@ describe('ForgotStudentPasswordChangeComponent', () => {
   });
 
   it('should enable the submit button when the password fields are filled in', () => {
-    const password = PasswordRequirementComponent.VALID_PASSWORD;
-    component.changePasswordFormGroup.controls['newPassword'].setValue(password);
-    component.changePasswordFormGroup.controls['confirmNewPassword'].setValue(password);
+    component.changePasswordFormGroup.controls['newPassword'].setValue(PASSWORD);
+    component.changePasswordFormGroup.controls['confirmNewPassword'].setValue(PASSWORD);
     fixture.detectChanges();
     const submitButton = getSubmitButton();
     expect(submitButton.disabled).toBe(false);

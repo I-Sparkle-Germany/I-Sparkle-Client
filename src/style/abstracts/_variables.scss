@@ -1,3 +1,19 @@
+@import '@angular/material/theming';
+
+// Create a config with the default Angular Material typography levels
+$config: mat-typography-config();
+
+// Custom typography config
+$wise-typography: mat-typography-config(
+  $font-family: 'Tahoma, Geneva, Verdana, sans-serif',
+  $body-1: mat-typography-level(16px, 22px, 400),
+  $body-2: mat-typography-level(16px, 22px, 600),
+  $caption: mat-typography-level(14px, 20px, 400),
+  $subheading-1: mat-typography-level(17px, 24px, 400),
+  $subheading-2: mat-typography-level(17px, 24px, 600),
+  $headline: mat-typography-level(24px, 32px, 600)
+);
+
 // media queries and breakpoints
 $breakpoints: (
   xs: (
@@ -26,8 +42,7 @@ $button-border-radius: 0;
 $card-border-radius: 0;
 $feature-border-radius: 0;
 $header-height: 80px;
-$announcement-height: 48px;
-$sidemenu-width: 58px;
+$announcement-height: 40px;
 $toolbar-height: 52px;
 $secondary-toolbar-height: 42px;
 // $heading-font-family: Tahoma, sans-serif;

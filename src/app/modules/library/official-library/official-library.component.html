@@ -38,7 +38,9 @@
 
 <div *ngIf="!isSplitScreen" class="content-block library-teacher__official">
   <p ngClass.xs="center">
-    <a class="mat-caption" href="#" (click)="showInfo($event)" i18n>What is i-sparkle Tested?</a>
+    <a class="info mat-caption" [routerLink]="" (click)="showInfo()" i18n
+      >What is i-sparkle Tested?</a
+    >
   </p>
   <ng-container *ngTemplateOutlet="library"></ng-container>
 </div>

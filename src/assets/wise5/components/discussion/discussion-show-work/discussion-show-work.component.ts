@@ -107,21 +107,7 @@ export class DiscussionShowWorkComponent extends ComponentShowWorkDirective {
    * the class from seeing the post.
    * @param componentState the student component state the teacher wants to delete.
    */
-  protected hidePost(componentState: any): void {
-    this.flagPost(componentState, 'Delete');
-  }
-
-  /**
-   * The teacher has clicked the 'Undo Delete' button to undo a previous deletion of a post. This
-   * function will create an inappropriate flag annotation with the action set to 'Undo Delete'.
-   * This will make the post visible to the students.
-   * @param componentState the student component state the teacher wants to show again.
-   */
-  protected showPost(componentState: any): void {
-    this.flagPost(componentState, 'Undo Delete');
-  }
-
-  private flagPost(componentState: any, action: 'Delete' | 'Undo Delete'): void {
+  deleteButtonClicked(componentState: any): void {
     const toWorkgroupId = componentState.workgroupId;
     const userInfo = this.ConfigService.getUserInfoByWorkgroupId(toWorkgroupId);
     const periodId = userInfo.periodId;
@@ -132,7 +118,46 @@ export class DiscussionShowWorkComponent extends ComponentShowWorkDirective {
     const componentId = this.componentId;
     const studentWorkId = componentState.id;
     const data = {
-      action: action
+      action: 'Delete'
+    };
+    const annotation = this.AnnotationService.createInappropriateFlagAnnotation(
+      runId,
+      periodId,
+      nodeId,
+      componentId,
+      fromWorkgroupId,
+      toWorkgroupId,
+      studentWorkId,
+      data
+    );
+    this.AnnotationService.saveAnnotation(annotation).then(() => {
+      const componentStates = this.TeacherDiscussionService.getPostsAssociatedWithComponentIdsAndWorkgroupId(
+        this.getGradingComponentIds(),
+        this.workgroupId
+      );
+      const annotations = this.getInappropriateFlagAnnotationsByComponentStates(componentStates);
+      this.setClassResponses(componentStates, annotations);
+    });
+  }
+
+  /**
+   * The teacher has clicked the 'Undo Delete' button to undo a previous deletion of a post. This
+   * function will create an inappropriate flag annotation with the action set to 'Undo Delete'.
+   * This will make the post visible to the students.
+   * @param componentState the student component state the teacher wants to show again.
+   */
+  undoDeleteButtonClicked(componentState: any): any {
+    const toWorkgroupId = componentState.workgroupId;
+    const userInfo = this.ConfigService.getUserInfoByWorkgroupId(toWorkgroupId);
+    const periodId = userInfo.periodId;
+    const teacherUserInfo = this.ConfigService.getMyUserInfo();
+    const fromWorkgroupId = teacherUserInfo.workgroupId;
+    const runId = this.ConfigService.getRunId();
+    const nodeId = this.nodeId;
+    const componentId = this.componentId;
+    const studentWorkId = componentState.id;
+    const data = {
+      action: 'Undo Delete'
     };
     const annotation = this.AnnotationService.createInappropriateFlagAnnotation(
       runId,

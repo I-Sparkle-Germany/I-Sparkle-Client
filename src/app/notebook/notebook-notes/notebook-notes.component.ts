@@ -96,10 +96,8 @@ export class NotebookNotesComponent extends NotebookParentComponent {
     };
     this.groupNameToGroup['private'] = personalGroup;
     for (const [personalItemKey, personalItemValue] of Object.entries(this.notebook.items)) {
-      const personalItems = personalItemValue as any;
-      const item = personalItems[personalItems.length - 1];
-      if (item.type === 'note') {
-        personalGroup.items.push(item);
+      if ((personalItemValue as any).last().type === 'note') {
+        personalGroup.items.push((personalItemValue as any).last());
       }
     }
     this.groups.push(personalGroup);

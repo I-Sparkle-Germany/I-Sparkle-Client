@@ -2,7 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { LibraryService } from '../../../services/library.service';
 import { LibraryProject } from '../libraryProject';
 import { LibraryComponent } from '../library/library.component';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-community-library',
@@ -13,8 +13,8 @@ export class CommunityLibraryComponent extends LibraryComponent {
   projects: LibraryProject[] = [];
   filteredProjects: LibraryProject[] = [];
 
-  constructor(protected dialog: MatDialog, protected libraryService: LibraryService) {
-    super(dialog, libraryService);
+  constructor(protected libraryService: LibraryService, public dialog: MatDialog) {
+    super(libraryService);
   }
 
   ngOnInit() {
@@ -35,8 +35,10 @@ export class CommunityLibraryComponent extends LibraryComponent {
     }
   }
 
-  protected getDetailsComponent(): any {
-    return CommunityLibraryDetailsComponent;
+  showInfo() {
+    this.dialog.open(CommunityLibraryDetailsComponent, {
+      panelClass: 'dialog-sm'
+    });
   }
 }
 

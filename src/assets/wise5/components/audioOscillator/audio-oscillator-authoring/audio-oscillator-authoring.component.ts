@@ -4,9 +4,10 @@ import { Component } from '@angular/core';
 import { ProjectAssetService } from '../../../../../app/services/projectAssetService';
 import { AbstractComponentAuthoring } from '../../../authoringTool/components/AbstractComponentAuthoring';
 import { ConfigService } from '../../../services/configService';
+import { NodeService } from '../../../services/nodeService';
 import { TeacherProjectService } from '../../../services/teacherProjectService';
+import { UtilService } from '../../../services/utilService';
 import { AudioOscillatorService } from '../audioOscillatorService';
-import { TeacherNodeService } from '../../../services/teacherNodeService';
 
 @Component({
   selector: 'audio-oscillator-authoring',
@@ -23,9 +24,10 @@ export class AudioOscillatorAuthoring extends AbstractComponentAuthoring {
   constructor(
     protected AudioOscillatorService: AudioOscillatorService,
     protected ConfigService: ConfigService,
-    protected NodeService: TeacherNodeService,
+    protected NodeService: NodeService,
     protected ProjectAssetService: ProjectAssetService,
-    protected ProjectService: TeacherProjectService
+    protected ProjectService: TeacherProjectService,
+    protected UtilService: UtilService
   ) {
     super(ConfigService, NodeService, ProjectAssetService, ProjectService);
   }

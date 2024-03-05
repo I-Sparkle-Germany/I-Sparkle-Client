@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { TeacherProjectService } from '../../../../assets/wise5/services/teacherProjectService';
+import { UtilService } from '../../../../assets/wise5/services/utilService';
 
 @Component({
   selector: 'edit-component-default-feedback',
@@ -9,11 +10,12 @@ import { TeacherProjectService } from '../../../../assets/wise5/services/teacher
   styleUrls: ['edit-component-default-feedback.component.scss']
 })
 export class EditComponentDefaultFeedback {
-  @Input() componentContent: any;
+  @Input()
+  componentContent: any;
   feedbackChanged: Subject<string> = new Subject<string>();
   feedbackChangedSubscription: Subscription;
 
-  constructor(private ProjectService: TeacherProjectService) {}
+  constructor(private ProjectService: TeacherProjectService, private UtilService: UtilService) {}
 
   ngOnInit(): void {
     this.feedbackChangedSubscription = this.feedbackChanged

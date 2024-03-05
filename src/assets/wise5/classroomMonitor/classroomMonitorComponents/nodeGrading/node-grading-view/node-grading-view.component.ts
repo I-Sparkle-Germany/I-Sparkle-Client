@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, SimpleChanges, ViewEncapsulation } from '@angular/core';
-import { Subscription, tap } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { Node } from '../../../../common/Node';
 import { AnnotationService } from '../../../../services/annotationService';
 import { ClassroomStatusService } from '../../../../services/classroomStatusService';
@@ -15,7 +15,6 @@ import { copy } from '../../../../common/object/object';
 import { ShowNodeInfoDialogComponent } from '../../../../../../app/classroom-monitor/show-node-info-dialog/show-node-info-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MilestoneDetailsDialogComponent } from '../../milestones/milestone-details-dialog/milestone-details-dialog.component';
-import { Annotation } from '../../../../common/Annotation';
 
 @Component({
   selector: 'node-grading-view',
@@ -104,7 +103,7 @@ export class NodeGradingViewComponent implements OnInit {
     );
 
     this.subscriptions.add(
-      this.annotationService.annotationReceived$.subscribe((annotation: Annotation) => {
+      this.annotationService.annotationReceived$.subscribe(({ annotation }) => {
         const workgroupId = annotation.toWorkgroupId;
         if (annotation.nodeId === this.nodeId && this.workgroupsById[workgroupId]) {
           this.updateWorkgroup(workgroupId);
@@ -129,7 +128,7 @@ export class NodeGradingViewComponent implements OnInit {
   }
 
   protected retrieveStudentData(node: Node = this.node): void {
-    this.teacherDataService.retrieveStudentDataForNode(node).subscribe(() => {
+    this.teacherDataService.retrieveStudentDataForNode(node).then(() => {
       this.teacherWorkgroupId = this.configService.getWorkgroupId();
       this.workgroups = copy(this.configService.getClassmateUserInfos()).filter(
         (workgroup) =>
@@ -142,6 +141,25 @@ export class NodeGradingViewComponent implements OnInit {
       this.numRubrics = this.projectService.getNumberOfRubricsByNodeId(node.id);
       document.body.scrollTop = document.documentElement.scrollTop = 0;
     });
+  }
+
+  saveNodeGradingViewDisplayedEvent() {
+    const context = 'ClassroomMonitor',
+      nodeId = this.nodeId,
+      componentId = null,
+      componentType = null,
+      category = 'Navigation',
+      event = 'nodeGradingViewDisplayed',
+      data = { nodeId: this.nodeId };
+    this.teacherDataService.saveEvent(
+      context,
+      nodeId,
+      componentId,
+      componentType,
+      category,
+      event,
+      data
+    );
   }
 
   private getMaxScore(nodeId = this.nodeId): number {

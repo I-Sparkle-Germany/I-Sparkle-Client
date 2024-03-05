@@ -7,10 +7,9 @@
   >
     <mat-card-header
       class="nav-item--card__content"
-      tabindex="0"
       (click)="itemClicked($event)"
-      (keyup.enter)="itemClicked($event)"
       role="button"
+      md-ink-ripple
     >
       <node-icon
         mat-card-avatar
@@ -49,7 +48,7 @@
       </mat-list>
     </mat-card-content>
     <mat-card-actions
-      class="nav-item__more mat-body-2"
+      class="nav-item__more mat-body-1"
       fxLayout="row"
       fxLayoutAlign="start center"
       fxLayoutGap="8px"
@@ -57,8 +56,8 @@
       <nav-item-progress [nodeCompletion]="getNodeCompletion()" [period]="currentPeriod">
       </nav-item-progress>
       <span fxFlex></span>
-      <button
-        mat-icon-button
+      <a
+        href="#"
         (click)="toggleLockNode()"
         aria-label="{{ getNodeLockedText() }}"
         [matTooltip]="getNodeLockedText()"
@@ -67,7 +66,7 @@
         <mat-icon [ngClass]="{ warn: isLocked() }">
           {{ isLocked() ? 'lock' : 'lock_open' }}
         </mat-icon>
-      </button>
+      </a>
     </mat-card-actions>
   </mat-card>
   <mat-list-item
@@ -77,8 +76,8 @@
     class="list-item"
     [ngClass]="{ 'nav-item--list--group': isGroup, 'text-secondary': !nodeHasWork }"
   >
-    <span fxLayout="row" fxLayoutAlign="start center">
-      <node-icon [nodeId]="nodeId" class="step-icon" customClass="mat-24"></node-icon>
+    <node-icon [nodeId]="nodeId" class="step-icon" customClass="mat-24"></node-icon>
+    <p fxFlex fxLayout="row" fxfxLayoutAlign="start center">
       <span [ngClass]="{ warn: newAlert }">{{ nodeTitle }}</span
       >&nbsp;
       <span fxFlex fxHide.gt-xs></span>
@@ -106,6 +105,6 @@
         [nodeCompletion]="getNodeCompletion()"
         [period]="currentPeriod"
       ></nav-item-progress>
-    </span>
+    </p>
   </mat-list-item>
 </ng-container>

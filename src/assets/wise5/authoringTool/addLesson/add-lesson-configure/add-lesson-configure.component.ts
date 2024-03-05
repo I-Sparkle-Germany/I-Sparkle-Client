@@ -1,10 +1,9 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { UpgradeModule } from '@angular/upgrade/static';
 
 @Component({
-  selector: 'add-lesson-configure',
-  styleUrls: ['./add-lesson-configure.component.scss', '../../add-content.scss'],
+  styleUrls: ['./add-lesson-configure.component.scss'],
   templateUrl: './add-lesson-configure.component.html'
 })
 export class AddLessonConfigureComponent {
@@ -13,16 +12,19 @@ export class AddLessonConfigureComponent {
   });
   @ViewChild('titleField') titleField: ElementRef;
 
-  constructor(private fb: FormBuilder, private route: ActivatedRoute, private router: Router) {}
+  constructor(private fb: FormBuilder, private upgrade: UpgradeModule) {}
 
   ngAfterViewInit() {
     this.titleField.nativeElement.focus();
   }
 
+  protected cancel(): void {
+    this.upgrade.$injector.get('$state').go('root.at.project');
+  }
+
   protected next(): void {
-    this.router.navigate(['../choose-location'], {
-      relativeTo: this.route,
-      state: { title: this.addLessonFormGroup.controls['title'].value }
+    this.upgrade.$injector.get('$state').go('root.at.project.add-lesson.choose-location', {
+      title: this.addLessonFormGroup.controls['title'].value
     });
   }
 }

@@ -3,6 +3,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
+import { UpgradeModule } from '@angular/upgrade/static';
 import { Observable, Subject } from 'rxjs';
 import { ComponentSelectComponent } from '../../../../../../app/classroom-monitor/component-select/component-select.component';
 import { DialogWithOpenInNewWindowComponent } from '../../../../directives/dialog-with-open-in-new-window/dialog-with-open-in-new-window.component';
@@ -11,9 +12,8 @@ import { TeacherDataService } from '../../../../services/teacherDataService';
 import { TeacherPeerGroupService } from '../../../../services/teacherPeerGroupService';
 import { TeacherProjectService } from '../../../../services/teacherProjectService';
 import { ClassroomMonitorTestingModule } from '../../../classroom-monitor-testing.module';
+import { NodeGradingViewComponent } from '../../nodeGrading/node-grading-view/node-grading-view.component';
 import { NodeProgressViewComponent } from './node-progress-view.component';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { RouterTestingModule } from '@angular/router/testing';
 
 const rubric = 'This is the unit rubric.';
 const title = 'Photosynthesis';
@@ -92,20 +92,22 @@ class MockTeacherDataService {
   getCurrentPeriodId() {}
 }
 
+class MockUpgradeModule {
+  $injector: any = {
+    get() {
+      return { go: () => {}, onSuccess: () => {} };
+    }
+  };
+}
+
 describe('NodeProgressViewComponent', () => {
   let component: NodeProgressViewComponent;
   let fixture: ComponentFixture<NodeProgressViewComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ComponentSelectComponent, NodeProgressViewComponent],
-      imports: [
-        ClassroomMonitorTestingModule,
-        FlexLayoutModule,
-        MatIconModule,
-        MatListModule,
-        RouterTestingModule
-      ],
+      declarations: [ComponentSelectComponent, NodeGradingViewComponent, NodeProgressViewComponent],
+      imports: [ClassroomMonitorTestingModule, FlexLayoutModule, MatIconModule, MatListModule],
       providers: [
         {
           provide: MilestoneService,
@@ -122,9 +124,12 @@ describe('NodeProgressViewComponent', () => {
         {
           provide: TeacherProjectService,
           useClass: MockTeacherProjectService
+        },
+        {
+          provide: UpgradeModule,
+          useClass: MockUpgradeModule
         }
-      ],
-      schemas: [NO_ERRORS_SCHEMA]
+      ]
     }).compileComponents();
   });
 

@@ -1,7 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { PeerChatMessage } from '../PeerChatMessage';
-import { PeerChatComponent } from '../PeerChatComponent';
-import { PeerGroup } from '../PeerGroup';
 
 @Component({
   selector: 'peer-chat-chat-box',
@@ -9,19 +7,29 @@ import { PeerGroup } from '../PeerGroup';
   styleUrls: ['./peer-chat-chat-box.component.scss']
 })
 export class PeerChatChatBoxComponent implements OnInit {
-  @Input() component: PeerChatComponent;
-  @Input() isEnabled: boolean = true;
-  @Input() isGrading: boolean = false;
-  @Input() messages: PeerChatMessage[] = [];
-  @Input() myWorkgroupId: number;
-  @Input() peerGroup: PeerGroup;
-  @Input() response: string = '';
-  @Input() workgroupInfos: any = {};
+  @Input()
+  isEnabled: boolean = true;
+
+  @Input()
+  isGrading: boolean = false;
+
+  @Input()
+  messages: PeerChatMessage[] = [];
+
+  @Input()
+  myWorkgroupId: number;
+
+  @Input()
+  workgroupInfos: any = {};
+
   workgroupInfosWithoutTeachers: any[];
 
-  @Output() deleteClickedEvent: EventEmitter<PeerChatMessage> = new EventEmitter<PeerChatMessage>();
-  @Output() responseChangedEvent: EventEmitter<string> = new EventEmitter<string>();
-  @Output('onSubmit') submit: EventEmitter<string> = new EventEmitter<string>();
+  @Output()
+  deleteClickedEvent: EventEmitter<PeerChatMessage> = new EventEmitter<PeerChatMessage>();
+
+  @Output('onSubmit')
+  submit: EventEmitter<string> = new EventEmitter<string>();
+
   @Output()
   undeleteClickedEvent: EventEmitter<PeerChatMessage> = new EventEmitter<PeerChatMessage>();
 
@@ -39,14 +47,5 @@ export class PeerChatChatBoxComponent implements OnInit {
 
   protected undeleteClicked(peerChatMessage: PeerChatMessage): void {
     this.undeleteClickedEvent.emit(peerChatMessage);
-  }
-
-  protected submitResponse(event: string): void {
-    this.submit.emit(event);
-    this.response = '';
-  }
-
-  protected responseChanged(response: string): void {
-    this.responseChangedEvent.emit(response);
   }
 }

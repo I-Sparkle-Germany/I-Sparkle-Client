@@ -2,15 +2,13 @@
 
 import { Component } from '@angular/core';
 import { Subject, Subscription } from 'rxjs';
-import { debounceTime, distinctUntilChanged, filter } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { ProjectAssetService } from '../../../../../app/services/projectAssetService';
 import { AbstractComponentAuthoring } from '../../../authoringTool/components/AbstractComponentAuthoring';
 import { generateRandomKey } from '../../../common/string/string';
 import { ConfigService } from '../../../services/configService';
+import { NodeService } from '../../../services/nodeService';
 import { TeacherProjectService } from '../../../services/teacherProjectService';
-import { MatDialog } from '@angular/material/dialog';
-import { AssetChooser } from '../../../authoringTool/project-asset-authoring/asset-chooser';
-import { TeacherNodeService } from '../../../services/teacherNodeService';
 
 @Component({
   selector: 'animation-authoring',
@@ -25,8 +23,7 @@ export class AnimationAuthoring extends AbstractComponentAuthoring {
 
   constructor(
     protected ConfigService: ConfigService,
-    private dialog: MatDialog,
-    protected NodeService: TeacherNodeService,
+    protected NodeService: NodeService,
     protected ProjectAssetService: ProjectAssetService,
     protected ProjectService: TeacherProjectService
   ) {
@@ -239,13 +236,8 @@ export class AnimationAuthoring extends AbstractComponentAuthoring {
   }
 
   chooseImage(authoredObject: any, targetString: string = 'image'): void {
-    new AssetChooser(this.dialog, this.nodeId, this.componentId)
-      .open(targetString, authoredObject)
-      .afterClosed()
-      .pipe(filter((data) => data != null))
-      .subscribe((data: any) => {
-        return this.assetSelected(data);
-      });
+    const params = this.createOpenAssetChooserParamsObject(targetString, authoredObject);
+    this.openAssetChooser(params);
   }
 
   /**

@@ -151,7 +151,10 @@ export class NodeComponent implements OnInit {
     this.dirtySubmitComponentIds = [];
     this.updateComponentVisibility();
 
-    if (this.node.isEvaluateTransitionLogicOn('enterNode')) {
+    if (
+      this.nodeService.currentNodeHasTransitionLogic() &&
+      this.nodeService.evaluateTransitionLogicOn('enterNode')
+    ) {
       this.nodeService.evaluateTransitionLogic();
     }
 
@@ -201,7 +204,10 @@ export class NodeComponent implements OnInit {
   ngOnDestroy() {
     this.stopAutoSaveInterval();
     this.nodeUnloaded(this.node.id);
-    if (this.node.isEvaluateTransitionLogicOn('exitNode')) {
+    if (
+      this.nodeService.currentNodeHasTransitionLogic() &&
+      this.nodeService.evaluateTransitionLogicOn('exitNode')
+    ) {
       this.nodeService.evaluateTransitionLogic();
     }
     this.subscriptions.unsubscribe();
@@ -266,24 +272,39 @@ export class NodeComponent implements OnInit {
   }
 
   private createComponentStatesResponseHandler(isAutoSave, componentId = null, isSubmit = null) {
-    return (componentStates) => {
-      const componentAnnotations = this.getAnnotationsFromComponentStates(componentStates);
+    return (componentStatesFromComponents) => {
+      const {
+        componentStates,
+        componentEvents,
+        componentAnnotations
+      } = this.getDataArraysToSaveFromComponentStates(componentStatesFromComponents);
       componentStates.forEach((componentState: any) => {
         this.injectAdditionalComponentStateFields(componentState, isAutoSave, isSubmit);
         this.notifyConnectedParts(componentId, componentState);
       });
       return this.studentDataService
-        .saveToServer(componentStates, [], componentAnnotations)
+        .saveToServer(componentStates, componentEvents, componentAnnotations)
         .then((savedStudentDataResponse) => {
           if (savedStudentDataResponse) {
-            if (this.node.isEvaluateTransitionLogicOn('studentDataChanged')) {
-              this.nodeService.evaluateTransitionLogic();
-            }
-            if (
-              this.node.isEvaluateTransitionLogicOn('scoreChanged') &&
-              componentAnnotations.some((annotation) => annotation.type === 'autoScore')
-            ) {
-              this.nodeService.evaluateTransitionLogic();
+            if (this.nodeService.currentNodeHasTransitionLogic()) {
+              if (this.nodeService.evaluateTransitionLogicOn('studentDataChanged')) {
+                this.nodeService.evaluateTransitionLogic();
+              }
+              if (this.nodeService.evaluateTransitionLogicOn('scoreChanged')) {
+                if (componentAnnotations != null && componentAnnotations.length > 0) {
+                  let evaluateTransitionLogic = false;
+                  for (const componentAnnotation of componentAnnotations) {
+                    if (componentAnnotation != null) {
+                      if (componentAnnotation.type === 'autoScore') {
+                        evaluateTransitionLogic = true;
+                      }
+                    }
+                  }
+                  if (evaluateTransitionLogic) {
+                    this.nodeService.evaluateTransitionLogic();
+                  }
+                }
+              }
             }
             const studentWorkList = savedStudentDataResponse.studentWorkList;
             if (!componentId && studentWorkList && studentWorkList.length) {
@@ -297,6 +318,14 @@ export class NodeComponent implements OnInit {
           }
           return savedStudentDataResponse;
         });
+    };
+  }
+
+  private getDataArraysToSaveFromComponentStates(componentStates: any[]): any {
+    return {
+      componentStates: componentStates,
+      componentEvents: [],
+      componentAnnotations: this.getAnnotationsFromComponentStates(componentStates)
     };
   }
 
@@ -352,11 +381,26 @@ export class NodeComponent implements OnInit {
     const componentStatePromises = [];
     for (const component of components) {
       componentStatePromises.push(
-        this.getComponentStatePromise(this.node.id, component.id, isAutoSave, isSubmit)
+        this.getComponentStatePromiseFromService(this.node.id, component.id, isAutoSave, isSubmit)
       );
       this.componentService.requestComponentState(this.node.id, component.id, isSubmit);
     }
     return componentStatePromises;
+  }
+
+  private getComponentStatePromiseFromService(
+    nodeId: string,
+    componentId: string,
+    isAutoSave: boolean = false,
+    isSubmit: boolean = false
+  ): Promise<any> {
+    const componentStatePromise = this.getComponentStatePromise(
+      nodeId,
+      componentId,
+      isAutoSave,
+      isSubmit
+    );
+    return componentStatePromise;
   }
 
   private getComponentStatePromise(
@@ -368,10 +412,9 @@ export class NodeComponent implements OnInit {
     return new Promise((resolve) => {
       this.componentService.sendComponentStateSource$
         .pipe(
-          filter(
-            (data: ComponentStateWrapper) =>
-              data.nodeId === nodeId && data.componentId === componentId
-          ),
+          filter((data: any) => {
+            return data.nodeId === nodeId && data.componentId === componentId;
+          }),
           take(1)
         )
         .toPromise()

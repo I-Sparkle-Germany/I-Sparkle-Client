@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
-  selector: 'card-selector',
+  selector: 'app-card-selector',
   templateUrl: './card-selector.component.html',
   styleUrls: ['./card-selector.component.scss']
 })

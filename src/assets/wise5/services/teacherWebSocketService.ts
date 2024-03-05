@@ -8,14 +8,13 @@ import { Observable, Subject } from 'rxjs';
 import { AchievementService } from './achievementService';
 import { RxStomp } from '@stomp/rx-stomp';
 import { Message } from '@stomp/stompjs';
-import { Annotation } from '../common/Annotation';
 
 @Injectable()
 export class TeacherWebSocketService {
   runId: number;
   rxStomp: RxStomp;
-  private newAnnotationReceivedSource: Subject<Annotation> = new Subject<Annotation>();
-  public newAnnotationReceived$: Observable<Annotation> = this.newAnnotationReceivedSource.asObservable();
+  private newAnnotationReceivedSource: Subject<any> = new Subject<any>();
+  public newAnnotationReceived$: Observable<any> = this.newAnnotationReceivedSource.asObservable();
   private newStudentWorkReceivedSource: Subject<any> = new Subject<any>();
   public newStudentWorkReceived$: Observable<any> = this.newStudentWorkReceivedSource.asObservable();
 
@@ -56,7 +55,8 @@ export class TeacherWebSocketService {
         const achievement = JSON.parse(body.content);
         this.AchievementService.broadcastNewStudentAchievement(achievement);
       } else if (body.type === 'annotation') {
-        this.broadcastNewAnnotationReceived(JSON.parse(body.content));
+        const annotationData = JSON.parse(body.content);
+        this.broadcastNewAnnotationReceived({ annotation: annotationData });
       }
     });
   }
@@ -65,8 +65,8 @@ export class TeacherWebSocketService {
     this.newStudentWorkReceivedSource.next(args);
   }
 
-  broadcastNewAnnotationReceived(annotation: Annotation): void {
-    this.newAnnotationReceivedSource.next(annotation);
+  broadcastNewAnnotationReceived(args: any) {
+    this.newAnnotationReceivedSource.next(args);
   }
 
   subscribeToTeacherWorkgroupTopic() {

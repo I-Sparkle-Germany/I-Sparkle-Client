@@ -25,7 +25,6 @@ import { NotebookService } from '../../../services/notebookService';
 import { TeacherProjectService } from '../../../services/teacherProjectService';
 import { GraphContent } from '../GraphContent';
 import { EditGraphAdvancedComponent } from './edit-graph-advanced.component';
-import { TeacherNodeService } from '../../../services/teacherNodeService';
 
 let component: EditGraphAdvancedComponent;
 let fixture: ComponentFixture<EditGraphAdvancedComponent>;
@@ -59,7 +58,7 @@ describe('EditGraphAdvancedComponent', () => {
         EditConnectedComponentsComponent,
         EditGraphAdvancedComponent
       ],
-      providers: [TeacherNodeService, TeacherProjectService],
+      providers: [TeacherProjectService],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
   });

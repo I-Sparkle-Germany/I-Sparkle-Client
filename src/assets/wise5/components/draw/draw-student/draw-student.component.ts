@@ -7,13 +7,13 @@ import { NotebookService } from '../../../services/notebookService';
 import { ProjectService } from '../../../services/projectService';
 import { StudentAssetService } from '../../../services/studentAssetService';
 import { StudentDataService } from '../../../services/studentDataService';
+import { UtilService } from '../../../services/utilService';
 import { ComponentStudent } from '../../component-student.component';
 import { ComponentService } from '../../componentService';
 import { DrawService } from '../drawService';
 import { MatDialog } from '@angular/material/dialog';
 import { copy } from '../../../common/object/object';
 import { convertToPNGFile } from '../../../common/canvas/canvas';
-import { hasConnectedComponent } from '../../../common/ComponentContent';
 
 @Component({
   selector: 'draw-student',
@@ -41,7 +41,8 @@ export class DrawStudent extends ComponentStudent {
     protected NotebookService: NotebookService,
     private ProjectService: ProjectService,
     protected StudentAssetService: StudentAssetService,
-    protected StudentDataService: StudentDataService
+    protected StudentDataService: StudentDataService,
+    protected UtilService: UtilService
   ) {
     super(
       AnnotationService,
@@ -112,7 +113,7 @@ export class DrawStudent extends ComponentStudent {
   }
 
   initializeStudentData(): void {
-    if (hasConnectedComponent(this.componentContent, 'showWork')) {
+    if (this.UtilService.hasShowWorkConnectedComponent(this.componentContent)) {
       this.handleConnectedComponents();
     } else if (
       this.DrawService.componentStateHasStudentWork(this.componentState, this.componentContent)

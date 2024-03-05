@@ -50,7 +50,6 @@ export class SessionService {
   }
 
   logOut() {
-    this.broadcastExit();
     this.http.get(this.configService.getSessionLogOutURL()).subscribe(() => {
       window.location.href = '/';
     });

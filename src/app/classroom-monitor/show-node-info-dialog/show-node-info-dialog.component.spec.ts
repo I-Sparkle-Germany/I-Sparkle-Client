@@ -15,7 +15,6 @@ import { TeacherDataService } from '../../../assets/wise5/services/teacherDataSe
 import { TeacherProjectService } from '../../../assets/wise5/services/teacherProjectService';
 import { VLEProjectService } from '../../../assets/wise5/vle/vleProjectService';
 import { ShowNodeInfoDialogComponent } from './show-node-info-dialog.component';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 let component: ShowNodeInfoDialogComponent;
 const componentRubric: string = 'This is the component rubric.';
@@ -60,8 +59,7 @@ describe('ShowNodeInfoDialogComponent', () => {
       providers: [
         { provide: MAT_DIALOG_DATA, useValue: nodeId1 },
         { provide: MatDialogRef, useValue: {} }
-      ],
-      schemas: [NO_ERRORS_SCHEMA]
+      ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(ShowNodeInfoDialogComponent);
@@ -72,7 +70,6 @@ describe('ShowNodeInfoDialogComponent', () => {
     spyOn(TestBed.inject(ProjectService), 'getNodeById').and.returnValue(node);
     spyOn(TestBed.inject(ProjectService), 'getNodePositionById').and.returnValue('1.1');
     spyOn(TestBed.inject(VLEProjectService), 'getSpaces').and.returnValue([]);
-    spyOn(TestBed.inject(ProjectService), 'getSpeechToTextSettings').and.returnValue({});
     spyOn(TestBed.inject(NotebookService), 'isNotebookEnabled').and.returnValue(false);
     fixture.detectChanges();
   });

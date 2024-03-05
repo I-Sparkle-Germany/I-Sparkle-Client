@@ -4,10 +4,10 @@ import * as html2canvas from 'html2canvas';
 import { Injectable } from '@angular/core';
 import { ComponentService } from '../componentService';
 import { StudentAssetService } from '../../services/studentAssetService';
+import { UtilService } from '../../services/utilService';
 import { ConfigService } from '../../services/configService';
 import { HttpClient } from '@angular/common/http';
 import { convertToPNGFile } from '../../common/canvas/canvas';
-import { hasConnectedComponent } from '../../common/ComponentContent';
 
 @Injectable()
 export class GraphService extends ComponentService {
@@ -16,7 +16,8 @@ export class GraphService extends ComponentService {
   constructor(
     private configService: ConfigService,
     private http: HttpClient,
-    private StudentAssetService: StudentAssetService
+    private StudentAssetService: StudentAssetService,
+    protected UtilService: UtilService
   ) {
     super();
   }
@@ -127,14 +128,17 @@ export class GraphService extends ComponentService {
    * @param component The component content.
    * @return Whether the student can perform any work on this component.
    */
-  canEdit(component: any): boolean {
+  canEdit(component: any) {
     const series = component.series;
     for (const singleSeries of series) {
       if (singleSeries.canEdit) {
         return true;
       }
     }
-    return hasConnectedComponent(component, 'importWork');
+    if (this.UtilService.hasImportWorkConnectedComponent(component)) {
+      return true;
+    }
+    return false;
   }
 
   hasSeriesData(studentData: any) {

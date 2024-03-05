@@ -29,7 +29,7 @@ let fixture: ComponentFixture<ChangeStudentPasswordDialogComponent>;
 let teacherService: TeacherService;
 let snackBar: MatSnackBar;
 let dialog: MatDialog;
-let snackBarOpenSpy, dialogCloseAllSpy;
+let snackBarSpy, dialogSpy;
 
 describe('ChangeStudentPasswordDialogComponent', () => {
   beforeEach(async () => {
@@ -60,8 +60,8 @@ describe('ChangeStudentPasswordDialogComponent', () => {
 function changePassword() {
   describe('changePassword()', () => {
     beforeEach(() => {
-      snackBarOpenSpy = spyOn(snackBar, 'open');
-      dialogCloseAllSpy = spyOn(dialog, 'closeAll');
+      snackBarSpy = spyOn(snackBar, 'open');
+      dialogSpy = spyOn(dialog, 'closeAll');
     });
     afterEach(() => {
       expect(component.isChangingPassword).toBeFalsy();
@@ -75,8 +75,8 @@ function changePassword_success_closeDialog() {
   it('should close dialog on success', () => {
     spyOn(teacherService, 'changeStudentPassword').and.returnValue(of({}));
     component.changePassword();
-    expect(snackBarOpenSpy).toHaveBeenCalled();
-    expect(dialogCloseAllSpy).toHaveBeenCalled();
+    expect(snackBarSpy).toHaveBeenCalled();
+    expect(dialogSpy).toHaveBeenCalled();
   });
 }
 
@@ -84,10 +84,10 @@ function changePassword_failure_keepDialogOpen() {
   it('should keep dialog open on failure', () => {
     spyOn(teacherService, 'changeStudentPassword').and.returnValue(
       throwError({
-        error: { messageCode: 'invalidPassword' }
+        error: { messageCode: 'invalidPasswordLength' }
       })
     );
     component.changePassword();
-    expect(dialogCloseAllSpy).not.toHaveBeenCalled();
+    expect(dialogSpy).not.toHaveBeenCalled();
   });
 }

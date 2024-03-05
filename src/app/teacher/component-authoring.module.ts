@@ -82,8 +82,6 @@ import { ConstraintAuthoringModule } from '../../assets/wise5/authoringTool/cons
 import { EditComponentAdvancedComponent } from '../authoring-tool/edit-component-advanced/edit-component-advanced.component';
 import { ComponentAuthoringComponent } from '../../assets/wise5/authoringTool/components/component-authoring.component';
 import { WiseTinymceEditorModule } from '../../assets/wise5/directives/wise-tinymce-editor/wise-tinymce-editor.module';
-import { WiseLinkAuthoringDialogComponent } from '../../assets/wise5/authoringTool/wise-link-authoring-dialog/wise-link-authoring-dialog.component';
-import { EditComponentAdvancedButtonComponent } from '../../assets/wise5/authoringTool/components/edit-component-advanced-button/edit-component-advanced-button.component';
 
 @NgModule({
   declarations: [
@@ -100,7 +98,6 @@ import { EditComponentAdvancedButtonComponent } from '../../assets/wise5/authori
     EditAnimationAdvancedComponent,
     EditAudioOscillatorAdvancedComponent,
     EditCommonAdvancedComponent,
-    EditComponentAdvancedButtonComponent,
     EditComponentAdvancedComponent,
     EditComponentAddToNotebookButtonComponent,
     EditComponentConstraintsComponent,
@@ -166,8 +163,7 @@ import { EditComponentAdvancedButtonComponent } from '../../assets/wise5/authori
     ShowMyWorkAuthoringComponent,
     SelectStepAndComponentComponent,
     SummaryAuthoring,
-    TableAuthoring,
-    WiseLinkAuthoringDialogComponent
+    TableAuthoring
   ],
   imports: [
     ConstraintAuthoringModule,
@@ -187,7 +183,6 @@ import { EditComponentAdvancedButtonComponent } from '../../assets/wise5/authori
     EditAudioOscillatorAdvancedComponent,
     EditCommonAdvancedComponent,
     EditComponentAddToNotebookButtonComponent,
-    EditComponentAdvancedButtonComponent,
     EditComponentConstraintsComponent,
     EditComponentDefaultFeedback,
     EditComponentExcludeFromTotalScoreComponent,

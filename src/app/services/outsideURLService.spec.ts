@@ -1,5 +1,6 @@
 import { OutsideURLService } from '../../assets/wise5/components/outsideURL/outsideURLService';
 import { TestBed } from '@angular/core/testing';
+import { UtilService } from '../../assets/wise5/services/utilService';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { AnnotationService } from '../../assets/wise5/services/annotationService';
 import { ConfigService } from '../../assets/wise5/services/configService';
@@ -20,7 +21,8 @@ describe('OutsideURLService', () => {
         OutsideURLService,
         ProjectService,
         SessionService,
-        TagService
+        TagService,
+        UtilService
       ]
     });
     http = TestBed.get(HttpTestingController);

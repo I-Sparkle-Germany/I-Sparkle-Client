@@ -3,14 +3,13 @@ import { CommonModule } from '@angular/common';
 import { HelpComponent } from './help.component';
 import { HelpRoutingModule } from './help-routing.module';
 import { SharedModule } from '../modules/shared/shared.module';
-import { GettingStartedComponent } from './faq/getting-started/getting-started.component';
-import { TeacherFaqComponent } from './faq/teacher-faq/teacher-faq.component';
-import { StudentFaqComponent } from './faq/student-faq/student-faq.component';
+import { GettingStartedComponent } from './getting-started/getting-started.component';
+import { TeacherFaqComponent } from './teacher-faq/teacher-faq.component';
+import { StudentFaqComponent } from './student-faq/student-faq.component';
 import { HelpHomeComponent } from './help-home/help-home.component';
-import { MatDividerModule } from '@angular/material/divider';
 
 @NgModule({
-  imports: [CommonModule, HelpRoutingModule, MatDividerModule, SharedModule],
+  imports: [CommonModule, HelpRoutingModule, SharedModule],
   declarations: [
     HelpComponent,
     GettingStartedComponent,

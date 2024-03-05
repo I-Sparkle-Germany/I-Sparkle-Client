@@ -4,12 +4,11 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
+import { WorkgroupSelectDropdownComponent } from '../../../../../../app/classroom-monitor/workgroup-select/workgroup-select-dropdown/workgroup-select-dropdown.component';
 import { ConfigService } from '../../../../services/configService';
 import { TeacherDataService } from '../../../../services/teacherDataService';
 import { ClassroomMonitorTestingModule } from '../../../classroom-monitor-testing.module';
 import { StudentGradingToolsComponent } from './student-grading-tools.component';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { RouterTestingModule } from '@angular/router/testing';
 
 describe('StudentGradingToolsComponent', () => {
   let component: StudentGradingToolsComponent;
@@ -17,17 +16,15 @@ describe('StudentGradingToolsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [StudentGradingToolsComponent],
+      declarations: [StudentGradingToolsComponent, WorkgroupSelectDropdownComponent],
       imports: [
         ClassroomMonitorTestingModule,
         FormsModule,
         MatDividerModule,
         MatFormFieldModule,
         MatIconModule,
-        MatSelectModule,
-        RouterTestingModule
-      ],
-      schemas: [NO_ERRORS_SCHEMA]
+        MatSelectModule
+      ]
     }).compileComponents();
   });
 

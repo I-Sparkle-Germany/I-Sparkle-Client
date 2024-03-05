@@ -1,8 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { NotificationService } from '../../services/notificationService';
 import { TeacherProjectService } from '../../services/teacherProjectService';
 import { NodeRecoveryAnalysis } from '../../../../app/domain/nodeRecoveryAnalysis';
+import { UpgradeModule } from '@angular/upgrade/static';
+import { ConfigService } from '../../services/configService';
 import { isValidJSONString } from '../../common/string/string';
 
 @Component({
@@ -12,16 +14,17 @@ import { isValidJSONString } from '../../common/string/string';
 })
 export class RecoveryAuthoringComponent implements OnInit {
   badNodes: NodeRecoveryAnalysis[] = [];
-  protected globalMessage: any;
-  jsonValid: boolean;
+  globalMessage: any;
+  jsonIsValid: boolean;
   projectJSONString: string;
   saveButtonEnabled: boolean = false;
-  private subscriptions: Subscription = new Subscription();
-  @Input() protected unitId?: string;
+  subscriptions: Subscription = new Subscription();
 
   constructor(
+    private configService: ConfigService,
     private notificationService: NotificationService,
-    private projectService: TeacherProjectService
+    private projectService: TeacherProjectService,
+    private upgrade: UpgradeModule
   ) {}
 
   ngOnInit(): void {
@@ -37,14 +40,14 @@ export class RecoveryAuthoringComponent implements OnInit {
 
   projectJSONChanged(): void {
     this.checkProjectJSONValidity();
-    this.saveButtonEnabled = this.jsonValid;
-    if (this.jsonValid) {
+    this.saveButtonEnabled = this.jsonIsValid;
+    if (this.jsonIsValid) {
       this.checkNodes();
     }
   }
 
   private checkProjectJSONValidity(): void {
-    this.jsonValid = isValidJSONString(this.projectJSONString);
+    this.jsonIsValid = isValidJSONString(this.projectJSONString);
   }
 
   private subscribeToGlobalMessage(): void {
@@ -96,7 +99,7 @@ export class RecoveryAuthoringComponent implements OnInit {
   }
 
   private hasTransitionToNull(node: any): boolean {
-    return node.transitionLogic?.transitions.some((transition: any) => {
+    return node.transitionLogic.transitions.some((transition: any) => {
       return transition.to == null;
     });
   }
@@ -105,5 +108,11 @@ export class RecoveryAuthoringComponent implements OnInit {
     this.projectService.project = JSON.parse(this.projectJSONString);
     this.projectService.saveProject();
     this.saveButtonEnabled = false;
+  }
+
+  goToAuthoringView(): void {
+    this.upgrade.$injector
+      .get('$state')
+      .go('root.at.project', { projectId: this.configService.getProjectId() });
   }
 }

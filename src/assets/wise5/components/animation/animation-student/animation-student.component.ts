@@ -7,10 +7,10 @@ import { NodeService } from '../../../services/nodeService';
 import { NotebookService } from '../../../services/notebookService';
 import { StudentAssetService } from '../../../services/studentAssetService';
 import { StudentDataService } from '../../../services/studentDataService';
+import { UtilService } from '../../../services/utilService';
 import { ComponentStudent } from '../../component-student.component';
 import { ComponentService } from '../../componentService';
 import { AnimationService } from '../animationService';
-import { hasConnectedComponent } from '../../../common/ComponentContent';
 
 @Component({
   selector: 'animation-student',
@@ -52,7 +52,8 @@ export class AnimationStudent extends ComponentStudent {
     protected NodeService: NodeService,
     protected NotebookService: NotebookService,
     protected StudentAssetService: StudentAssetService,
-    protected StudentDataService: StudentDataService
+    protected StudentDataService: StudentDataService,
+    protected UtilService: UtilService
   ) {
     super(
       AnnotationService,
@@ -76,7 +77,7 @@ export class AnimationStudent extends ComponentStudent {
     this.svgId = this.AnimationService.getSvgId(domIdEnding);
     this.initializeCoordinates();
 
-    if (hasConnectedComponent(this.componentContent, 'showWork')) {
+    if (this.UtilService.hasShowWorkConnectedComponent(this.componentContent)) {
       this.handleConnectedComponents();
     } else if (
       this.AnimationService.componentStateHasStudentWork(this.componentState, this.componentContent)

@@ -1,6 +1,13 @@
 <h5 i18n>Choose a location for the new step</h5>
 <div style="margin-top: 20px; margin-left: 20px">
-  <div *ngFor="let nodeId of nodeIds">
+  <div
+    *ngFor="let nodeId of nodeIds"
+    class="project-item"
+    [ngClass]="{
+      'node-select--group': isGroupNode(nodeId),
+      'node-select--node': !isGroupNode(nodeId)
+    }"
+  >
     <div
       id="{{ nodeId }}"
       [ngClass]="{
@@ -17,8 +24,8 @@
           </p>
         </div>
         <button
-          mat-raised-button
-          color="primary"
+          mat-button
+          class="mat-raised-button mat-primary"
           *ngIf="isGroupNode(nodeId)"
           matTooltip="Insert As First Step"
           i18n-matTooltip
@@ -28,8 +35,8 @@
           <mat-icon>call_received</mat-icon>
         </button>
         <button
-          mat-raised-button
-          color="primary"
+          mat-button
+          class="mat-raised-button mat-primary"
           *ngIf="!isGroupNode(nodeId)"
           matTooltip="Insert After"
           i18n-matTooltip
@@ -42,9 +49,5 @@
     </div>
   </div>
 </div>
-<div class="nav-controls">
-  <mat-divider></mat-divider>
-  <div>
-    <button mat-button color="primary" routerLink="../.." i18n>Cancel</button>
-  </div>
-</div>
+<hr />
+<button mat-button class="mat-primary" (click)="cancel()" aria-label="Cancel" i18n>Cancel</button>
