@@ -34,11 +34,15 @@ fi
 echo "Changing directory to dist"
 cd dist
 
-echo "Creating en-US.tar.gz"
-tar -czf en-US.tar.gz en-US
+for d in */ ; do
+  # get the directory name without the ending slash
+  dir_name="${d%/}"
+  echo "Creating $dir_name.tar.gz"
+  tar -czf "$dir_name.tar.gz" "$dir_name"
+done
 
-echo "Copying en-US.tar.gz to server"
-scp -i $KEY_PATH en-US.tar.gz $SERVER_ADDRESS:./
+echo "Copying *.tar.gz files to server"
+scp -i $KEY_PATH *.tar.gz $SERVER_ADDRESS:./builds
 
 echo "Running deploy-client.sh script on server"
 ssh -i $KEY_PATH $SERVER_ADDRESS "sudo ~/scripts/deploy-client.sh"
