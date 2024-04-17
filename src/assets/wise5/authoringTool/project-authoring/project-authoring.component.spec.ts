@@ -32,10 +32,19 @@ import { ProjectAuthoringHarness } from './project-authoring.harness';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonHarness } from '@angular/material/button/testing';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MatMenuModule } from '@angular/material/menu';
+import { ConfigService } from '../../services/configService';
+import { of } from 'rxjs/internal/observable/of';
+import { HttpClient } from '@angular/common/http';
+import { AddLessonButtonComponent } from '../add-lesson-button/add-lesson-button.component';
+import { AddStepButtonComponent } from '../add-step-button/add-step-button.component';
 
+let configService: ConfigService;
 let component: ProjectAuthoringComponent;
+let getConfigParamSpy: jasmine.Spy;
 let fixture: ComponentFixture<ProjectAuthoringComponent>;
 let harness: ProjectAuthoringHarness;
+let http: HttpClient;
 let projectService: TeacherProjectService;
 let route: ActivatedRoute;
 let router: Router;
@@ -54,6 +63,8 @@ describe('ProjectAuthoringComponent', () => {
         TeacherNodeIconComponent
       ],
       imports: [
+        AddLessonButtonComponent,
+        AddStepButtonComponent,
         BrowserAnimationsModule,
         FormsModule,
         HttpClientTestingModule,
@@ -63,6 +74,7 @@ describe('ProjectAuthoringComponent', () => {
         MatFormFieldModule,
         MatIconModule,
         MatInputModule,
+        MatMenuModule,
         MatTooltipModule,
         RouterTestingModule,
         StudentTeacherCommonServicesModule
@@ -79,9 +91,22 @@ describe('ProjectAuthoringComponent', () => {
     }).compileComponents();
     projectService = TestBed.inject(TeacherProjectService);
     projectService.setProject(copy(demoProjectJSON_import));
+    configService = TestBed.inject(ConfigService);
+    http = TestBed.inject(HttpClient);
     route = TestBed.inject(ActivatedRoute);
     router = TestBed.inject(Router);
     window.history.pushState({}, '', '');
+    getConfigParamSpy = spyOn(configService, 'getConfigParam');
+    getConfigParamSpy.withArgs('canEditProject').and.returnValue(true);
+    getConfigParamSpy.withArgs('mode').and.returnValue('author');
+    getConfigParamSpy.withArgs('saveProjectURL').and.returnValue('/api/author/project/save/1');
+    spyOn(configService, 'getMyUserInfo').and.returnValue({
+      userId: 4,
+      firstName: 'Spongebob',
+      lastName: 'Squarepants',
+      username: 'spongebobsquarepants'
+    });
+    spyOn(http, 'post').and.returnValue(of({ status: 'success' }) as any);
     fixture = TestBed.createComponent(ProjectAuthoringComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

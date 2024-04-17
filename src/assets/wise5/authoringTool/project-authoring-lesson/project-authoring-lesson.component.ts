@@ -63,6 +63,15 @@ export class ProjectAuthoringLessonComponent {
     }
   }
 
+  protected addStepInside(nodeId: string): void {
+    this.router.navigate(['add-node', 'choose-template'], {
+      relativeTo: this.route,
+      state: {
+        nodeIdToInsertInsideOrAfter: nodeId
+      }
+    });
+  }
+
   private saveAndRefreshProject(): void {
     this.projectService.saveProject();
     this.projectService.refreshProject();
