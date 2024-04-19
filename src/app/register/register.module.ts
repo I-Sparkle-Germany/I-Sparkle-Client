@@ -23,6 +23,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { GoogleSignInModule } from '../modules/google-sign-in/google-sign-in.module';
 import { PasswordModule } from '../password/password.module';
 import { StandaloneLogoComponent } from '../common/standalone-logo/standalone-logo.comonent';
+import { RegisterMicrosoftUserAlreadyExistsComponent } from './register-microsoft-user-already-exists/register-microsoft-user-already-exists.component';
 
 const materialModules = [
   MatButtonModule,
@@ -56,7 +57,8 @@ const materialModules = [
     RegisterStudentFormComponent,
     RegisterStudentCompleteComponent,
     RegisterStudentComponent,
-    RegisterGoogleUserAlreadyExistsComponent
+    RegisterGoogleUserAlreadyExistsComponent,
+    RegisterMicrosoftUserAlreadyExistsComponent
   ],
   exports: [RegisterComponent, StandaloneLogoComponent]
 })
