@@ -60,9 +60,9 @@
         </button>
       </p>
     </form>
-    <ng-container *ngIf="isGoogleAuthenticationEnabled && isShowGoogleLogin">
+    <div *ngIf="showSocialLogin">
       <p class="center mat-headline-6">- <span i18>or</span> -</p>
-      <p class="center">
+      <p class="center" *ngIf="googleAuthenticationEnabled">
         <button
           class="button--social-login button--google"
           color="accent"
@@ -73,7 +73,18 @@
           <ng-container i18n>Sign in with Google</ng-container>
         </button>
       </p>
-    </ng-container>
+      <p class="center" *ngIf="microsoftAuthenticationEnabled">
+        <button
+          class="button--social-login button--microsoft"
+          color="accent"
+          mat-flat-button
+          (click)="socialSignIn('microsoft')"
+        >
+          <img src="assets/img/icons/ms-logo.svg" alt="Microsoft logo" />
+          <ng-container i18n>Sign in with Microsoft</ng-container>
+        </button>
+      </p>
+    </div>
   </mat-card-content>
   <mat-divider></mat-divider>
   <mat-card-content class="center">
