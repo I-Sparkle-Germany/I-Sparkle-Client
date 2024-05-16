@@ -9,6 +9,10 @@
           <context context-type="linenumber">12</context>
         </context-group>
         <context-group purpose="location">
+          <context context-type="sourcefile">src/app/home/home.component.html</context>
+          <context context-type="linenumber">72</context>
+        </context-group>
+        <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/mobile-menu/mobile-menu.component.html</context>
           <context context-type="linenumber">30</context>
         </context-group>
@@ -1492,7 +1496,7 @@ Click &quot;Cancel&quot; to keep the invalid JSON open so you can fix it.</sourc
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.html</context>
-          <context context-type="linenumber">136</context>
+          <context context-type="linenumber">131</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/forgot/student/forgot-student-password-change/forgot-student-password-change.component.html</context>
@@ -1856,28 +1860,28 @@ Click &quot;Cancel&quot; to keep the invalid JSON open so you can fix it.</sourc
         <source>Thank you for contacting WISE!</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.html</context>
-          <context context-type="linenumber">11</context>
+          <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
       <trans-unit id="708d809914d6b7756b27dd0e9a0233e8ee4e070a" datatype="html">
         <source>Your message has been sent. We will get back to you as soon as possible.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.html</context>
-          <context context-type="linenumber">12</context>
+          <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1e93e18a72aefe4e27b49c715e29b37aee9b1f71" datatype="html">
         <source>Return to Home</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.html</context>
-          <context context-type="linenumber">15</context>
+          <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
       <trans-unit id="02e9e69ddcbf93de9fd38bc4d0f312142658610d" datatype="html">
         <source>Contact Us</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.html</context>
-          <context context-type="linenumber">25</context>
+          <context context-type="linenumber">20</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/footer/footer.component.html</context>
@@ -1888,7 +1892,7 @@ Click &quot;Cancel&quot; to keep the invalid JSON open so you can fix it.</sourc
         <source>Name</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.html</context>
-          <context context-type="linenumber">28</context>
+          <context context-type="linenumber">23</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/library/share-project-dialog/share-project-dialog.component.html</context>
@@ -1911,14 +1915,14 @@ Click &quot;Cancel&quot; to keep the invalid JSON open so you can fix it.</sourc
         <source>Name required</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.html</context>
-          <context context-type="linenumber">31</context>
+          <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
       <trans-unit id="244aae9346da82b0922506c2d2581373a15641cc" datatype="html">
         <source>Email</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.html</context>
-          <context context-type="linenumber">37</context>
+          <context context-type="linenumber">32</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/forgot/teacher/forgot-teacher-username/forgot-teacher-username.component.html</context>
@@ -1941,7 +1945,7 @@ Click &quot;Cancel&quot; to keep the invalid JSON open so you can fix it.</sourc
         <source>Email required</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.html</context>
-          <context context-type="linenumber">40</context>
+          <context context-type="linenumber">35</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/forgot/teacher/forgot-teacher-username/forgot-teacher-username.component.html</context>
@@ -1960,14 +1964,14 @@ Click &quot;Cancel&quot; to keep the invalid JSON open so you can fix it.</sourc
         <source>Invalid Email</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.html</context>
-          <context context-type="linenumber">43</context>
+          <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6237ff3a29d96a2418eb0007bebc0be1dda21cdd" datatype="html">
         <source>Teacher</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.html</context>
-          <context context-type="linenumber">49</context>
+          <context context-type="linenumber">44</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/forgot/forgot-home/forgot-home.component.html</context>
@@ -1982,49 +1986,49 @@ Click &quot;Cancel&quot; to keep the invalid JSON open so you can fix it.</sourc
         <source>Teacher required</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.html</context>
-          <context context-type="linenumber">56</context>
+          <context context-type="linenumber">51</context>
         </context-group>
       </trans-unit>
       <trans-unit id="712648c55b8f81cc494ffeff1c304f275dcafc61" datatype="html">
         <source>Issue Type</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.html</context>
-          <context context-type="linenumber">62</context>
+          <context context-type="linenumber">57</context>
         </context-group>
       </trans-unit>
       <trans-unit id="15b954ace707d502928339a1518c05e2c33a2bc4" datatype="html">
         <source>Issue Type required</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.html</context>
-          <context context-type="linenumber">69</context>
+          <context context-type="linenumber">64</context>
         </context-group>
       </trans-unit>
       <trans-unit id="84f64f26d4b4e040f0ca418bb766cf2120b052bd" datatype="html">
         <source>Project Name</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.html</context>
-          <context context-type="linenumber">75</context>
+          <context context-type="linenumber">70</context>
         </context-group>
       </trans-unit>
       <trans-unit id="a8233de047500bf0f0d9f9f1712ddb071501a283" datatype="html">
         <source>Summary</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.html</context>
-          <context context-type="linenumber">81</context>
+          <context context-type="linenumber">76</context>
         </context-group>
       </trans-unit>
       <trans-unit id="f57c6e5b9225f1a36757d76b0cb2a0b739487c87" datatype="html">
         <source>Summary required</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.html</context>
-          <context context-type="linenumber">84</context>
+          <context context-type="linenumber">79</context>
         </context-group>
       </trans-unit>
       <trans-unit id="eec715de352a6b114713b30b640d319fa78207a0" datatype="html">
         <source>Description</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.html</context>
-          <context context-type="linenumber">90</context>
+          <context context-type="linenumber">85</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/assets/wise5/authoringTool/milestones-authoring/milestones-authoring.component.html</context>
@@ -2055,21 +2059,21 @@ Click &quot;Cancel&quot; to keep the invalid JSON open so you can fix it.</sourc
         <source>Description required</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.html</context>
-          <context context-type="linenumber">101</context>
+          <context context-type="linenumber">96</context>
         </context-group>
       </trans-unit>
       <trans-unit id="c6c755f87aa1b71e3912e3bdf4872950937e88fc" datatype="html">
         <source> This site is protected by reCAPTCHA and the Google <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://policies.google.com/privacy&quot;&gt;"/>Privacy Policy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> and <x id="START_LINK_1" equiv-text="&lt;a href=&quot;https://policies.google.com/terms&quot;&gt;"/>Terms of Service<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> apply. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.html</context>
-          <context context-type="linenumber">105,109</context>
+          <context context-type="linenumber">100,104</context>
         </context-group>
       </trans-unit>
       <trans-unit id="810358a0509fe5b1c4fa9d6b91d69aba1577d4df" datatype="html">
         <source>Recaptcha failed. Please reload the page and try again!</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.html</context>
-          <context context-type="linenumber">118</context>
+          <context context-type="linenumber">113</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/login-home/login-home.component.html</context>
@@ -2088,7 +2092,7 @@ Click &quot;Cancel&quot; to keep the invalid JSON open so you can fix it.</sourc
         <source> Sorry, there was a problem submitting the form. Please try again. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.html</context>
-          <context context-type="linenumber">122,124</context>
+          <context context-type="linenumber">117,119</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6178733511992894634" datatype="html">
@@ -4743,6 +4747,79 @@ Click &quot;Cancel&quot; to keep the invalid JSON open so you can fix it.</sourc
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="95ed411fb364c324c1ea2421eef65aef2d20460e" datatype="html">
+        <source> The i-sparkle mission is to combine the power of teachers and technology to transform learning spaces and unlock student potential. </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/home/home.component.html</context>
+          <context context-type="linenumber">3,6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="fc3986c22fec8fa05acddfb40c2f17e7aaa4ffcf" datatype="html">
+        <source>Learn more, get engaged, and spread the sparkle!</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/home/home.component.html</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="71ea4365bea8a63b6b5d1b0e12ee32cd361c4dd3" datatype="html">
+        <source>The i-sparkle approach</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/home/home.component.html</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e8d8e9c1232a41489e2c68131ce0d9133df21b86" datatype="html">
+        <source><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;sparkle-text&quot; [@bounceIn]=&quot;{ value: &apos;*&apos;, params: { delay: &apos;0ms&apos; } }&quot;&gt;"/> interactive<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/><x id="START_TAG_SPAN_1" ctype="x-span_1" equiv-text="&lt;span class=&quot;sparkle-text&quot; [@bounceIn]=&quot;{ value: &apos;*&apos;, params: { delay: &apos;600ms&apos; } }&quot;&gt;"/> sensemaking<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> <x id="START_TAG_SPAN_2" ctype="x-span_2" equiv-text="&lt;span class=&quot;mat-body-2&quot;&gt;"/>in a<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> <x id="START_TAG_SPAN_3" ctype="x-span_3" equiv-text="&lt;span
+        class=&quot;sparkle-text&quot;
+        [@bounceIn]=&quot;{ value: &apos;*&apos;, params: { delay: &apos;1200ms&apos; } }&quot;
+        &gt;"/>personalized<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/><x id="START_TAG_SPAN_2" ctype="x-span_2" equiv-text="&lt;span class=&quot;mat-body-2&quot;&gt;"/>, <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/><x id="START_TAG_SPAN_4" ctype="x-span_4" equiv-text="&lt;span class=&quot;sparkle-text&quot; [@bounceIn]=&quot;{ value: &apos;*&apos;, params: { delay: &apos;1800ms&apos; } }&quot;&gt;"/> adaptive<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/><x id="START_TAG_SPAN_2" ctype="x-span_2" equiv-text="&lt;span class=&quot;mat-body-2&quot;&gt;"/>, <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/><x id="START_TAG_SPAN_5" ctype="x-span_5" equiv-text="&lt;span class=&quot;sparkle-text&quot; [@bounceIn]=&quot;{ value: &apos;*&apos;, params: { delay: &apos;2400ms&apos; } }&quot;&gt;"/> responsive<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/><x id="START_TAG_SPAN_2" ctype="x-span_2" equiv-text="&lt;span class=&quot;mat-body-2&quot;&gt;"/>, and<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/><x id="START_TAG_SPAN_6" ctype="x-span_6" equiv-text="&lt;span class=&quot;sparkle-text&quot; [@bounceIn]=&quot;{ value: &apos;*&apos;, params: { delay: &apos;3000ms&apos; } }&quot;&gt;"/> kind<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/><x id="START_TAG_SPAN_7" ctype="x-span_7" equiv-text="&lt;span class=&quot;sparkle-text&quot; [@bounceIn]=&quot;{ value: &apos;*&apos;, params: { delay: &apos;3600ms&apos; } }&quot;&gt;"/> learning environment <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/home/home.component.html</context>
+          <context context-type="linenumber">14,37</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ddfd7e6350ed363f1d4b48f9c73f993042fbaacf" datatype="html">
+        <source>Tutorials</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/home/home.component.html</context>
+          <context context-type="linenumber">56</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4b6dbf2d92858e82bcf6ae5dbc8dfb4b29d82ad0" datatype="html">
+        <source>FAQ</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/home/home.component.html</context>
+          <context context-type="linenumber">64</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="33f46beae629773ad255e544725fff33320bd732" datatype="html">
+        <source>Get in Touch</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/home/home.component.html</context>
+          <context context-type="linenumber">80</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="579454ac01c879f5366d5bf4c0cec00400b49bbd" datatype="html">
+        <source>Wondering if i-sparkle is for you?</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/home/home.component.html</context>
+          <context context-type="linenumber">87</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0feff2609b45514c9750c5bf3e5dceddc7e84852" datatype="html">
+        <source> Find out how the free and open-source i-sparkle technology benefits your <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;&quot;&gt;"/>school<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;&quot;&gt;"/>teaching<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, or <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;&quot;&gt;"/>research<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>! </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/home/home.component.html</context>
+          <context context-type="linenumber">88,91</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8db1ad5a7f02cab86679ffbbbe0d497600c9829a" datatype="html">
+        <source>Ready to use i-sparkle?</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/home/home.component.html</context>
+          <context context-type="linenumber">95</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="3220280128711469703" datatype="html">
         <source>WISE students in classroom</source>
         <context-group purpose="location">
@@ -5050,18 +5127,53 @@ Click &quot;Cancel&quot; to keep the invalid JSON open so you can fix it.</sourc
           <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="261cac1baf723a1aed8465aa0442318ee7bc2b90" datatype="html">
-        <source>Partnerships</source>
+      <trans-unit id="ea4df515bf1b371108af6aa0e0ae2f848ae90a31" datatype="html">
+        <source>Researchers</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/header/header-links/header-links.component.html</context>
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="f71631baab5509e9d78b15b033e2bf9e3b7ae340" datatype="html">
-        <source>Curriculum</source>
+      <trans-unit id="3ed116bfd98424f1bdd9fb28f750ec025979713a" datatype="html">
+        <source>i-sparkle <x id="START_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;mat-icon&gt;"/>arrow_drop_down<x id="CLOSE_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;/mat-icon&gt;"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/header/header-links/header-links.component.html</context>
-          <context context-type="linenumber">38</context>
+          <context context-type="linenumber">40</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2ff219aa353c38f7899317e7f1054b11d0e35fd4" datatype="html">
+        <source> Mission </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/header/header-links/header-links.component.html</context>
+          <context context-type="linenumber">50,52</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="170d55d3f1db3c435f3f5a2e791ca962c4aab846" datatype="html">
+        <source> Partnership </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/header/header-links/header-links.component.html</context>
+          <context context-type="linenumber">59,61</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4d80d6b39bf7105501dfb5769a96946052374e02" datatype="html">
+        <source> Curriculum </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/header/header-links/header-links.component.html</context>
+          <context context-type="linenumber">68,70</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e2e36504dbf46c9bd3d50dd9836039ca3cb4ac2d" datatype="html">
+        <source> Tech </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/header/header-links/header-links.component.html</context>
+          <context context-type="linenumber">77,79</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7537aa31cc424b41451da88788f2a0c8a25f7564" datatype="html">
+        <source> Impact </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modules/header/header-links/header-links.component.html</context>
+          <context context-type="linenumber">86,88</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cfc2f436ec2beffb042e7511a73c89c372e86a6c" datatype="html">
