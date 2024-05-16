@@ -6,7 +6,7 @@
   <ng-container *ngSwitchDefault>
     <div>
       <a
-        class="header-link mat-body-2"
+        class="header-link mat-body-1"
         routerLink=""
         routerLinkActive="active"
         [routerLinkActiveOptions]="{ exact: true }"
@@ -14,7 +14,7 @@
         >Teachers</a
       >
       <a
-        class="header-link mat-body-2"
+        class="header-link mat-body-1"
         routerLink=""
         routerLinkActive="active"
         [routerLinkActiveOptions]="{ exact: true }"
@@ -22,22 +22,76 @@
         >Students</a
       >
       <a
-        class="header-link mat-body-2"
+        class="header-link mat-body-1"
         routerLink=""
         routerLinkActive="active"
         [routerLinkActiveOptions]="{ exact: true }"
         i18n
-        >Partnerships</a
+        >Researchers</a
       >
       <a
-        class="header-link mat-body-2"
+        class="header-link mat-body-1"
         routerLink=""
         routerLinkActive="active"
         [routerLinkActiveOptions]="{ exact: true }"
-        i18n
-        >Curriculum</a
+        [matMenuTriggerFor]="iSparkleMenu"
       >
+        <span class="menu-link" fxLayoutAlign="start center" i18n
+          >i-sparkle <mat-icon>arrow_drop_down</mat-icon></span
+        >
+      </a>
+      <mat-menu #iSparkleMenu="matMenu" xPosition="before">
+        <a
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          mat-menu-item
+          routerLink=""
+          i18n
+        >
+          Mission
+        </a>
+        <a
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          mat-menu-item
+          routerLink=""
+          i18n
+        >
+          Partnership
+        </a>
+        <a
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          mat-menu-item
+          routerLink=""
+          i18n
+        >
+          Curriculum
+        </a>
+        <a
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          mat-menu-item
+          routerLink=""
+          i18n
+        >
+          Tech
+        </a>
+        <a
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          mat-menu-item
+          routerLink=""
+          i18n
+        >
+          Impact
+        </a>
+      </mat-menu>
     </div>
   </ng-container>
-  <ng-container *ngIf="!roles.length"> | <app-header-signin></app-header-signin> </ng-container>
+  <ng-container *ngIf="!roles.length">
+    <div fxLayout="row" fxLayoutGap="8px">
+      &nbsp;|&nbsp;&nbsp;<app-header-signin></app-header-signin>
+    </div>
+  </ng-container>
 </nav>

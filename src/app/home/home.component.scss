@@ -20,3 +20,11 @@ discourse-latest-news {
   display: flex;
   align-items: center;
 }
+
+.mat-subtitle-1, .mat-headline-5 {
+  margin-bottom: 0;
+}
+
+.main:not(:first-of-type) {
+  padding-top: 0;
+}
