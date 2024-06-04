@@ -39,6 +39,16 @@
     }
   }
 
+  textarea, input {
+    &.mat-mdc-form-field-input-control {
+      font-weight: 400;
+    }
+  }
+
+  .mat-mdc-select{
+    font-weight: 400;
+  }
+
   .mat-mdc-button, .mat-mdc-raised-button, .mat-mdc-unelevated-button, .mat-mdc-outlined-button {
     min-width: 0;
     border-radius: $button-border-radius;
