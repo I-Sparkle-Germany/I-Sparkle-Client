@@ -1,17 +1,16 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { AddYourOwnNode } from '../../assets/wise5/authoringTool/addNode/add-your-own-node/add-your-own-node.component';
-import { ChooseNewNodeTemplate } from '../../assets/wise5/authoringTool/addNode/choose-new-node-template/choose-new-node-template.component';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { AddYourOwnNodeComponent } from '../../assets/wise5/authoringTool/addNode/add-your-own-node/add-your-own-node.component';
+import { ChooseNewNodeTemplateComponent } from '../../assets/wise5/authoringTool/addNode/choose-new-node-template/choose-new-node-template.component';
 import { AdvancedProjectAuthoringComponent } from '../../assets/wise5/authoringTool/advanced/advanced-project-authoring.component';
 import { CardSelectorComponent } from '../../assets/wise5/authoringTool/components/card-selector/card-selector.component';
-import { RequiredErrorLabelComponent } from '../../assets/wise5/authoringTool/node/advanced/required-error-label/required-error-label.component';
 import { RubricAuthoringComponent } from '../../assets/wise5/authoringTool/rubric/rubric-authoring.component';
 import { NodeIconChooserDialog } from '../../assets/wise5/common/node-icon-chooser-dialog/node-icon-chooser-dialog.component';
 import { ChooseNewComponent } from '../authoring-tool/add-component/choose-new-component/choose-new-component.component';
 import { ChooseImportStepComponent } from '../authoring-tool/import-step/choose-import-step/choose-import-step.component';
 import { ComponentAuthoringModule } from './component-authoring.module';
 import { ComponentStudentModule } from '../../assets/wise5/components/component/component-student.module';
-import { PreviewComponentModule } from '../../assets/wise5/authoringTool/components/preview-component/preview-component.module';
 import { StudentTeacherCommonModule } from '../student-teacher-common.module';
 import { RecoveryAuthoringComponent } from '../../assets/wise5/authoringTool/recovery-authoring/recovery-authoring.component';
 import { AddLessonConfigureComponent } from '../../assets/wise5/authoringTool/addLesson/add-lesson-configure/add-lesson-configure.component';
@@ -36,7 +35,6 @@ import { ProjectListComponent } from '../../assets/wise5/authoringTool/project-l
 import { AddProjectComponent } from '../../assets/wise5/authoringTool/add-project/add-project.component';
 import { MatBadgeModule } from '@angular/material/badge';
 import { AuthoringToolBarComponent } from '../../assets/wise5/authoringTool/components/shared/authoring-tool-bar/authoring-tool-bar.component';
-import { StepToolsModule } from '../../assets/wise5/themes/default/themeComponents/stepTools/step-tools.module';
 import { ProjectAuthoringComponent } from '../../assets/wise5/authoringTool/project-authoring/project-authoring.component';
 import { AuthoringToolComponent } from '../../assets/wise5/authoringTool/authoring-tool.component';
 import { ChooseMoveNodeLocationComponent } from '../../assets/wise5/authoringTool/choose-node-location/choose-move-node-location/choose-move-node-location.component';
@@ -49,25 +47,28 @@ import { ProjectAuthoringParentComponent } from '../../assets/wise5/authoringToo
 import { ChooseImportUnitComponent } from '../authoring-tool/import-step/choose-import-unit/choose-import-unit.component';
 import { NodeAuthoringParentComponent } from '../../assets/wise5/authoringTool/node/node-authoring-parent/node-authoring-parent.component';
 import { AddLessonChooseTemplateComponent } from '../../assets/wise5/authoringTool/addLesson/add-lesson-choose-template/add-lesson-choose-template.component';
-import { ComponentTypeButtonComponent } from '../../assets/wise5/authoringTool/components/component-type-button/component-type-button.component';
-import { ComponentInfoDialogComponent } from '../../assets/wise5/authoringTool/components/component-info-dialog/component-info-dialog.component';
-import { ComponentTypeSelectorComponent } from '../../assets/wise5/authoringTool/components/component-type-selector/component-type-selector.component';
 import { EditNodeTitleComponent } from '../../assets/wise5/authoringTool/node/edit-node-title/edit-node-title.component';
+import { EditProjectLanguageSettingComponent } from '../../assets/wise5/authoringTool/project-info/edit-project-language-setting/edit-project-language-setting.component';
 import { AddComponentButtonComponent } from '../../assets/wise5/authoringTool/node/add-component-button/add-component-button.component';
+import { ProjectLanguageChooserComponent } from '../common/project-language-chooser/project-language-chooser.component';
 import { CopyComponentButtonComponent } from '../../assets/wise5/authoringTool/node/copy-component-button/copy-component-button.component';
 import { SaveIndicatorComponent } from '../../assets/wise5/common/save-indicator/save-indicator.component';
 import { ProjectAuthoringLessonComponent } from '../../assets/wise5/authoringTool/project-authoring-lesson/project-authoring-lesson.component';
 import { ProjectAuthoringStepComponent } from '../../assets/wise5/authoringTool/project-authoring-step/project-authoring-step.component';
 import { AddLessonButtonComponent } from '../../assets/wise5/authoringTool/add-lesson-button/add-lesson-button.component';
+import { TranslatableInputComponent } from '../../assets/wise5/authoringTool/components/translatable-input/translatable-input.component';
+import { TranslatableTextareaComponent } from '../../assets/wise5/authoringTool/components/translatable-textarea/translatable-textarea.component';
+import { TranslatableRichTextEditorComponent } from '../../assets/wise5/authoringTool/components/translatable-rich-text-editor/translatable-rich-text-editor.component';
 import { AddStepButtonComponent } from '../../assets/wise5/authoringTool/add-step-button/add-step-button.component';
+import { PreviewComponentButtonComponent } from '../../assets/wise5/authoringTool/components/preview-component-button/preview-component-button.component';
+import { StepToolsComponent } from '../../assets/wise5/common/stepTools/step-tools.component';
+import { ComponentTypeButtonComponent } from '../../assets/wise5/authoringTool/components/component-type-button/component-type-button.component';
 
 @NgModule({
   declarations: [
-    AddComponentButtonComponent,
     AddLessonChooseTemplateComponent,
     AddLessonConfigureComponent,
     AddProjectComponent,
-    AddYourOwnNode,
     AdvancedProjectAuthoringComponent,
     AuthoringToolComponent,
     AuthoringToolBarComponent,
@@ -77,24 +78,17 @@ import { AddStepButtonComponent } from '../../assets/wise5/authoringTool/add-ste
     ChooseCopyNodeLocationComponent,
     ChooseImportStepComponent,
     ChooseImportUnitComponent,
-    ChooseNewComponent,
-    ChooseNewNodeTemplate,
     ChooseMoveNodeLocationComponent,
     ChooseSimulationComponent,
-    ComponentInfoDialogComponent,
-    ComponentTypeButtonComponent,
-    ComponentTypeSelectorComponent,
     ConcurrentAuthorsMessageComponent,
     ConfigureAutomatedAssessmentComponent,
-    CopyComponentButtonComponent,
-    EditNodeTitleComponent,
+    EditProjectLanguageSettingComponent,
     InsertNodeAfterButtonComponent,
     InsertNodeInsideButtonComponent,
     MilestonesAuthoringComponent,
     NodeAuthoringComponent,
     NodeAuthoringParentComponent,
     NodeIconChooserDialog,
-    NodeIconAndTitleComponent,
     NodeWithMoveAfterButtonComponent,
     NotebookAuthoringComponent,
     ProjectInfoAuthoringComponent,
@@ -103,28 +97,40 @@ import { AddStepButtonComponent } from '../../assets/wise5/authoringTool/add-ste
     ProjectAuthoringLessonComponent,
     ProjectAuthoringStepComponent,
     RecoveryAuthoringComponent,
-    RequiredErrorLabelComponent,
     RubricAuthoringComponent,
-    TeacherNodeIconComponent,
     TopBarComponent,
     ProjectListComponent
   ],
   imports: [
+    AddComponentButtonComponent,
     AddLessonButtonComponent,
     AddStepButtonComponent,
+    AddYourOwnNodeComponent,
+    ChooseNewNodeTemplateComponent,
     StudentTeacherCommonModule,
+    ChooseNewComponent,
     ComponentAuthoringModule,
     ComponentStudentModule,
+    ComponentTypeButtonComponent,
+    CopyComponentButtonComponent,
+    EditNodeTitleComponent,
     MatBadgeModule,
     MatChipsModule,
     ImportComponentModule,
+    NgSelectModule,
     NodeAdvancedAuthoringModule,
-    PreviewComponentModule,
+    NodeIconAndTitleComponent,
+    PreviewComponentButtonComponent,
     ProjectAssetAuthoringModule,
+    ProjectLanguageChooserComponent,
     RouterModule,
     SaveIndicatorComponent,
-    StepToolsModule,
+    StepToolsComponent,
     StructureAuthoringModule,
+    TeacherNodeIconComponent,
+    TranslatableInputComponent,
+    TranslatableRichTextEditorComponent,
+    TranslatableTextareaComponent,
     WiseTinymceEditorModule
   ]
 })

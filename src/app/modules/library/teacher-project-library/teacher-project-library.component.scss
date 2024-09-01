@@ -1,8 +1,22 @@
+@use '@angular/material' as mat;
 @import
-  '@angular/material/theming',
   'style/abstracts/variables',
   'style/abstracts/mixins',
   'style/abstracts/functions';
+
+.library-teacher {
+  margin-top: 24px;
+
+  .mat-mdc-tab-link {
+    flex-grow: 1;
+  }
+}
+
+.filters {
+  padding: 16px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
 
 .library-teacher__header {
   h3 {

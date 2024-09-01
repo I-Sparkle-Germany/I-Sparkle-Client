@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ProjectAuthoringLessonComponent } from './project-authoring-lesson.component';
 import { TeacherDataService } from '../../services/teacherDataService';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { StudentTeacherCommonServicesModule } from '../../../../app/student-teacher-common-services.module';
 import { TeacherProjectService } from '../../services/teacherProjectService';
 import { TeacherWebSocketService } from '../../services/teacherWebSocketService';
@@ -9,17 +9,21 @@ import { ClassroomStatusService } from '../../services/classroomStatusService';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { NodeIconAndTitleComponent } from '../choose-node-location/node-icon-and-title/node-icon-and-title.component';
-import { NodeIconComponent } from '../../vle/node-icon/node-icon.component';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { ProjectAuthoringStepComponent } from '../project-authoring-step/project-authoring-step.component';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { ProjectAuthoringLessonHarness } from './project-authoring-lesson.harness';
 import { DeleteNodeService } from '../../services/deleteNodeService';
-import { RouterTestingModule } from '@angular/router/testing';
 import { CopyNodesService } from '../../services/copyNodesService';
 import { MatMenuModule } from '@angular/material/menu';
 import { AddStepButtonComponent } from '../add-step-button/add-step-button.component';
+import { DeleteTranslationsService } from '../../services/deleteTranslationsService';
+import { provideRouter } from '@angular/router';
+import { CopyTranslationsService } from '../../services/copyTranslationsService';
+import { TeacherProjectTranslationService } from '../../services/teacherProjectTranslationService';
+import { RemoveNodeIdFromTransitionsService } from '../../services/removeNodeIdFromTransitionsService';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 let component: ProjectAuthoringLessonComponent;
 let fixture: ComponentFixture<ProjectAuthoringLessonComponent>;
@@ -35,30 +39,31 @@ const node2 = { id: nodeId2, title: 'Step 2' };
 describe('ProjectAuthoringLessonComponent', () => {
   beforeEach(async () => {
     TestBed.configureTestingModule({
-      declarations: [
-        NodeIconComponent,
-        NodeIconAndTitleComponent,
-        ProjectAuthoringLessonComponent,
-        ProjectAuthoringStepComponent
-      ],
+      declarations: [ProjectAuthoringLessonComponent, ProjectAuthoringStepComponent],
       imports: [
         AddStepButtonComponent,
         FormsModule,
-        HttpClientTestingModule,
         MatCheckboxModule,
         MatDialogModule,
         MatIconModule,
         MatMenuModule,
-        RouterTestingModule,
+        NodeIconAndTitleComponent,
         StudentTeacherCommonServicesModule
       ],
       providers: [
         ClassroomStatusService,
         CopyNodesService,
+        CopyTranslationsService,
         DeleteNodeService,
+        DeleteTranslationsService,
+        provideRouter([]),
+        RemoveNodeIdFromTransitionsService,
         TeacherDataService,
         TeacherProjectService,
-        TeacherWebSocketService
+        TeacherProjectTranslationService,
+        TeacherWebSocketService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
       ]
     });
     teacherProjectService = TestBed.inject(TeacherProjectService);
@@ -67,6 +72,7 @@ describe('ProjectAuthoringLessonComponent', () => {
       node2: node2
     };
     teacherProjectService.project = { nodes: [node1, node2] };
+    spyOn(teacherProjectService, 'isDefaultLocale').and.returnValue(true);
     fixture = TestBed.createComponent(ProjectAuthoringLessonComponent);
     component = fixture.componentInstance;
     component.lesson = {

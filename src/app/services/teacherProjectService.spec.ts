@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TeacherProjectService } from '../../assets/wise5/services/teacherProjectService';
 import { ConfigService } from '../../assets/wise5/services/configService';
 import demoProjectJSON_import from './sampleData/curriculum/Demo.project.json';
@@ -8,6 +8,8 @@ import teacherProjctJSON_import from './sampleData/curriculum/TeacherProjectServ
 import { StudentTeacherCommonServicesModule } from '../student-teacher-common-services.module';
 import { copy } from '../../assets/wise5/common/object/object';
 import { DeleteNodeService } from '../../assets/wise5/services/deleteNodeService';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { RemoveNodeIdFromTransitionsService } from '../../assets/wise5/services/removeNodeIdFromTransitionsService';
 let service: TeacherProjectService;
 let configService: ConfigService;
 let deleteNodeService: DeleteNodeService;
@@ -15,7 +17,6 @@ let http: HttpTestingController;
 let demoProjectJSON: any;
 let scootersProjectJSON: any;
 let teacherProjectJSON: any;
-let objects;
 
 const scootersProjectJSONString = JSON.stringify(demoProjectJSON_import);
 const scootersProjectName = 'scooters';
@@ -28,8 +29,14 @@ const wiseBaseURL = '/wise';
 describe('TeacherProjectService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, StudentTeacherCommonServicesModule],
-      providers: [DeleteNodeService, TeacherProjectService]
+      imports: [StudentTeacherCommonServicesModule],
+      providers: [
+        DeleteNodeService,
+        RemoveNodeIdFromTransitionsService,
+        TeacherProjectService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+      ]
     });
     http = TestBed.inject(HttpTestingController);
     service = TestBed.inject(TeacherProjectService);
@@ -44,30 +51,22 @@ describe('TeacherProjectService', () => {
     };
     service.applicationNodes = [];
   });
-  registerNewProject();
-  isNodeIdUsed();
   isNodeIdToInsertTargetNotSpecified();
-  testDeleteTransition();
   testGetNodeIdAfter();
   testCreateNodeAfter();
   shouldGetTheBranchLetter();
-  lockNode();
-  unlockNode();
   getNextAvailableNodeId();
   shouldReturnTheNextAvailableGroupId();
   shouldReturnTheGroupIdsInTheProject();
-  shouldReturnTheMaxScoreOfTheProject();
   shouldNotAddSpaceIfItDoesExist();
   shouldAddSpaceIfItDoesntExist();
   shouldRemoveSpaces();
-  shouldRemoveTransitionsGoingOutOfGroupInChildNodesOfGroup();
   removeNodeFromGroup();
   insertNodeAfterInTransitions();
   shouldNotBeAbleToInsertANodeAfterAnotherNodeWhenTheyAreDifferentTypes();
   shouldBeAbleToInsertAStepNodeInsideAGroupNode();
   shouldBeAbleToInsertAGroupNodeInsideAGroupNode();
   shouldNotBeAbleToInsertAStepNodeInsideAStepNode();
-  getComponentPosition();
   addCurrentUserToAuthors_CM_shouldAddUserInfo();
   getNodeIds();
   getInactiveNodeIds();
@@ -78,8 +77,6 @@ describe('TeacherProjectService', () => {
   getOldToNewIds();
   replaceOldIds();
   replaceIds();
-  moveObjectUp();
-  moveObjectDown();
   removeNodeIdFromTransitions();
 });
 
@@ -113,42 +110,6 @@ function createConfigServiceGetConfigParamSpy() {
   });
 }
 
-function registerNewProject() {
-  describe('registerNewProject', () => {
-    it('should register new project', () => {
-      createConfigServiceGetConfigParamSpy();
-      const newProjectIdExpected = projectIdDefault;
-      const newProjectIdActual = service.registerNewProject(
-        scootersProjectName,
-        scootersProjectJSONString
-      );
-      http.expectOne(registerNewProjectURL).flush(newProjectIdExpected);
-      newProjectIdActual.then((result) => {
-        expect(result).toEqual(newProjectIdExpected);
-      });
-    });
-  });
-}
-
-function isNodeIdUsed() {
-  describe('isNodeIdUsed', () => {
-    beforeEach(() => {
-      service.setProject(demoProjectJSON);
-    });
-    it('should find used node id in active nodes', () => {
-      expect(service.isNodeIdUsed('node1')).toEqual(true);
-    });
-
-    it('should find used node id in inactive nodes', () => {
-      expect(service.isNodeIdUsed('node789')).toEqual(true);
-    });
-
-    it('should not find used node id in active or inactive nodes', () => {
-      expect(service.isNodeIdUsed('nodedoesnotexist')).toEqual(false);
-    });
-  });
-}
-
 function isNodeIdToInsertTargetNotSpecified() {
   describe('isNodeIdToInsertTargetNotSpecified', () => {
     it('should return true for null, inactive nodes, steps, and activities', () => {
@@ -161,18 +122,6 @@ function isNodeIdToInsertTargetNotSpecified() {
     it('should return false for active nodes and groups', () => {
       expect(service.isNodeIdToInsertTargetNotSpecified('activeNodes')).toBeFalsy();
       expect(service.isNodeIdToInsertTargetNotSpecified('activeGroups')).toBeFalsy();
-    });
-  });
-}
-
-function testDeleteTransition() {
-  describe('deleteTransition', () => {
-    it('should delete existing transition from the node', () => {
-      service.setProject(demoProjectJSON);
-      const node1 = service.getNodeById('node1');
-      expect(service.nodeHasTransitionToNodeId(node1, 'node2')).toBeTruthy();
-      service.deleteTransition(node1, node1.transitionLogic.transitions[0]);
-      expect(service.nodeHasTransitionToNodeId(node1, 'node2')).toBeFalsy();
     });
   });
 }
@@ -226,38 +175,6 @@ function shouldGetTheBranchLetter() {
   });
 }
 
-function lockNode() {
-  describe('lockNode()', () => {
-    it('should add teacherRemoval constraint to node', () => {
-      service.setProject(teacherProjectJSON);
-      const group1 = service.getNodeById('group1');
-      const periodIdToLock = 123;
-      expect(group1.constraints).toBeUndefined();
-      service.addTeacherRemovalConstraint(group1, periodIdToLock);
-      expect(group1.constraints.length).toEqual(1);
-      const contraintRemovalCriteria = group1.constraints[0].removalCriteria[0];
-      expect(contraintRemovalCriteria.name).toEqual('teacherRemoval');
-      expect(contraintRemovalCriteria.params.periodId).toEqual(periodIdToLock);
-    });
-  });
-}
-
-function unlockNode() {
-  describe('unlockNode()', () => {
-    it('should remove teacherRemoval constraint from node', () => {
-      service.setProject(teacherProjectJSON);
-      const node6 = service.getNodeById('node6');
-      expect(node6.constraints.length).toEqual(2);
-      service.removeTeacherRemovalConstraint(node6, 123);
-      expect(node6.constraints.length).toEqual(1);
-      service.removeTeacherRemovalConstraint(node6, 124);
-      expect(node6.constraints.length).toEqual(0);
-      service.removeTeacherRemovalConstraint(node6, 999);
-      expect(node6.constraints.length).toEqual(0);
-    });
-  });
-}
-
 function getNextAvailableNodeId() {
   describe('getNextAvailableNodeId', () => {
     it('should return the next available node id', () => {
@@ -287,18 +204,6 @@ function shouldReturnTheGroupIdsInTheProject() {
     const groupIdsExpected = ['group0', 'group1', 'group2', 'group3', 'group4', 'group5', 'group6'];
     const groupIdsActual = service.getGroupIds();
     expect(groupIdsActual).toEqual(groupIdsExpected);
-  });
-}
-
-function shouldReturnTheMaxScoreOfTheProject() {
-  it('should return the max score of the project', () => {
-    service.setProject(demoProjectJSON);
-    const demoProjectMaxScoreActual = service.getMaxScore();
-    expect(demoProjectMaxScoreActual).toEqual(9);
-    service.setProject(scootersProjectJSON);
-    const scootersProjectMaxScoreExpected = 18;
-    const scootersProjectMaxScoreActual = service.getMaxScore();
-    expect(scootersProjectMaxScoreActual).toEqual(scootersProjectMaxScoreExpected);
   });
 }
 
@@ -355,17 +260,6 @@ function shouldRemoveSpaces() {
       service.removeSpace('sharePictures');
       expect(spaces.length).toEqual(0);
     });
-  });
-}
-
-function shouldRemoveTransitionsGoingOutOfGroupInChildNodesOfGroup() {
-  it('should remove transitions going out of group in child nodes of group', () => {
-    service.setProject(demoProjectJSON);
-    expect(service.getTransitionsByFromNodeId('node18').length).toEqual(1);
-    expect(service.getTransitionsByFromNodeId('node19').length).toEqual(1);
-    service.removeTransitionsOutOfGroup('group1');
-    expect(service.getTransitionsByFromNodeId('node18').length).toEqual(1);
-    expect(service.getTransitionsByFromNodeId('node19').length).toEqual(0);
   });
 }
 
@@ -468,24 +362,6 @@ function insertNodeAfterInTransitions() {
   });
   it('should be able to insert an activity node after another activity node', () => {
     expectInsertNodeAfterInTransition('group1', 'group2');
-  });
-}
-
-function getComponentPosition() {
-  it('should get the component position by node id and comonent id', () => {
-    service.setProject(scootersProjectJSON);
-    const nullNodeIdResult = service.getComponentPosition(null, '57lxhwfp5r');
-    expect(nullNodeIdResult).toEqual(-1);
-    const nullComponentIdResult = service.getComponentPosition('node13', null);
-    expect(nullComponentIdResult).toEqual(-1);
-    const nodeIdDNEResult = service.getComponentPosition('badNodeId', '57lxhwfp5r');
-    expect(nodeIdDNEResult).toEqual(-1);
-    const componentIdDNEResult = service.getComponentPosition('node13', 'badComponentId');
-    expect(componentIdDNEResult).toEqual(-1);
-    const componentExists = service.getComponentPosition('node13', '57lxhwfp5r');
-    expect(componentExists).toEqual(0);
-    const componentExists2 = service.getComponentPosition('node9', 'mnzx68ix8h');
-    expect(componentExists2).toEqual(1);
   });
 }
 
@@ -746,54 +622,6 @@ function replaceIds() {
       const expectedString = '"node10", "node10", "node2", "node10", "node11", "node11"';
       expect(service.replaceIds(string, 'node1', 'node10')).toEqual(expectedString);
     });
-  });
-}
-
-function moveObjectUp() {
-  describe('moveObjectUp()', () => {
-    beforeEach(() => {
-      objects = [1, 2, 3];
-    });
-    moveObjectUpTopElement();
-    moveObjectUpNotTopElement();
-  });
-}
-
-function moveObjectUpTopElement() {
-  it('should not move an object up when the object is the top element', () => {
-    service.moveObjectUp(objects, 0);
-    expect(objects).toEqual([1, 2, 3]);
-  });
-}
-
-function moveObjectUpNotTopElement() {
-  it('should move an object up when the object is not the top element', () => {
-    service.moveObjectUp(objects, 1);
-    expect(objects).toEqual([2, 1, 3]);
-  });
-}
-
-function moveObjectDown() {
-  describe('moveObjectDown()', () => {
-    beforeEach(() => {
-      objects = [1, 2, 3];
-    });
-    moveObjectDownNotBottomElement();
-    moveObjectDownIsBottomElement();
-  });
-}
-
-function moveObjectDownNotBottomElement() {
-  it('should move an object down when the object is not the bottom element', () => {
-    service.moveObjectDown(objects, 1);
-    expect(objects).toEqual([1, 3, 2]);
-  });
-}
-
-function moveObjectDownIsBottomElement() {
-  it('should not move an object down when the object is the bottom element', () => {
-    service.moveObjectDown(objects, 2);
-    expect(objects).toEqual([1, 2, 3]);
   });
 }
 

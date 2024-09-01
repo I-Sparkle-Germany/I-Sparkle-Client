@@ -2,13 +2,16 @@ import { Component, Input, OnInit, Signal, WritableSignal, computed, signal } fr
 import { DeleteNodeService } from '../../services/deleteNodeService';
 import { TeacherProjectService } from '../../services/teacherProjectService';
 import { TeacherDataService } from '../../services/teacherDataService';
-import * as $ from 'jquery';
+import $ from 'jquery';
 import { Subscription } from 'rxjs';
 import { temporarilyHighlightElement } from '../../common/dom/dom';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SelectNodeEvent } from '../domain/select-node-event';
 import { NodeTypeSelected } from '../domain/node-type-selected';
 import { ExpandEvent } from '../domain/expand-event';
+import { DeleteTranslationsService } from '../../services/deleteTranslationsService';
+import { ComponentContent } from '../../common/ComponentContent';
+import { copy } from '../../common/object/object';
 
 @Component({
   selector: 'project-authoring',
@@ -35,6 +38,7 @@ export class ProjectAuthoringComponent implements OnInit {
 
   constructor(
     private deleteNodeService: DeleteNodeService,
+    private deleteTranslationsService: DeleteTranslationsService,
     private projectService: TeacherProjectService,
     private dataService: TeacherDataService,
     private route: ActivatedRoute,
@@ -84,16 +88,24 @@ export class ProjectAuthoringComponent implements OnInit {
 
   protected deleteSelectedNodes(): void {
     const selectedNodeIds = this.getSelectedNodeIds();
-    const confirmMessage =
-      selectedNodeIds.length === 1
-        ? $localize`Are you sure you want to delete the selected item?`
-        : $localize`Are you sure you want to delete the ${selectedNodeIds.length} selected items?`;
+    const confirmMessage = $localize`Are you sure you want to delete the ${selectedNodeIds.length} selected item(s)?`;
     if (confirm(confirmMessage)) {
+      // get the components before they're removed by the following line
+      const components = this.getComponents(selectedNodeIds);
       selectedNodeIds.forEach((nodeId) => this.deleteNodeService.deleteNode(nodeId));
       this.removeLessonIdToExpandedEntries(selectedNodeIds);
       this.projectService.saveProject();
       this.refreshProject();
+      this.deleteTranslationsService.tryDeleteComponents(components);
     }
+  }
+
+  private getComponents(nodeIds: string[]): ComponentContent[] {
+    return nodeIds.flatMap((nodeId: string) => {
+      return this.projectService.isGroupNode(nodeId)
+        ? this.projectService.getComponentsFromLesson(nodeId)
+        : this.projectService.getComponentsFromStep(nodeId);
+    });
   }
 
   private getSelectedNodeIds(): string[] {
@@ -112,10 +124,11 @@ export class ProjectAuthoringComponent implements OnInit {
   }
 
   private removeLessonIdToExpandedEntries(nodeIds: string[]): void {
-    this.lessonIdToExpanded.mutate((value) => {
+    this.lessonIdToExpanded.update((lessonIdToExpanded) => {
       nodeIds.forEach((nodeId) => {
-        delete value[nodeId];
+        delete lessonIdToExpanded[nodeId];
       });
+      return copy(lessonIdToExpanded);
     });
   }
 
@@ -192,19 +205,21 @@ export class ProjectAuthoringComponent implements OnInit {
   }
 
   private setAllLessonsExpandedValue(expanded: boolean): void {
-    this.lessonIdToExpanded.mutate((value) => {
+    this.lessonIdToExpanded.update((lessonIdToExpanded) => {
       for (const lesson of this.lessons) {
-        value[lesson.id] = expanded;
+        lessonIdToExpanded[lesson.id] = expanded;
       }
       for (const inactiveGroupNode of this.inactiveGroupNodes) {
-        value[inactiveGroupNode.id] = expanded;
+        lessonIdToExpanded[inactiveGroupNode.id] = expanded;
       }
+      return copy(lessonIdToExpanded);
     });
   }
 
   protected onExpandedChanged(event: ExpandEvent): void {
-    this.lessonIdToExpanded.mutate((value) => {
-      value[event.id] = event.expanded;
+    this.lessonIdToExpanded.update((lessonIdToExpanded) => {
+      lessonIdToExpanded[event.id] = event.expanded;
+      return copy(lessonIdToExpanded);
     });
     const lesson = this.lessons
       .concat(this.inactiveGroupNodes)

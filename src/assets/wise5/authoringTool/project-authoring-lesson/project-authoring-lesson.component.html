@@ -13,7 +13,7 @@
       aria-label="Select lesson"
       i18n-aria-label
     >
-      <node-icon-and-title [nodeId]="lesson.id" [showPosition]="showPosition"></node-icon-and-title>
+      <node-icon-and-title [nodeId]="lesson.id" [showPosition]="showPosition" />
     </mat-checkbox>
     <div
       class="lesson-expand-collapse-div"
@@ -23,6 +23,7 @@
     ></div>
     <div class="lesson-buttons" [ngClass]="{ 'lesson-expanded': expanded }" fxLayoutGap="8px">
       <button
+        class="enable-in-translation"
         mat-icon-button
         (click)="setCurrentNode(lesson.id)"
         color="primary"

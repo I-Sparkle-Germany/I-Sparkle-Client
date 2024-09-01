@@ -1,7 +1,7 @@
 'use strict';
 
 import { ConfigService } from './configService';
-import { Injectable } from '@angular/core';
+import { Injectable, WritableSignal, signal } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, Subject, tap } from 'rxjs';
 import { Node } from '../common/Node';
@@ -18,6 +18,8 @@ import { ReferenceComponent } from '../../../app/domain/referenceComponent';
 import { QuestionBank } from '../components/peerChat/peer-chat-question-bank/QuestionBank';
 import { DynamicPrompt } from '../directives/dynamic-prompt/DynamicPrompt';
 import { Component } from '../common/Component';
+import { ProjectLocale } from '../../../app/domain/projectLocale';
+import { Language } from '../../../app/domain/language';
 
 @Injectable()
 export class ProjectService {
@@ -25,6 +27,9 @@ export class ProjectService {
   additionalProcessingFunctionsMap: any = {};
   allPaths: string[][] = [];
   applicationNodes: any = [];
+  private currentLanguageSignal: WritableSignal<Language> = signal(null);
+  readonly currentLanguage = this.currentLanguageSignal.asReadonly();
+
   flattenedProjectAsNodeIds: any = null;
   groupNodes: any[] = [];
   idToNode: any = {};
@@ -38,6 +43,7 @@ export class ProjectService {
   nodeIdToIsInBranchPath: any = {};
   nodeIdsInAnyBranch: any = [];
   nodeIdToBranchPathLetter: any = {};
+  private originalProject: any;
   project: any = null;
   rootNode: any = null;
   transitions: Transition[] = [];
@@ -51,6 +57,10 @@ export class ProjectService {
     protected configService: ConfigService,
     protected pathService: PathService
   ) {}
+
+  getProject(): any {
+    return this.project;
+  }
 
   setProject(project: any): void {
     this.project = project;
@@ -228,6 +238,9 @@ export class ProjectService {
     if (this.project.projectAchievements != null) {
       this.achievements = this.project.projectAchievements;
     }
+    if (this.currentLanguage() == null) {
+      this.currentLanguageSignal.set(this.getLocale().getDefaultLanguage());
+    }
     this.broadcastProjectParsed();
   }
 
@@ -239,6 +252,10 @@ export class ProjectService {
   instantiateDefaults(): void {
     this.project.nodes = this.project.nodes ? this.project.nodes : [];
     this.project.inactiveNodes = this.project.inactiveNodes ? this.project.inactiveNodes : [];
+    this.project.metadata.locale = this.project.metadata.locale ?? {
+      default: 'en_US',
+      supported: []
+    };
   }
 
   private calculateNodeOrderOfProject(): void {
@@ -703,47 +720,23 @@ export class ProjectService {
   }
 
   /**
-   * Get the transition logic for a node
-   * @param fromNodeId the from node id
-   * @returns the transition logic object
-   */
-  getTransitionLogicByFromNodeId(fromNodeId: string): TransitionLogic {
-    return this.getNode(fromNodeId).getTransitionLogic();
-  }
-
-  /**
    * Get the transitions for a node
    * @param fromNodeId the node to get transitions from
    * @returns {Array} an array of transitions
    */
   getTransitionsByFromNodeId(fromNodeId: string): Transition[] {
-    const transitionLogic = this.getTransitionLogicByFromNodeId(fromNodeId);
-    return transitionLogic.transitions ?? [];
+    return this.getNode(fromNodeId).getTransitionLogic().transitions ?? [];
   }
 
   /**
    * Get nodes that have a transition to the given node id
    * @param toNodeId the node id
-   * @returns an array of node objects that transition to the
-   * given node id
+   * @returns an array of node objects that transition to the given node id
    */
-  getNodesByToNodeId(toNodeId: string): any {
-    const nodesByToNodeId = [];
-    if (toNodeId != null) {
-      const nodes = this.project.nodes;
-      for (let node of nodes) {
-        if (this.nodeHasTransitionToNodeId(node, toNodeId)) {
-          nodesByToNodeId.push(node);
-        }
-      }
-      const inactiveNodes = this.getInactiveNodes();
-      for (let inactiveNode of inactiveNodes) {
-        if (this.nodeHasTransitionToNodeId(inactiveNode, toNodeId)) {
-          nodesByToNodeId.push(inactiveNode);
-        }
-      }
-    }
-    return nodesByToNodeId;
+  getNodesByToNodeId(toNodeId: string): any[] {
+    return this.project.nodes
+      .concat(this.getInactiveNodes())
+      .filter((node) => this.nodeHasTransitionToNodeId(node, toNodeId));
   }
 
   getInactiveNodes(): any {
@@ -763,26 +756,14 @@ export class ProjectService {
   }
 
   /**
-   * Get node ids of all the nodes that have a to transition to the given node id
-   * @param toNodeId
-   * @returns all the node ids that have a transition to the given node id
-   */
-  getNodesWithTransitionToNodeId(toNodeId: string): string[] {
-    const nodeIds = [];
-    const nodes = this.getNodesByToNodeId(toNodeId);
-    for (let node of nodes) {
-      nodeIds.push(node.id);
-    }
-    return nodeIds;
-  }
-
-  /**
    * Retrieves the project JSON from Config.projectURL and returns it.
    * If Config.projectURL is undefined, returns null.
    */
   retrieveProject(): Observable<any> {
     return this.makeProjectRequest().pipe(
       tap((projectJSON: any) => {
+        this.originalProject = projectJSON;
+        this.setCurrentLanguage(null);
         this.setProject(projectJSON);
         return projectJSON;
       })
@@ -792,6 +773,7 @@ export class ProjectService {
   retrieveProjectWithoutParsing(): Observable<any> {
     return this.makeProjectRequest().pipe(
       tap((projectJSON: any) => {
+        this.originalProject = projectJSON;
         this.project = projectJSON;
         this.metadata = projectJSON.metadata;
         return projectJSON;
@@ -803,6 +785,10 @@ export class ProjectService {
     const projectURL = this.configService.getConfigParam('projectURL');
     const headers = new HttpHeaders().set('cache-control', 'no-cache');
     return this.http.get(projectURL, { headers: headers });
+  }
+
+  getOriginalProject(): any {
+    return this.originalProject;
   }
 
   getThemePath(): string {
@@ -1168,125 +1154,6 @@ export class ProjectService {
   }
 
   /**
-   * Get the message that describes how to satisfy the criteria
-   * TODO: check if the criteria is satisfied
-   * @param criteria the criteria object that needs to be satisfied
-   * @returns the message to display to the student that describes how to
-   * satisfy the criteria
-   */
-  getCriteriaMessage(criteria: any): string {
-    let message = '';
-
-    if (criteria != null) {
-      const name = criteria.name;
-      const params = criteria.params;
-
-      if (name === 'isCompleted') {
-        const nodeId = params.nodeId;
-        if (nodeId != null) {
-          const nodeTitle = this.getNodePositionAndTitle(nodeId);
-          message += $localize`Complete <b>${nodeTitle}</b>`;
-        }
-      } else if (name === 'isVisited') {
-        const nodeId = params.nodeId;
-        if (nodeId != null) {
-          const nodeTitle = this.getNodePositionAndTitle(nodeId);
-          message += $localize`Visit <b>${nodeTitle}</b>`;
-        }
-      } else if (name === 'isCorrect') {
-        const nodeId = params.nodeId;
-        if (nodeId != null) {
-          const nodeTitle = this.getNodePositionAndTitle(nodeId);
-          message += $localize`Correctly answer <b>${nodeTitle}</b>`;
-        }
-      } else if (name === 'score') {
-        const nodeId = params.nodeId;
-        let nodeTitle = '';
-        let scoresString = '';
-
-        if (nodeId != null) {
-          nodeTitle = this.getNodePositionAndTitle(nodeId);
-        }
-
-        const scores = params.scores;
-        if (scores != null) {
-          scoresString = scores.join(', ');
-        }
-        message += $localize`Obtain a score of <b>${scoresString}</b> on <b>${nodeTitle}</b>`;
-      } else if (name === 'choiceChosen') {
-        const nodeId = params.nodeId;
-        const componentId = params.componentId;
-        const choiceIds = params.choiceIds;
-        let nodeTitle = this.getNodePositionAndTitle(nodeId);
-        let choices = this.getChoiceText(nodeId, componentId, choiceIds);
-        let choiceText = choices.join(', ');
-        message += $localize`You must choose "${choiceText}" on "${nodeTitle}"`;
-      } else if (name === 'usedXSubmits') {
-        const nodeId = params.nodeId;
-        let nodeTitle = '';
-
-        const requiredSubmitCount = params.requiredSubmitCount;
-
-        if (nodeId != null) {
-          nodeTitle = this.getNodePositionAndTitle(nodeId);
-        }
-
-        if (requiredSubmitCount == 1) {
-          message += $localize`Submit <b>${requiredSubmitCount}</b> time on <b>${nodeTitle}</b>`;
-        } else {
-          message += $localize`Submit <b>${requiredSubmitCount}</b> times on <b>${nodeTitle}</b>`;
-        }
-      } else if (name === 'branchPathTaken') {
-        const fromNodeId = params.fromNodeId;
-        const fromNodeTitle = this.getNodePositionAndTitle(fromNodeId);
-        const toNodeId = params.toNodeId;
-        const toNodeTitle = this.getNodePositionAndTitle(toNodeId);
-        message += $localize`Take the branch path from <b>${fromNodeTitle}</b> to <b>${toNodeTitle}</b>`;
-      } else if (name === 'wroteXNumberOfWords') {
-        const nodeId = params.nodeId;
-        if (nodeId != null) {
-          const requiredNumberOfWords = params.requiredNumberOfWords;
-          const nodeTitle = this.getNodePositionAndTitle(nodeId);
-          message += $localize`Write <b>${requiredNumberOfWords}</b> words on <b>${nodeTitle}</b>`;
-        }
-      } else if (name === 'isVisible') {
-        const nodeId = params.nodeId;
-        if (nodeId != null) {
-          const nodeTitle = this.getNodePositionAndTitle(nodeId);
-          message += $localize`"${nodeTitle}" is visible`;
-        }
-      } else if (name === 'isVisitable') {
-        const nodeId = params.nodeId;
-        if (nodeId != null) {
-          const nodeTitle = this.getNodePositionAndTitle(nodeId);
-          message += $localize`"${nodeTitle}" is visitable`;
-        }
-      } else if (name === 'addXNumberOfNotesOnThisStep') {
-        const nodeId = params.nodeId;
-        const requiredNumberOfNotes = params.requiredNumberOfNotes;
-        const nodeTitle = this.getNodePositionAndTitle(nodeId);
-        if (requiredNumberOfNotes == 1) {
-          message += $localize`Add <b>${requiredNumberOfNotes}</b> note on <b>${nodeTitle}</b>`;
-        } else {
-          message += $localize`Add <b>${requiredNumberOfNotes}</b> notes on <b>${nodeTitle}</b>`;
-        }
-      } else if (name === 'fillXNumberOfRows') {
-        const requiredNumberOfFilledRows = params.requiredNumberOfFilledRows;
-        const nodeId = params.nodeId;
-        const nodeTitle = this.getNodePositionAndTitle(nodeId);
-        if (requiredNumberOfFilledRows == 1) {
-          message += $localize`You must fill in <b>${requiredNumberOfFilledRows}</b> row in the <b>Table</b> on <b>${nodeTitle}</b>`;
-        } else {
-          message += $localize`You must fill in <b>${requiredNumberOfFilledRows}</b> rows in the <b>Table</b> on <b>${nodeTitle}</b>`;
-        }
-      } else if (name === 'teacherRemoval') {
-        message += $localize`Wait for your teacher to unlock the item`;
-      }
-    }
-    return message;
-  }
-
-  /**
    * Get the choices of a Multiple Choice component.
    * @param nodeId The node id.
    * @param componentId The component id.
@@ -1393,9 +1260,9 @@ export class ProjectService {
     return componentService.componentHasWork(component);
   }
 
-  calculateComponentIdToHasWork(
-    components: ComponentContent[]
-  ): { [componentId: string]: boolean } {
+  calculateComponentIdToHasWork(components: ComponentContent[]): {
+    [componentId: string]: boolean;
+  } {
     const componentIdToHasWork: { [componentId: string]: boolean } = {};
     for (const component of components) {
       componentIdToHasWork[component.id] = this.componentHasWork(component);
@@ -1997,6 +1864,18 @@ export class ProjectService {
     const nodeId = content.getReferenceNodeId();
     const componentId = content.getReferenceComponentId();
     return new Component(this.getComponent(nodeId, componentId), nodeId);
+  }
+
+  getLocale(): ProjectLocale {
+    return new ProjectLocale(this.project.metadata.locale);
+  }
+
+  setCurrentLanguage(language: Language): void {
+    this.currentLanguageSignal.set(language);
+  }
+
+  isDefaultLocale(): boolean {
+    return this.getLocale().isDefaultLocale(this.currentLanguage().locale);
   }
 
   getSpeechToTextSettings(): any {

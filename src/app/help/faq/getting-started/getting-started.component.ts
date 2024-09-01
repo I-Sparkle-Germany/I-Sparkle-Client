@@ -1,10 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import { ConfigService } from '../../../services/config.service';
+import { Component } from '@angular/core';
 import { FaqComponent } from '../faq.component';
+import { MatDividerModule } from '@angular/material/divider';
+import { CallToActionComponent } from '../../../modules/shared/call-to-action/call-to-action.component';
+import { MatIconModule } from '@angular/material/icon';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 @Component({
-  selector: 'app-getting-started',
-  templateUrl: './getting-started.component.html',
-  styleUrls: ['../../help.component.scss']
+  imports: [CallToActionComponent, FlexLayoutModule, MatDividerModule, MatIconModule],
+  standalone: true,
+  styleUrls: ['../../help.component.scss'],
+  templateUrl: './getting-started.component.html'
 })
 export class GettingStartedComponent extends FaqComponent {}

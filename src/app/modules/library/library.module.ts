@@ -48,8 +48,15 @@ import { ShareProjectDialogComponent } from './share-project-dialog/share-projec
 import { CopyProjectDialogComponent } from './copy-project-dialog/copy-project-dialog.component';
 import { LibraryPaginatorIntl } from './libraryPaginatorIntl';
 import { DiscourseCategoryActivityComponent } from './discourse-category-activity/discourse-category-activity.component';
-import { SelectAllItemsCheckboxComponent } from './select-all-items-checkbox/select-all-items-checkbox.component';
 import { ArchiveProjectsButtonComponent } from '../../teacher/archive-projects-button/archive-projects-button.component';
+import { SearchBarComponent } from '../shared/search-bar/search-bar.component';
+import { SelectAllItemsCheckboxComponent } from './select-all-items-checkbox/select-all-items-checkbox.component';
+import { ApplyTagsButtonComponent } from '../../teacher/apply-tags-button/apply-tags-button.component';
+import { SelectTagsComponent } from '../../teacher/select-tags/select-tags.component';
+import { MatChipsModule } from '@angular/material/chips';
+import { SelectMenuComponent } from '../shared/select-menu/select-menu.component';
+import { UnitTagsComponent } from '../../teacher/unit-tags/unit-tags.component';
+import { ProjectTagService } from '../../../assets/wise5/services/projectTagService';
 
 const materialModules = [
   MatAutocompleteModule,
@@ -57,6 +64,7 @@ const materialModules = [
   MatButtonModule,
   MatCardModule,
   MatCheckboxModule,
+  MatChipsModule,
   MatDialogModule,
   MatDividerModule,
   MatExpansionModule,
@@ -74,21 +82,28 @@ const materialModules = [
 
 @NgModule({
   imports: [
+    ApplyTagsButtonComponent,
     ArchiveProjectsButtonComponent,
     CommonModule,
+    DiscourseCategoryActivityComponent,
     FlexLayoutModule,
     FormsModule,
+    LibraryProjectDisciplinesComponent,
     ReactiveFormsModule,
     RouterModule,
     materialModules,
+    SearchBarComponent,
+    SelectAllItemsCheckboxComponent,
+    SelectMenuComponent,
+    SelectTagsComponent,
     SharedModule,
-    TimelineModule
+    TimelineModule,
+    UnitTagsComponent
   ],
   declarations: [
     LibraryGroupThumbsComponent,
     LibraryProjectComponent,
     LibraryProjectDetailsComponent,
-    LibraryProjectDisciplinesComponent,
     LibraryProjectMenuComponent,
     LibraryFiltersComponent,
     HomePageProjectLibraryComponent,
@@ -99,17 +114,20 @@ const materialModules = [
     CommunityLibraryDetailsComponent,
     PersonalLibraryComponent,
     PersonalLibraryDetailsComponent,
-    SelectAllItemsCheckboxComponent,
     ShareProjectDialogComponent,
-    CopyProjectDialogComponent,
-    DiscourseCategoryActivityComponent
+    CopyProjectDialogComponent
   ],
   exports: [
     HomePageProjectLibraryComponent,
     ReactiveFormsModule,
     TeacherProjectLibraryComponent,
+    UnitTagsComponent,
     materialModules
   ],
-  providers: [LibraryService, { provide: MatPaginatorIntl, useClass: LibraryPaginatorIntl }]
+  providers: [
+    LibraryService,
+    { provide: MatPaginatorIntl, useClass: LibraryPaginatorIntl },
+    ProjectTagService
+  ]
 })
 export class LibraryModule {}

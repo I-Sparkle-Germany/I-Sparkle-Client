@@ -1,5 +1,5 @@
+@use '@angular/material' as mat;
 @import
-  '@angular/material/theming',
   'style/abstracts/variables',
   'style/abstracts/mixins',
   'style/abstracts/functions';
@@ -16,5 +16,10 @@
 
 .notice {
   max-width: none;
+}
+
+.content-block {
+  padding: 16px;
+  border-radius: 0;
 }
 

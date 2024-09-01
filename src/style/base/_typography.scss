@@ -2,15 +2,15 @@
 
 $family: Tahoma, Geneva, Verdana, sans-serif;
 
-$wise-typography: mat.define-typography-config(
+$wise-typography: mat.m2-define-typography-config(
   $font-family: $family,
-  $body-1: mat.define-typography-level(16px, 22px, 600),
-  $body-2: mat.define-typography-level(16px, 22px, 400),
-  $caption: mat.define-typography-level(14px, 20px, 400),
-  $headline-5: mat.define-typography-level(24px, 32px, 600),
-  $subtitle-1: mat.define-typography-level(17px, 24px, 600),
-  $subtitle-2: mat.define-typography-level(17px, 24px, 400),
-  $button: mat.define-typography-level(14px, 14px, 600, $letter-spacing: 'normal'),
+  $body-1: mat.m2-define-typography-level(16px, 22px, 600),
+  $body-2: mat.m2-define-typography-level(16px, 22px, 400),
+  $caption: mat.m2-define-typography-level(14px, 20px, 400),
+  $headline-5: mat.m2-define-typography-level(24px, 32px, 600),
+  $subtitle-1: mat.m2-define-typography-level(17px, 24px, 600),
+  $subtitle-2: mat.m2-define-typography-level(17px, 24px, 400),
+  $button: mat.m2-define-typography-level(14px, 14px, 600, $letter-spacing: 'normal'),
 );
 
 textarea {

@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { MatDialogModule } from '@angular/material/dialog';
 import { TeacherProjectService } from '../../services/teacherProjectService';
 import { StudentTeacherCommonServicesModule } from '../../../../app/student-teacher-common-services.module';
@@ -11,6 +11,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { MatInputModule } from '@angular/material/input';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('AddProjectComponent', () => {
   let component: AddProjectComponent;
@@ -18,9 +19,9 @@ describe('AddProjectComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [AddProjectComponent],
+      schemas: [NO_ERRORS_SCHEMA],
       imports: [
         BrowserAnimationsModule,
-        HttpClientTestingModule,
         MatDialogModule,
         MatDividerModule,
         MatFormFieldModule,
@@ -29,8 +30,11 @@ describe('AddProjectComponent', () => {
         ReactiveFormsModule,
         StudentTeacherCommonServicesModule
       ],
-      providers: [TeacherProjectService],
-      schemas: [NO_ERRORS_SCHEMA]
+      providers: [
+        TeacherProjectService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+      ]
     }).compileComponents();
     fixture = TestBed.createComponent(AddProjectComponent);
     component = fixture.componentInstance;

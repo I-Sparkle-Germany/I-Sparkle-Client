@@ -7,10 +7,11 @@ import { NodeAdvancedAuthoringComponent } from './node-advanced-authoring/node-a
 import { NodeAdvancedPathAuthoringComponent } from './path/node-advanced-path-authoring.component';
 import { StudentTeacherCommonModule } from '../../../../../app/student-teacher-common.module';
 import { NodeConstraintAuthoringComponent } from '../../constraint/node-constraint-authoring/node-constraint-authoring.component';
-import { ConstraintAuthoringModule } from '../../constraint/constraint-authoring.module';
 import { EditNodeRubricComponent } from '../editRubric/edit-node-rubric.component';
 import { WiseTinymceEditorModule } from '../../../directives/wise-tinymce-editor/wise-tinymce-editor.module';
 import { RouterModule } from '@angular/router';
+import { TranslatableRichTextEditorComponent } from '../../components/translatable-rich-text-editor/translatable-rich-text-editor.component';
+import { RequiredErrorLabelComponent } from './required-error-label/required-error-label.component';
 
 @NgModule({
   declarations: [
@@ -20,8 +21,7 @@ import { RouterModule } from '@angular/router';
     NodeAdvancedConstraintAuthoringComponent,
     NodeAdvancedGeneralAuthoringComponent,
     NodeAdvancedJsonAuthoringComponent,
-    NodeAdvancedPathAuthoringComponent,
-    NodeConstraintAuthoringComponent
+    NodeAdvancedPathAuthoringComponent
   ],
   exports: [
     EditNodeRubricComponent,
@@ -30,13 +30,14 @@ import { RouterModule } from '@angular/router';
     NodeAdvancedConstraintAuthoringComponent,
     NodeAdvancedGeneralAuthoringComponent,
     NodeAdvancedJsonAuthoringComponent,
-    NodeAdvancedPathAuthoringComponent,
-    NodeConstraintAuthoringComponent
+    NodeAdvancedPathAuthoringComponent
   ],
   imports: [
-    ConstraintAuthoringModule,
+    NodeConstraintAuthoringComponent,
+    RequiredErrorLabelComponent,
     RouterModule,
     StudentTeacherCommonModule,
+    TranslatableRichTextEditorComponent,
     WiseTinymceEditorModule
   ]
 })

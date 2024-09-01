@@ -22,7 +22,6 @@ export class TeacherDataService extends DataService {
   currentWorkgroup = null;
   currentStep = null;
   previousStep = null;
-  runStatus = null;
   periods = [];
   nodeGradingSort = 'team';
   studentGradingSort = 'step';
@@ -30,7 +29,8 @@ export class TeacherDataService extends DataService {
   private currentPeriodChangedSource: Subject<any> = new Subject<any>();
   public currentPeriodChanged$: Observable<any> = this.currentPeriodChangedSource.asObservable();
   private currentWorkgroupChangedSource: Subject<any> = new Subject<any>();
-  public currentWorkgroupChanged$: Observable<any> = this.currentWorkgroupChangedSource.asObservable();
+  public currentWorkgroupChanged$: Observable<any> =
+    this.currentWorkgroupChangedSource.asObservable();
 
   constructor(
     private http: HttpClient,
@@ -62,12 +62,6 @@ export class TeacherDataService extends DataService {
     this.TeacherWebSocketService.newStudentWorkReceived$.subscribe(({ studentWork }) => {
       this.addOrUpdateComponentState(studentWork);
       this.broadcastStudentWorkReceived({ studentWork: studentWork });
-    });
-
-    this.ConfigService.configRetrieved$.subscribe(() => {
-      if (this.ConfigService.isClassroomMonitor()) {
-        this.retrieveRunStatus();
-      }
     });
   }
 
@@ -158,7 +152,7 @@ export class TeacherDataService extends DataService {
       projectId: this.ConfigService.getProjectId(),
       runId: this.ConfigService.getRunId(),
       workgroupId: this.ConfigService.getWorkgroupId(),
-      clientSaveTime: Date.parse(new Date().toString()),
+      clientSaveTime: new Date().getTime(),
       context: context,
       nodeId: nodeId,
       componentId: componentId,
@@ -394,19 +388,6 @@ export class TeacherDataService extends DataService {
     return -1;
   }
 
-  retrieveRunStatus(): Observable<any> {
-    const options = {
-      params: new HttpParams().set('runId', this.ConfigService.getConfigParam('runId')),
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-    };
-    return this.http.get(this.ConfigService.getConfigParam('runStatusURL'), options).pipe(
-      tap((runStatus: any) => {
-        this.runStatus = runStatus;
-        this.initializePeriods();
-      })
-    );
-  }
-
   getComponentStatesByWorkgroupId(workgroupId) {
     return this.studentData.componentStatesByWorkgroupId[workgroupId] || [];
   }
@@ -567,31 +548,6 @@ export class TeacherDataService extends DataService {
     }
   }
 
-  private initializePeriods(): void {
-    const periods = [...this.ConfigService.getPeriods()];
-    if (this.currentPeriod == null) {
-      this.setCurrentPeriod(periods[0]);
-    }
-    periods.unshift({ periodId: -1, periodName: $localize`All Periods` });
-    let mergedPeriods = periods;
-    if (this.runStatus.periods != null) {
-      mergedPeriods = this.mergeConfigAndRunStatusPeriods(periods, this.runStatus.periods);
-    }
-    this.periods = mergedPeriods;
-    this.runStatus.periods = mergedPeriods;
-  }
-
-  private mergeConfigAndRunStatusPeriods(configPeriods: any[], runStatusPeriods: any[]): any[] {
-    const mergedPeriods = [];
-    configPeriods.forEach((configPeriod) => {
-      const runStatusPeriod = runStatusPeriods.find(
-        (runStatusPeriod) => runStatusPeriod.periodId === configPeriod.periodId
-      );
-      mergedPeriods.push(runStatusPeriod != null ? runStatusPeriod : configPeriod);
-    });
-    return mergedPeriods;
-  }
-
   setCurrentPeriod(period) {
     const previousPeriod = this.currentPeriod;
     this.currentPeriod = period;
@@ -629,12 +585,12 @@ export class TeacherDataService extends DataService {
     return this.currentPeriod.periodId;
   }
 
-  getPeriods() {
+  getPeriods(): any[] {
     return this.periods;
   }
 
-  getRunStatus() {
-    return this.runStatus;
+  setPeriods(periods: any[]): void {
+    this.periods = periods;
   }
 
   getVisiblePeriodsById(currentPeriodId: number): any {
@@ -674,84 +630,6 @@ export class TeacherDataService extends DataService {
 
   private getPeriodById(periodId: number): any {
     return this.getPeriods().find((period) => period.periodId === periodId);
-  }
-
-  /**
-   * The pause screen status was changed for the given periodId. Update period accordingly.
-   * @param periodId the id of the period to toggle
-   * @param isPaused Boolean whether the period should be paused or not
-   */
-  pauseScreensChanged(periodId: number, isPaused: boolean): void {
-    this.updatePausedRunStatusValue(periodId, isPaused);
-    this.saveRunStatusThenHandlePauseScreen(periodId, isPaused);
-    const context = 'ClassroomMonitor',
-      nodeId = null,
-      componentId = null,
-      componentType = null,
-      category = 'TeacherAction',
-      data = { periodId: periodId },
-      event = isPaused ? 'pauseScreen' : 'unPauseScreen';
-    this.saveEvent(context, nodeId, componentId, componentType, category, event, data);
-  }
-
-  private saveRunStatusThenHandlePauseScreen(periodId: number, isPaused: boolean): void {
-    this.saveRunStatus().subscribe(() => {
-      if (isPaused) {
-        this.TeacherWebSocketService.pauseScreens(periodId);
-      } else {
-        this.TeacherWebSocketService.unPauseScreens(periodId);
-      }
-    });
-  }
-
-  private saveRunStatus(): Observable<void> {
-    const url = this.ConfigService.getConfigParam('runStatusURL');
-    const body = new HttpParams()
-      .set('runId', this.ConfigService.getConfigParam('runId'))
-      .set('status', JSON.stringify(this.runStatus));
-    const options = {
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-    };
-    return this.http.post<void>(url, body, options);
-  }
-
-  /**
-   * Update the paused value for a period in our run status
-   * @param periodId the period id or -1 for all periods
-   * @param isPaused whether the period is paused or not
-   */
-  private updatePausedRunStatusValue(periodId: number, isPaused: boolean): void {
-    if (this.runStatus == null) {
-      this.runStatus = this.createRunStatus();
-    }
-    if (periodId === -1) {
-      this.updateAllPeriodsPausedValue(isPaused);
-    } else {
-      this.updatePeriodPausedValue(periodId, isPaused);
-    }
-  }
-
-  private createRunStatus(): any {
-    const periods = this.ConfigService.getPeriods();
-    periods.forEach((period) => (period.paused = false));
-    return {
-      runId: this.ConfigService.getConfigParam('runId'),
-      periods: periods
-    };
-  }
-
-  private updateAllPeriodsPausedValue(isPaused: boolean): void {
-    for (const period of this.runStatus.periods) {
-      period.paused = isPaused;
-    }
-  }
-
-  private updatePeriodPausedValue(periodId: number, isPaused: boolean): void {
-    for (const period of this.runStatus.periods) {
-      if (period.periodId === periodId) {
-        period.paused = isPaused;
-      }
-    }
   }
 
   isWorkgroupShown(workgroup): boolean {

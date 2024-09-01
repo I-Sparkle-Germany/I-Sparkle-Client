@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { ProjectService } from '../../assets/wise5/services/projectService';
 import { ConfigService } from '../../assets/wise5/services/configService';
 import branchSpansMultipleActivitiesJSON_import from './sampleData/curriculum/BranchSpansActivities.project.json';
@@ -12,6 +12,7 @@ import { PeerGrouping } from '../domain/peerGrouping';
 import { StudentTeacherCommonServicesModule } from '../student-teacher-common-services.module';
 import { EmbeddedContent } from '../../assets/wise5/components/embedded/EmbeddedContent';
 import { copy } from '../../assets/wise5/common/object/object';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 const projectIdDefault = 1;
 const projectBaseURL = 'http://localhost:8080/curriculum/12345/';
@@ -30,7 +31,8 @@ let twoLessonsProjectJSON: any;
 describe('ProjectService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, StudentTeacherCommonServicesModule]
+      imports: [StudentTeacherCommonServicesModule],
+      providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
     });
     http = TestBed.inject(HttpTestingController);
     configService = TestBed.inject(ConfigService);
@@ -87,7 +89,6 @@ describe('ProjectService', () => {
   // MARK: Tests for Node and Group Id functions
   // TODO: add test for service.getNodePositionAndTitle()
   // TODO: add test for service.deconsteNode()
-  // TODO: add test for service.removeNodeIdFromTransitions()
   // TODO: add test for service.removeNodeIdFromGroups()
   // TODO: add test for service.createComponent()
   // TODO: add test for service.addComponentToNode()
@@ -514,7 +515,8 @@ function calculateNodeNumbersWhenNoLessons(): void {
       service.project = {
         nodes: [{ id: 'group0', type: 'group', ids: [], startId: '' }],
         startNodeId: 'group0',
-        startGroupId: 'group0'
+        startGroupId: 'group0',
+        metadata: {}
       };
       service.parseProject();
       expectNodeIdsToHaveNumbers([{ nodeId: 'group0', number: '0' }]);

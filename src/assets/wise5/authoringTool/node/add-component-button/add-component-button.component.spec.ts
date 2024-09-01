@@ -1,19 +1,21 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AddComponentButtonComponent } from './add-component-button.component';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
+import { CreateComponentService } from '../../../services/createComponentService';
 import { TeacherProjectService } from '../../../services/teacherProjectService';
-import { RouterTestingModule } from '@angular/router/testing';
-import { MatIconModule } from '@angular/material/icon';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { HarnessLoader } from '@angular/cdk/testing';
 import { MatButtonHarness } from '@angular/material/button/testing';
 import { ChooseNewComponent } from '../../../../../app/authoring-tool/add-component/choose-new-component/choose-new-component.component';
 import { of } from 'rxjs';
 import { Node } from '../../../common/Node';
+import { provideRouter } from '@angular/router';
 
 class MockTeacherProjectService {
-  createComponent() {}
   saveProject() {}
+}
+class MockCreateComponentService {
+  create() {}
 }
 let loader: HarnessLoader;
 describe('AddComponentButtonComponent', () => {
@@ -22,9 +24,12 @@ describe('AddComponentButtonComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [AddComponentButtonComponent],
-      imports: [MatDialogModule, MatIconModule, RouterTestingModule],
-      providers: [{ provide: TeacherProjectService, useClass: MockTeacherProjectService }]
+      imports: [AddComponentButtonComponent],
+      providers: [
+        { provide: CreateComponentService, useClass: MockCreateComponentService },
+        { provide: TeacherProjectService, useClass: MockTeacherProjectService },
+        provideRouter([])
+      ]
     });
     fixture = TestBed.createComponent(AddComponentButtonComponent);
     component = fixture.componentInstance;
@@ -39,7 +44,7 @@ describe('AddComponentButtonComponent', () => {
         afterClosed: () => of({ action: 'create', componentType: 'OpenResponse' })
       } as any);
       const projectService = TestBed.inject(TeacherProjectService);
-      const createComponentSpy = spyOn(projectService, 'createComponent');
+      const createComponentSpy = spyOn(TestBed.inject(CreateComponentService), 'create');
       const saveProjectSpy = spyOn(projectService, 'saveProject');
       await (await loader.getHarness(MatButtonHarness)).click();
       expect(dialogSpy).toHaveBeenCalledWith(ChooseNewComponent, {

@@ -1,6 +1,6 @@
 <div class="library library-teacher">
   <div class="controls library__header library-teacher__header mat-app-background">
-    <app-library-filters></app-library-filters>
+    <app-library-filters />
     <mat-divider class="library-teacher-divider"></mat-divider>
   </div>
   <div class="library__content library-teacher__content">
@@ -22,9 +22,9 @@
       </a>
     </nav>
     <div class="container-bg">
-      <app-official-library [hidden]="!isOfficialRoute()"></app-official-library>
-      <app-community-library [hidden]="!isCommunityRoute()"></app-community-library>
-      <app-personal-library [hidden]="!isPersonalRoute()"></app-personal-library>
+      <app-official-library [hidden]="!isOfficialRoute()" />
+      <app-community-library [hidden]="!isCommunityRoute()" />
+      <app-personal-library [hidden]="!isPersonalRoute()" />
     </div>
   </div>
 </div>

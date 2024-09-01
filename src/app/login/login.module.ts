@@ -5,14 +5,13 @@ import { LoginHomeComponent } from './login-home/login-home.component';
 import { LoginRoutingModule } from './login-routing.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RecaptchaModule, RecaptchaFormsModule } from 'ng-recaptcha';
+import { RecaptchaModule, RecaptchaFormsModule } from 'ng-recaptcha-2';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { GoogleSignInModule } from '../modules/google-sign-in/google-sign-in.module';
 import { StandaloneLogoComponent } from '../common/standalone-logo/standalone-logo.comonent';
 
 const materialModules = [
@@ -29,7 +28,6 @@ const materialModules = [
     CommonModule,
     FlexLayoutModule,
     FormsModule,
-    GoogleSignInModule,
     LoginRoutingModule,
     ReactiveFormsModule,
     materialModules,
