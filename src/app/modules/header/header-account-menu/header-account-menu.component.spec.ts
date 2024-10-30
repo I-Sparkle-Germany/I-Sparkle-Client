@@ -4,9 +4,10 @@ import { User } from '../../../domain/user';
 import { MatMenuModule } from '@angular/material/menu';
 import { ConfigService } from '../../../services/config.service';
 import { Observable } from 'rxjs';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { Config } from '../../../domain/config';
+import { provideRouter } from '@angular/router';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 export class MockConfigService {
   getConfig(): Observable<Config> {
@@ -29,11 +30,9 @@ describe('HeaderAccountMenuComponent', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        declarations: [HeaderAccountMenuComponent],
-        imports: [HttpClientTestingModule, MatMenuModule],
-        providers: [{ provide: ConfigService, useClass: MockConfigService }],
-        schemas: [NO_ERRORS_SCHEMA]
-      }).compileComponents();
+    imports: [HeaderAccountMenuComponent, MatMenuModule],
+    providers: [{ provide: ConfigService, useClass: MockConfigService }, provideRouter([]), provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+}).compileComponents();
     })
   );
 

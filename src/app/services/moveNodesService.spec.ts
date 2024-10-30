@@ -3,8 +3,10 @@ import { MoveNodesService } from '../../assets/wise5/services/moveNodesService';
 import { copy } from '../../assets/wise5/common/object/object';
 import demoProjectJSON_import from './sampleData/curriculum/Demo.project.json';
 import { TeacherProjectService } from '../../assets/wise5/services/teacherProjectService';
+import { RemoveNodeIdFromTransitionsService } from '../../assets/wise5/services/removeNodeIdFromTransitionsService';
 import { StudentTeacherCommonServicesModule } from '../student-teacher-common-services.module';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 let demoProjectJSON: any;
 const inactiveLessonId1 = 'group6';
@@ -15,8 +17,14 @@ let teacherProjectService: TeacherProjectService;
 describe('MoveNodesService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, StudentTeacherCommonServicesModule],
-      providers: [MoveNodesService, TeacherProjectService]
+      imports: [StudentTeacherCommonServicesModule],
+      providers: [
+        MoveNodesService,
+        RemoveNodeIdFromTransitionsService,
+        TeacherProjectService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+      ]
     });
     service = TestBed.inject(MoveNodesService);
     demoProjectJSON = copy(demoProjectJSON_import);

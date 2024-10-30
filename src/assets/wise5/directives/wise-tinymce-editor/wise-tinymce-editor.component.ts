@@ -1,35 +1,36 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { debounceTime } from 'rxjs/operators';
 import { Subject, Subscription } from 'rxjs';
 import { NotebookService } from '../../services/notebookService';
+import { EditorModule } from '@tinymce/tinymce-angular';
 import 'tinymce';
+import { EditorComponent } from '@tinymce/tinymce-angular';
+import { Language } from '../../../../app/domain/language';
 
 declare let tinymce: any;
 
 @Component({
   selector: 'wise-tinymce-editor',
-  styleUrls: ['wise-tinymce-editor.component.scss'],
-  templateUrl: 'wise-tinymce-editor.component.html'
+  styleUrl: 'wise-tinymce-editor.component.scss',
+  templateUrl: 'wise-tinymce-editor.component.html',
+  standalone: true,
+  imports: [EditorModule]
 })
 export class WiseTinymceEditorComponent {
-  public editor: any;
   public config: any;
-  private previousContent: string;
-
-  @Input()
-  model: any;
-
-  @Input()
-  isAddNoteButtonAvailable: boolean;
-
-  @Output()
-  modelChange: EventEmitter<string> = new EventEmitter<string>();
-
-  @Output()
-  openNotebook: EventEmitter<string> = new EventEmitter<string>();
-
   private debouncer: Subject<string> = new Subject<string>();
-  subscriptions: Subscription = new Subscription();
+  @Input() disabled: boolean;
+  public editor: any;
+  @ViewChild(EditorComponent) editorComponent: EditorComponent;
+  @Input() isAddNoteButtonAvailable: boolean;
+  @Input() language: Language;
+  @Input() model: any;
+  @Output() modelChange: EventEmitter<string> = new EventEmitter<string>();
+  @Output() openNotebook: EventEmitter<string> = new EventEmitter<string>();
+  private previousContent: string;
+  private subscriptions: Subscription = new Subscription();
+  protected toolbar: string = `undo redo | bold italic underline | numlist bullist`;
+  protected toolbarGroups: any;
 
   protected aValidAttributes: string =
     'a[href|download|referrerpolicy|rel|target|type|style|' +
@@ -40,7 +41,6 @@ export class WiseTinymceEditorComponent {
     'onmouseover|onmouseup|style|tabindex|title|type|value|wiselink|node-id|component-id|' +
     'link-text]';
   protected extendedValidElements: string = `${this.aValidAttributes},${this.buttonValidAttributes}`;
-
   protected plugins: string[] = [
     'advlist',
     'anchor',
@@ -79,10 +79,7 @@ export class WiseTinymceEditorComponent {
     'wordcount'
   ];
 
-  protected toolbar: string = `undo redo | bold italic underline | numlist bullist`;
-  protected toolbarGroups: any;
-
-  constructor(private NotebookService: NotebookService) {
+  constructor(private notebookService: NotebookService) {
     this.subscriptions.add(
       this.debouncer.pipe(debounceTime(1000)).subscribe((value) => {
         this.modelChange.emit(value);
@@ -93,7 +90,7 @@ export class WiseTinymceEditorComponent {
   ngOnInit(): void {
     if (this.isAddNoteButtonAvailable) {
       this.subscriptions.add(
-        this.NotebookService.notebookItemChosen$.subscribe(({ requester, notebookItem }) => {
+        this.notebookService.notebookItemChosen$.subscribe(({ requester, notebookItem }) => {
           if (requester === 'report') {
             this.insertWISENote(notebookItem);
           }
@@ -106,11 +103,30 @@ export class WiseTinymceEditorComponent {
     this.initializeTinyMCE();
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (this.editorComponent) {
+      if (
+        changes.model &&
+        changes.model.currentValue !== this.editorComponent.editor.getContent()
+      ) {
+        this.editorComponent.editor.setContent(changes.model.currentValue ?? '');
+      }
+      if (changes.language && !this.model) {
+        // handles an edge case in the AT translation mode where
+        // 1. show lang1 (original value: undefined)
+        // 2. translate lang1 (set value to 'XYZ')
+        // 3. switch to lang2 (original value: undefined)
+        // should show empty editor, but is showing 'XYZ'
+        this.editorComponent.editor.setContent('');
+      }
+    }
+  }
+
   addPluginName(pluginName: string): void {
     this.plugins.push(pluginName);
   }
 
-  initializeTinyMCE(): void {
+  protected initializeTinyMCE(): void {
     this.config = {
       base_url: '/tinymce',
       suffix: '.min',
@@ -122,9 +138,9 @@ export class WiseTinymceEditorComponent {
       media_live_embeds: true,
       extended_valid_elements: this.extendedValidElements,
       font_formats: `Roboto=Roboto,Helvetica Neue,sans-serif; Raleway=Raleway,sans-serif;
-        Arial=arial,helvetica,sans-serif; Arial Black=arial black,avant garde; 
-        Comic Sans MS=comic sans ms,sans-serif; Courier New=courier new,courier; Georgia=georgia,palatino; 
-        Helvetica=helvetica; Impact=impact,chicago; Tahoma=tahoma,arial,helvetica,sans-serif; 
+        Arial=arial,helvetica,sans-serif; Arial Black=arial black,avant garde;
+        Comic Sans MS=comic sans ms,sans-serif; Courier New=courier new,courier; Georgia=georgia,palatino;
+        Helvetica=helvetica; Impact=impact,chicago; Tahoma=tahoma,arial,helvetica,sans-serif;
         Terminal=terminal,monaco; Times New Roman=times new roman,times; Verdana=verdana,geneva`,
       plugins: this.plugins,
       quickbars_insert_toolbar: false,
@@ -155,7 +171,7 @@ export class WiseTinymceEditorComponent {
     };
   }
 
-  initializeInsertWISENotePlugin(): void {
+  private initializeInsertWISENotePlugin(): void {
     const thisWiseTinymceEditorComponent = this;
     tinymce.PluginManager.add('wisenote', function (editor: any, url: string) {
       thisWiseTinymceEditorComponent.editor = editor;
@@ -169,7 +185,7 @@ export class WiseTinymceEditorComponent {
     });
   }
 
-  insertWISENote(notebookItem: any): void {
+  private insertWISENote(notebookItem: any): void {
     const attachmentURLs = this.getAttachmentURLs(notebookItem);
     const text = this.getText(notebookItem);
     let noteContent = this.getAttachmentsHTML(attachmentURLs, text);
@@ -210,7 +226,7 @@ export class WiseTinymceEditorComponent {
     return attachmentURLs;
   }
 
-  getText(notebookItem: any): string {
+  private getText(notebookItem: any): string {
     return notebookItem.content.text;
   }
 
@@ -218,7 +234,7 @@ export class WiseTinymceEditorComponent {
     this.subscriptions.unsubscribe();
   }
 
-  onChange(event: any): void {
+  protected onChange(event: any): void {
     const newContent = event.editor.getContent();
     if (this.isContentChanged(this.previousContent, newContent)) {
       this.debouncer.next(newContent);
@@ -226,7 +242,7 @@ export class WiseTinymceEditorComponent {
     }
   }
 
-  isContentChanged(previousContent: string, newContent: string): boolean {
+  private isContentChanged(previousContent: string, newContent: string): boolean {
     return previousContent !== newContent;
   }
 
@@ -241,7 +257,7 @@ export class WiseTinymceEditorComponent {
     return content;
   }
 
-  getAudioSourceHTML(src: string, mime: string): string {
+  private getAudioSourceHTML(src: string, mime: string): string {
     let content = '';
     content += `<source src="${src}"`;
     if (mime != null) {
@@ -251,5 +267,5 @@ export class WiseTinymceEditorComponent {
     return content;
   }
 
-  filePicker(cb: any, value: any, meta: any) {}
+  protected filePicker(cb: any, value: any, meta: any): void {}
 }

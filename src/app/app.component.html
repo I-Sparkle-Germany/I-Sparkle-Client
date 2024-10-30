@@ -8,8 +8,8 @@
       class="top-content"
       [announcement]="announcement"
       (dismiss)="dismissAnnouncement()"
-    ></app-announcement>
-    <app-header *ngIf="showHeaderAndFooter" class="top-content"></app-header>
+    />
+    <app-header *ngIf="showHeaderAndFooter" class="top-content" />
     <div fxFlex>
       <router-outlet></router-outlet>
     </div>

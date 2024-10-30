@@ -139,7 +139,7 @@ export class NodeGradingViewComponent implements OnInit {
       this.canViewStudentNames = this.configService.getPermissions().canViewStudentNames;
       this.setWorkgroupsById();
       this.sortWorkgroups();
-      this.numRubrics = this.projectService.getNumberOfRubricsByNodeId(node.id);
+      this.numRubrics = node.getNumRubrics();
       document.body.scrollTop = document.documentElement.scrollTop = 0;
     });
   }
@@ -284,9 +284,8 @@ export class NodeGradingViewComponent implements OnInit {
         completionStatus.isVisible = nodeStatus.isVisible;
         // TODO: store this info in the nodeStatus so we don't have to calculate every time?
         completionStatus.latestWorkTime = this.getLatestWorkTimeByWorkgroupId(workgroupId);
-        completionStatus.latestAnnotationTime = this.getLatestAnnotationTimeByWorkgroupId(
-          workgroupId
-        );
+        completionStatus.latestAnnotationTime =
+          this.getLatestAnnotationTimeByWorkgroupId(workgroupId);
         if (!this.projectService.nodeHasWork(this.nodeId)) {
           completionStatus.isCompleted = nodeStatus.isVisited;
         }
@@ -370,7 +369,7 @@ export class NodeGradingViewComponent implements OnInit {
   protected showRubric(): void {
     this.dialog.open(ShowNodeInfoDialogComponent, {
       data: this.nodeId,
-      width: '100%'
+      width: '90%'
     });
   }
 

@@ -14,8 +14,6 @@ import { ProjectService } from '../../../assets/wise5/services/projectService';
 import { StudentDataService } from '../../../assets/wise5/services/studentDataService';
 import { NavigationComponent } from '../../../assets/wise5/themes/default/navigation/navigation.component';
 import { StepToolsComponent } from '../../../assets/wise5/themes/default/themeComponents/stepTools/step-tools.component';
-import { NavItemComponent } from '../../../assets/wise5/vle/nav-item/nav-item.component';
-import { NodeModule } from '../../../assets/wise5/vle/node/node.module';
 import { StudentAssetsDialogModule } from '../../../assets/wise5/vle/studentAsset/student-assets-dialog/student-assets-dialog.module';
 import { VLEComponent } from '../../../assets/wise5/vle/vle.component';
 import { VLEProjectService } from '../../../assets/wise5/vle/vleProjectService';
@@ -23,7 +21,6 @@ import { StudentTeacherCommonModule } from '../../student-teacher-common.module'
 import { ChooseBranchPathDialogComponent } from '../../preview/modules/choose-branch-path-dialog/choose-branch-path-dialog.component';
 import { DataService } from '../../services/data.service';
 import { StudentComponentModule } from '../student.component.module';
-import { TopBarModule } from '../top-bar/top-bar.module';
 import { StudentVLERoutingModule } from './student-vle-routing.module';
 import { PauseScreenService } from '../../../assets/wise5/services/pauseScreenService';
 import { StudentNotificationService } from '../../../assets/wise5/services/studentNotificationService';
@@ -34,33 +31,36 @@ import { NodeNavigationComponent } from '../../../assets/wise5/directives/node-n
 import { GroupTabsComponent } from '../../../assets/wise5/directives/group-tabs/group-tabs.component';
 import { StudentPeerGroupService } from '../../../assets/wise5/services/studentPeerGroupService';
 import { PeerGroupService } from '../../../assets/wise5/services/peerGroupService';
+import { TopBarComponent } from '../top-bar/top-bar.component';
+import { NodeStatusIconComponent } from '../../../assets/wise5/themes/default/themeComponents/nodeStatusIcon/node-status-icon.component';
+import { NodeComponent } from '../../../assets/wise5/vle/node/node.component';
 
 @NgModule({
   declarations: [
     ChooseBranchPathDialogComponent,
     GenerateImageDialogComponent,
-    GroupTabsComponent,
-    NavigationComponent,
-    NavItemComponent,
-    NodeNavigationComponent,
-    RunEndedAndLockedMessageComponent,
     SafeUrl,
-    StepToolsComponent,
     VLEComponent,
     VLEParentComponent
   ],
   imports: [
-    StudentTeacherCommonModule,
     CommonModule,
     ComponentStudentModule,
+    GroupTabsComponent,
     MatDialogModule,
-    NodeModule,
+    NavigationComponent,
+    NodeComponent,
+    NodeNavigationComponent,
+    NodeStatusIconComponent,
+    RunEndedAndLockedMessageComponent,
     SimpleDialogModule,
+    StepToolsComponent,
     StudentAssetsDialogModule,
     StudentComponentModule,
+    StudentTeacherCommonModule,
     StudentVLERoutingModule,
     SummaryDisplayModule,
-    TopBarModule
+    TopBarComponent
   ],
   providers: [
     InitializeVLEService,

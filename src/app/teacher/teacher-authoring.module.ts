@@ -32,6 +32,13 @@ import { MilestoneReportService } from '../../assets/wise5/services/milestoneRep
 import { AuthoringRoutingModule } from './authoring-routing.module';
 import { RouterModule } from '@angular/router';
 import { ComponentInfoService } from '../../assets/wise5/services/componentInfoService';
+import { TeacherProjectTranslationService } from '../../assets/wise5/services/teacherProjectTranslationService';
+import { DeleteTranslationsService } from '../../assets/wise5/services/deleteTranslationsService';
+import { CopyTranslationsService } from '../../assets/wise5/services/copyTranslationsService';
+import { CreateComponentService } from '../../assets/wise5/services/createComponentService';
+import { NotifyAuthorService } from '../../assets/wise5/services/notifyAuthorService';
+import { RemoveNodeIdFromTransitionsService } from '../../assets/wise5/services/removeNodeIdFromTransitionsService';
+import { RegisterProjectService } from '../../assets/wise5/services/registerProjectService';
 
 @NgModule({
   imports: [StudentTeacherCommonModule, AuthoringToolModule, RouterModule, AuthoringRoutingModule],
@@ -40,8 +47,11 @@ import { ComponentInfoService } from '../../assets/wise5/services/componentInfoS
     ComponentInfoService,
     CopyNodesService,
     CopyProjectService,
+    CopyTranslationsService,
+    CreateComponentService,
     DataExportService,
     { provide: DataService, useExisting: TeacherDataService },
+    TeacherProjectTranslationService,
     GetWorkgroupService,
     DeleteNodeService,
     ImportComponentService,
@@ -51,10 +61,14 @@ import { ComponentInfoService } from '../../assets/wise5/services/componentInfoS
     MilestoneReportService,
     MoveNodesService,
     { provide: NodeService, useExisting: TeacherNodeService },
+    NotifyAuthorService,
     ProjectAssetService,
     SpaceService,
+    DeleteTranslationsService,
     { provide: PeerGroupService, useExisting: TeacherPeerGroupService },
     { provide: ProjectService, useExisting: TeacherProjectService },
+    RegisterProjectService,
+    RemoveNodeIdFromTransitionsService,
     TeacherDataService,
     TeacherDiscussionService,
     TeacherNodeService,

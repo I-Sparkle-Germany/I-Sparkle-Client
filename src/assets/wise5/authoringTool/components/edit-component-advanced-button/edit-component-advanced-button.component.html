@@ -1,7 +1,8 @@
 <button
+  class="enable-in-translation"
   mat-icon-button
   color="primary"
-  (click)="showComponentAdvancedAuthoring($event)"
+  (click)="$event.stopPropagation(); showComponentAdvancedAuthoring()"
   matTooltip="Advanced"
   matTooltipPosition="above"
   i18n-matTooltip
