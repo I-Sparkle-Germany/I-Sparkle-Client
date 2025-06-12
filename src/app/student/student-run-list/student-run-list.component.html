@@ -1,13 +1,13 @@
-<div class="mat-app-background no-runs" *ngIf="!runs.length && loaded">
-  <div class="notice">
+<div class="mat-app-background">
+  <div class="notice" *ngIf="!runs.length && loaded">
     <p i18n>Hey there! Looks like you don't have any units yet.</p>
     <p i18n>
       Ask your teacher for an <b>Access Code</b> and then tap the <b>Add Unit</b> button to get
       started.
     </p>
   </div>
-  <div class="content-block" *ngIf="runs.length">
-    <div class="content-block__header controls dark-theme primary-bg flex">
+  <div class="container-bg p-4 sm:p-6" *ngIf="runs.length">
+    <div class="content-block__header controls app-background flex">
       <app-search-bar
         class="w-full sm:w-auto"
         [placeholderText]="'Search'"

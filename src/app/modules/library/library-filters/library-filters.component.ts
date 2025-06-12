@@ -45,7 +45,7 @@ export class LibraryFiltersComponent {
   protected showFilters: boolean = false;
   protected standardOptions: Standard[] = [];
   protected unitTypeOptions: { id: string; name: string }[] = [
-    { id: 'WISE Platform', name: $localize`WISE Platform` },
+    { id: 'i-sparkle Platform', name: $localize`i-sparkle Platform` },
     { id: 'Other Platform', name: $localize`Other Platform` }
   ];
 
@@ -182,9 +182,9 @@ export class LibraryFiltersComponent {
   }
 
   protected showTypeInfo(): void {
-    const message = $localize`"Type" indicates the platform on which a unit runs. "WISE Platform" units are created 
-      using the WISE authoring tool. Students use WISE accounts to complete lessons and teachers can review and grade 
-      work on the WISE platform. "Other" units are created using different platforms. Resources for these units 
+    const message = $localize`"Type" indicates the platform on which a unit runs. "i-sparkle Platform" units are created 
+      using the i-sparkle authoring tool. Students use i-sparkle accounts to complete lessons and teachers can review and grade 
+      work on the i-sparkle platform. "Other" units are created using different platforms. Resources for these units 
       are linked in the unit details.`;
     this.dialog.open(DialogWithCloseComponent, {
       data: {
