@@ -15,20 +15,21 @@ import { PeerChatService } from '../peerChatService';
 import { PeerGroup } from '../PeerGroup';
 
 @Component({
-  selector: 'peer-chat-grading',
-  templateUrl: './peer-chat-grading.component.html',
-  styleUrls: ['./peer-chat-grading.component.scss']
+    selector: 'peer-chat-grading',
+    templateUrl: './peer-chat-grading.component.html',
+    styleUrls: ['./peer-chat-grading.component.scss'],
+    standalone: false
 })
 export class PeerChatGradingComponent extends PeerChatShowWorkComponent {
   constructor(
     protected annotationService: AnnotationService,
     protected configService: ConfigService,
+    protected dataService: TeacherDataService,
     protected nodeService: NodeService,
     protected notificationService: NotificationService,
     protected peerChatService: PeerChatService,
     protected peerGroupService: PeerGroupService,
     protected projectService: ProjectService,
-    protected teacherDataService: TeacherDataService,
     protected teacherWebSocketService: TeacherWebSocketService,
     protected teacherWorkService: TeacherWorkService
   ) {
@@ -70,7 +71,7 @@ export class PeerChatGradingComponent extends PeerChatShowWorkComponent {
       isSubmit: true,
       nodeId: this.nodeId,
       runId: this.configService.getRunId(),
-      periodId: this.teacherDataService.getCurrentPeriodId(),
+      periodId: this.dataService.getCurrentPeriodId(),
       studentData: {
         response: response
       },

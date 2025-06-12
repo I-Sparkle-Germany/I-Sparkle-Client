@@ -1,15 +1,10 @@
 <mat-card class="standalone__content mat-elevation-z0">
   <mat-card-content>
-    <form
-      role="form"
-      fxLayout="column"
-      (submit)="createAccount()"
-      [formGroup]="createTeacherAccountFormGroup"
-    >
-      <standalone-logo></standalone-logo>
+    <standalone-logo />
+    <form role="form" (submit)="createAccount()" [formGroup]="createTeacherAccountFormGroup">
       <h2 class="standalone__title accent" i18n>Create Teacher Account</h2>
       <p>
-        <mat-form-field appearance="fill" fxFlex>
+        <mat-form-field appearance="fill" class="w-full">
           <mat-label i18n>First Name</mat-label>
           <input
             matInput
@@ -33,7 +28,7 @@
         </mat-form-field>
       </p>
       <p>
-        <mat-form-field appearance="fill" fxFlex>
+        <mat-form-field appearance="fill" class="w-full">
           <mat-label i18n>Last Name</mat-label>
           <input matInput id="lastName" name="lastName" formControlName="lastName" required />
           <mat-error
@@ -50,7 +45,7 @@
         </mat-form-field>
       </p>
       <p>
-        <mat-form-field class="form-field-extra-sub" appearance="fill" fxFlex>
+        <mat-form-field class="form-field-extra-sub w-full" appearance="fill">
           <mat-label i18n>Email</mat-label>
           <input matInput id="email" name="email" formControlName="email" required />
           <mat-hint i18n
@@ -68,7 +63,7 @@
         </mat-form-field>
       </p>
       <p>
-        <mat-form-field appearance="fill" fxFlex>
+        <mat-form-field appearance="fill" class="w-full">
           <mat-label i18n>City</mat-label>
           <input matInput id="city" name="city" formControlName="city" required />
           <mat-error
@@ -79,7 +74,7 @@
         </mat-form-field>
       </p>
       <p>
-        <mat-form-field appearance="fill" fxFlex>
+        <mat-form-field appearance="fill" class="w-full">
           <mat-label i18n>State</mat-label>
           <input matInput id="state" name="state" formControlName="state" required />
           <mat-error
@@ -90,7 +85,7 @@
         </mat-form-field>
       </p>
       <p>
-        <mat-form-field appearance="fill" fxFlex>
+        <mat-form-field appearance="fill" class="w-full">
           <mat-label i18n>Country</mat-label>
           <input matInput id="country" name="country" formControlName="country" required />
           <mat-error
@@ -101,7 +96,7 @@
         </mat-form-field>
       </p>
       <p>
-        <mat-form-field appearance="fill" fxFlex>
+        <mat-form-field appearance="fill" class="w-full">
           <mat-label i18n>School Name</mat-label>
           <input matInput id="schoolName" name="schoolName" formControlName="schoolName" required />
           <mat-error
@@ -112,7 +107,7 @@
         </mat-form-field>
       </p>
       <p>
-        <mat-form-field appearance="fill" fxFlex>
+        <mat-form-field appearance="fill" class="w-full">
           <mat-label i18n>School Level</mat-label>
           <mat-select
             placeholder="School Level"
@@ -132,7 +127,7 @@
         </mat-form-field>
       </p>
       <p>
-        <mat-form-field appearance="fill" fxFlex>
+        <mat-form-field appearance="fill" class="w-full">
           <mat-label i18n>How did you hear about us?</mat-label>
           <input
             matInput
@@ -185,7 +180,7 @@
         color="primary"
         type="submit"
         [disabled]="!createTeacherAccountFormGroup.valid || processing"
-        class="button--progress"
+        class="button--progress w-full"
       >
         <mat-progress-bar *ngIf="processing" mode="indeterminate"></mat-progress-bar>
         <span i18n>Create Account</span>

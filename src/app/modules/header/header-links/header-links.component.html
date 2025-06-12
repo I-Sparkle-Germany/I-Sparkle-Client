@@ -1,4 +1,4 @@
-<nav class="header__links" [ngSwitch]="location" fxLayout="row" fxLayoutAlign="start center">
+<nav class="header__links flex flex-row items-center justify-start" [ngSwitch]="location">
   <span class="mat-body-1">
     <ng-container *ngSwitchCase="'teacher'" i18n>Welcome {{ user.firstName }}!</ng-container>
     <ng-container *ngSwitchCase="'student'" i18n>Welcome {{ user.firstName }}!</ng-container>
@@ -36,7 +36,7 @@
         [routerLinkActiveOptions]="{ exact: true }"
         [matMenuTriggerFor]="iSparkleMenu"
       >
-        <span class="menu-link" fxLayoutAlign="start center" i18n
+        <span class="menu-link flex items-center justify-start" i18n
           >i-sparkle <mat-icon>arrow_drop_down</mat-icon></span
         >
       </a>
@@ -90,7 +90,7 @@
     </div>
   </ng-container>
   <ng-container *ngIf="!roles.length">
-    <div fxLayout="row" fxLayoutGap="8px">
+    <div class="flex flex-row gap-2">
       &nbsp;|&nbsp;&nbsp;<app-header-signin></app-header-signin>
     </div>
   </ng-container>

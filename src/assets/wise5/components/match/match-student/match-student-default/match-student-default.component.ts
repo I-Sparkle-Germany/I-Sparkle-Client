@@ -1,64 +1,81 @@
+import { AddChoiceButtonComponent } from '../add-choice-button/add-choice-button.component';
+import { AddMatchChoiceDialogComponent } from '../add-match-choice-dialog/add-match-choice-dialog';
+import { AnnotationService } from '../../../../services/annotationService';
+import { Bucket, mergeBucket } from '../../bucket';
 import {
   CdkDragEnter,
   CdkDragExit,
   moveItemInArray,
   transferArrayItem
 } from '@angular/cdk/drag-drop';
+import { Choice, createChoiceFromNotebookItem } from '../../choice';
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { filter } from 'rxjs';
-import { NotebookItem } from '../../../../common/notebook/notebookItem';
-import { generateRandomKey } from '../../../../common/string/string';
-import { AnnotationService } from '../../../../services/annotationService';
+import { ComponentAnnotationsComponent } from '../../../../directives/componentAnnotations/component-annotations.component';
+import { ComponentHeaderComponent } from '../../../../directives/component-header/component-header.component';
+import { ComponentSaveSubmitButtonsComponent } from '../../../../directives/component-save-submit-buttons/component-save-submit-buttons.component';
+import { ComponentService } from '../../../componentService';
+import { ComponentStudent } from '../../../component-student.component';
 import { ConfigService } from '../../../../services/configService';
+import { Container } from '../container';
+import { copy } from '../../../../common/object/object';
+import { CRaterService } from '../../../../services/cRaterService';
+import { CRaterRubric, getUniqueIdeas } from '../../../common/cRater/CRaterRubric';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { filter } from 'rxjs';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { generateRandomKey } from '../../../../common/string/string';
+import { hasConnectedComponent } from '../../../../common/ComponentContent';
+import { Item } from '../item';
+import { MatchCdkDragDrop } from '../MatchCdkDragDrop';
+import { MatchChoiceItemComponent } from '../../match-choice-item/match-choice-item.component';
+import { MatchFeedbackSectionComponent } from '../match-feedback-section/match-feedback-section.component';
+import { MatchService } from '../../matchService';
+import { MatDialog } from '@angular/material/dialog';
 import { NodeService } from '../../../../services/nodeService';
+import { NotebookItem } from '../../../../common/notebook/notebookItem';
 import { NotebookService } from '../../../../services/notebookService';
 import { ProjectService } from '../../../../services/projectService';
 import { StudentAssetService } from '../../../../services/studentAssetService';
 import { StudentDataService } from '../../../../services/studentDataService';
-import { ComponentStudent } from '../../../component-student.component';
-import { ComponentService } from '../../../componentService';
-import { Choice, createChoiceFromNotebookItem } from '../../choice';
-import { MatchService } from '../../matchService';
-import { AddMatchChoiceDialog } from '../add-match-choice-dialog/add-match-choice-dialog';
-import { copy } from '../../../../common/object/object';
-import { MatchCdkDragDrop } from '../MatchCdkDragDrop';
-import { Container } from '../container';
-import { Item } from '../item';
-import { hasConnectedComponent } from '../../../../common/ComponentContent';
+import { CRaterIdea } from '../../../common/cRater/CRaterIdea';
 
 @Component({
-  templateUrl: 'match-student-default.component.html',
-  styleUrls: ['match-student-default.component.scss']
+  imports: [
+    AddChoiceButtonComponent,
+    CommonModule,
+    ComponentAnnotationsComponent,
+    ComponentHeaderComponent,
+    ComponentSaveSubmitButtonsComponent,
+    DragDropModule,
+    FlexLayoutModule,
+    MatchChoiceItemComponent,
+    MatchFeedbackSectionComponent
+  ],
+  styleUrl: 'match-student-default.component.scss',
+  templateUrl: 'match-student-default.component.html'
 })
-export class MatchStudentDefault extends ComponentStudent {
-  autoScroll: any = require('dom-autoscroller');
-  buckets: any[] = [];
-  bucketStyle: string = '';
-  bucketWidth: number = 100;
-  choices: Choice[] = [];
-  choiceStyle: any = '';
-  hasCorrectAnswer: boolean = false;
-  isChoicesAfter: boolean = false;
-  isCorrect: boolean = false;
-  isHorizontal: boolean = false;
-  isLatestComponentStateSubmit: boolean = false;
-  numChoiceColumns: number = 1;
-  privateNotebookItems: NotebookItem[] = [];
-  sourceBucket: any;
-  sourceBucketId: string = '0';
+export class MatchStudentDefaultComponent extends ComponentStudent {
+  protected buckets: any[] = [];
+  protected choices: Choice[] = [];
+  protected hasCorrectAnswer: boolean = false;
+  protected isCorrect: boolean = false;
+  protected isLatestComponentStateSubmit: boolean = false;
+  private sourceBucket: any;
+  protected sourceBucketId: string = '0';
 
   constructor(
     protected annotationService: AnnotationService,
+    protected assetService: StudentAssetService,
     protected componentService: ComponentService,
     protected configService: ConfigService,
+    private craterService: CRaterService,
+    protected dataService: StudentDataService,
     protected dialog: MatDialog,
     protected matchService: MatchService,
     protected nodeService: NodeService,
     protected notebookService: NotebookService,
-    private projectService: ProjectService,
-    protected studentAssetService: StudentAssetService,
-    protected studentDataService: StudentDataService
+    private projectService: ProjectService
   ) {
     super(
       annotationService,
@@ -67,17 +84,13 @@ export class MatchStudentDefault extends ComponentStudent {
       dialog,
       nodeService,
       notebookService,
-      studentAssetService,
-      studentDataService
+      assetService,
+      dataService
     );
   }
 
   ngOnInit(): void {
     super.ngOnInit();
-    this.isChoicesAfter = this.componentContent.choicesAfter;
-    this.isHorizontal = this.componentContent.horizontal;
-    this.isSaveButtonVisible = this.componentContent.showSaveButton;
-    this.isSubmitButtonVisible = this.componentContent.showSubmitButton;
     this.hasCorrectAnswer = this.matchService.componentHasCorrectAnswer(this.componentContent);
     this.choices = this.componentContent.choices;
     if (this.shouldImportPrivateNotes()) {
@@ -85,34 +98,50 @@ export class MatchStudentDefault extends ComponentStudent {
       this.subscribeToNewNotes();
     }
     this.initializeBuckets();
-    if (hasConnectedComponent(this.componentContent, 'showWork')) {
+    if (
+      hasConnectedComponent(this.componentContent, 'showWork') ||
+      this.component.hasConnectedComponent()
+    ) {
       this.handleConnectedComponents();
-    } else if (
+    }
+    if (
       this.matchService.componentStateHasStudentWork(this.componentState, this.componentContent)
     ) {
       this.setStudentWork(this.componentState);
-    } else if (this.component.hasConnectedComponent()) {
-      this.handleConnectedComponents();
     }
-    if (this.componentState != null && this.componentState.isSubmit) {
-      this.isLatestComponentStateSubmit = true;
-    }
+    this.isLatestComponentStateSubmit = this.componentState != null && this.componentState.isSubmit;
     this.tryDisableComponent();
     this.disableComponentIfNecessary();
     this.broadcastDoneRenderingComponent();
   }
 
-  ngAfterContentInit() {
-    this.registerAutoScroll();
+  private shouldImportPrivateNotes(): boolean {
+    return this.isNotebookEnabled() && this.componentContent.importPrivateNotes;
+  }
+
+  private initializeBuckets(): void {
+    this.buckets = [];
+    this.sourceBucket = {
+      id: this.sourceBucketId,
+      value: this.componentContent.choicesLabel ?? $localize`Choices`,
+      type: 'bucket',
+      items: [...this.choices]
+    };
+    this.buckets.push(this.sourceBucket);
+    this.componentContent.buckets.forEach((bucket) => {
+      const bucketCopy = copy(bucket);
+      bucketCopy.items = [];
+      this.buckets.push(bucketCopy);
+    });
   }
 
   private importPrivateNotes(): void {
-    this.privateNotebookItems = this.notebookService
+    this.notebookService
       .getPrivateNotebookItems()
-      .filter((item) => item.type === 'note' && item.serverDeleteTime == null);
-    this.privateNotebookItems.forEach((item) => {
-      this.choices.push(createChoiceFromNotebookItem(item));
-    });
+      .filter((item) => item.type === 'note' && item.serverDeleteTime == null)
+      .forEach((item) => {
+        this.choices.push(createChoiceFromNotebookItem(item));
+      });
   }
 
   private subscribeToNewNotes(): void {
@@ -123,21 +152,21 @@ export class MatchStudentDefault extends ComponentStudent {
     );
   }
 
-  addNotebookItemToSourceBucket(notebookItem: NotebookItem): void {
+  private addNotebookItemToSourceBucket(notebookItem: NotebookItem): void {
     const choice = createChoiceFromNotebookItem(notebookItem);
     this.choices.push(choice);
-    this.getSourceBucket().items.push(choice);
+    this.getBucketById(this.sourceBucketId).items.push(choice);
   }
 
-  dragEnter(event: CdkDragEnter) {
+  protected dragEnter(event: CdkDragEnter): void {
     event.container.element.nativeElement.classList.add('primary-bg');
   }
 
-  dragExit(event: CdkDragExit) {
+  protected dragExit(event: CdkDragExit): void {
     event.container.element.nativeElement.classList.remove('primary-bg');
   }
 
-  protected drop(event: MatchCdkDragDrop<Container, Item>) {
+  protected drop(event: MatchCdkDragDrop<Container, Item>): void {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data.items, event.item.data.position, event.currentIndex);
     } else {
@@ -152,17 +181,8 @@ export class MatchStudentDefault extends ComponentStudent {
     this.studentDataChanged();
   }
 
-  registerAutoScroll(): void {
-    this.autoScroll([document.querySelector('#content')], {
-      margin: 30,
-      scrollWhenOutside: true,
-      autoScroll: function () {
-        return this.down;
-      }
-    });
-  }
-
   setStudentWork(componentState: any): void {
+    this.getBucketById(this.sourceBucketId).items = [];
     this.addComponentStateChoicesToBuckets(componentState);
     if (componentState.studentData.submitCounter != null) {
       this.submitCounter = componentState.studentData.submitCounter;
@@ -170,53 +190,39 @@ export class MatchStudentDefault extends ComponentStudent {
     this.processPreviousStudentWork();
   }
 
-  addComponentStateChoicesToBuckets(componentState: any): void {
-    this.clearSourceBucketChoices();
-    const bucketIds = this.getBucketIds();
-    const choiceIds = this.getChoiceIds();
-    for (const componentStateBucket of componentState.studentData.buckets) {
-      if (bucketIds.includes(componentStateBucket.id)) {
-        const bucket = this.matchService.getBucketById(componentStateBucket.id, this.buckets);
-        for (const componentStateChoice of componentStateBucket.items) {
+  private addComponentStateChoicesToBuckets(componentState: any): void {
+    const choiceIds = this.choices.map((choice) => choice.id);
+    componentState.studentData.buckets.forEach((componentStateBucket) => {
+      if (this.buckets.some((bucket) => bucket.id === componentStateBucket.id)) {
+        const bucket = this.getBucketById(componentStateBucket.id);
+        componentStateBucket.items.forEach((componentStateChoice) => {
           this.addChoiceToBucket(componentStateChoice, bucket);
           const choiceLocation = choiceIds.indexOf(componentStateChoice.id);
           if (choiceLocation != -1) {
             choiceIds.splice(choiceLocation, 1);
           }
-        }
+        });
       }
-    }
-    const sourceBucket = this.getSourceBucket();
-    for (const choiceId of choiceIds) {
-      this.addAuthoredChoiceToBucket(choiceId, sourceBucket);
-    }
+    });
+
+    const sourceBucket = this.getBucketById(this.sourceBucketId);
+    choiceIds.forEach((choiceId) => this.addAuthoredChoiceToBucket(choiceId, sourceBucket));
   }
 
-  getSourceBucket(): any {
-    return this.matchService.getBucketById(this.sourceBucketId, this.buckets);
+  private getBucketById(id: string, buckets: Bucket[] = this.buckets): Bucket {
+    return buckets.find((bucket) => bucket.id === id);
   }
 
-  clearSourceBucketChoices(): void {
-    const sourceBucket = this.getSourceBucket();
-    sourceBucket.items = [];
+  private addChoiceToBucket(choice: Choice, bucket: Bucket): void {
+    bucket.items.push(
+      this.choices.some((authoredChoice) => authoredChoice.id === choice.id)
+        ? this.choices.find((authoredChoice) => authoredChoice.id === choice.id)
+        : choice // this is a choice that was created by the student
+    );
   }
 
-  private isAuthoredChoice(choiceId: string): boolean {
-    return this.getChoiceIds().includes(choiceId);
-  }
-
-  addChoiceToBucket(choice: Choice, bucket: any): void {
-    const choiceId = choice.id;
-    if (this.isAuthoredChoice(choiceId)) {
-      this.addAuthoredChoiceToBucket(choiceId, bucket);
-    } else {
-      // This choice was created by the student
-      bucket.items.push(choice);
-    }
-  }
-
-  protected addAuthoredChoiceToBucket(choiceId: string, bucket: any): void {
-    bucket.items.push(this.matchService.getChoiceById(choiceId, this.choices));
+  protected addAuthoredChoiceToBucket(choiceId: string, bucket: Bucket): void {
+    bucket.items.push(this.choices.find((choice) => choice.id === choiceId));
   }
 
   /**
@@ -224,7 +230,7 @@ export class MatchStudentDefault extends ComponentStudent {
    * since. This will also determine if submit is dirty.
    */
   private processPreviousStudentWork(): void {
-    const latestComponentState = this.studentDataService.getLatestComponentStateByNodeIdAndComponentId(
+    const latestComponentState = this.dataService.getLatestComponentStateByNodeIdAndComponentId(
       this.nodeId,
       this.componentId
     );
@@ -236,7 +242,7 @@ export class MatchStudentDefault extends ComponentStudent {
       this.setGeneralComponentStatus(latestComponentState.isCorrect, false);
       this.checkAnswer();
     } else {
-      const latestSubmitComponentState = this.studentDataService.getLatestSubmitComponentState(
+      const latestSubmitComponentState = this.dataService.getLatestSubmitComponentState(
         this.nodeId,
         this.componentId
       );
@@ -248,20 +254,20 @@ export class MatchStudentDefault extends ComponentStudent {
     }
   }
 
-  setGeneralComponentStatus(isCorrect: boolean, isSubmitDirty: boolean): void {
+  private setGeneralComponentStatus(isCorrect: boolean, isSubmitDirty: boolean): void {
     this.isCorrect = isCorrect;
     this.setIsSubmitDirty(isSubmitDirty);
   }
 
-  processDirtyStudentWork(): void {
-    const latestSubmitComponentState = this.studentDataService.getLatestSubmitComponentState(
+  private processDirtyStudentWork(): void {
+    const latestSubmitComponentState = this.dataService.getLatestSubmitComponentState(
       this.nodeId,
       this.componentId
     );
     if (latestSubmitComponentState != null) {
       this.showFeedbackOnUnchangedChoices(latestSubmitComponentState);
     } else {
-      const latestComponentState = this.studentDataService.getLatestComponentStateByNodeIdAndComponentId(
+      const latestComponentState = this.dataService.getLatestComponentStateByNodeIdAndComponentId(
         this.nodeId,
         this.componentId
       );
@@ -273,16 +279,14 @@ export class MatchStudentDefault extends ComponentStudent {
     }
   }
 
-  showFeedbackOnUnchangedChoices(latestSubmitComponentState: any): void {
-    const choicesThatChangedSinceLastSubmit = this.getChoicesThatChangedSinceLastSubmit(
-      latestSubmitComponentState
-    );
-    if (choicesThatChangedSinceLastSubmit.length > 0) {
+  private showFeedbackOnUnchangedChoices(latestSubmitComponentState: any): void {
+    const updatedChoices = this.getUpdatedChoicesSinceLastSubmit(latestSubmitComponentState);
+    if (updatedChoices.length > 0) {
       this.setIsSubmitDirty(true);
     } else {
       this.setIsSubmitDirty(false);
     }
-    this.checkAnswer(choicesThatChangedSinceLastSubmit);
+    this.checkAnswer(updatedChoices);
   }
 
   setIsSubmitDirty(isSubmitDirty: boolean): void {
@@ -290,28 +294,12 @@ export class MatchStudentDefault extends ComponentStudent {
     this.emitComponentSubmitDirty(isSubmitDirty);
   }
 
-  getBucketIds(): string[] {
-    return this.buckets.map((bucket) => bucket.id);
-  }
-
-  getChoiceIds(): string[] {
-    return this.choices.map((choice) => choice.id);
-  }
-
-  getIds(objects: any[]): string[] {
-    return objects.map((object) => {
-      return object.id;
-    });
-  }
-
-  protected getChoicesThatChangedSinceLastSubmit(latestSubmitComponentState: any): string[] {
-    const choicesThatChanged = [];
+  protected getUpdatedChoicesSinceLastSubmit(latestSubmitComponentState: any): string[] {
+    const updatedChoices = [];
     const previousBuckets = latestSubmitComponentState.studentData.buckets;
-    for (const currentBucket of this.buckets) {
-      const {
-        currentBucketChoiceIds,
-        previousBucketChoiceIds
-      } = this.getPreviousAndCurrentChoiceIds(previousBuckets, currentBucket);
+    this.buckets.forEach((currentBucket) => {
+      const { currentBucketChoiceIds, previousBucketChoiceIds } =
+        this.getPreviousAndCurrentChoiceIds(previousBuckets, currentBucket);
       for (
         let currentChoiceIndex = 0;
         currentChoiceIndex < currentBucketChoiceIds.length;
@@ -320,24 +308,24 @@ export class MatchStudentDefault extends ComponentStudent {
         if (
           this.isChoiceChanged(previousBucketChoiceIds, currentBucketChoiceIds, currentChoiceIndex)
         ) {
-          choicesThatChanged.push(currentBucketChoiceIds[currentChoiceIndex]);
+          updatedChoices.push(currentBucketChoiceIds[currentChoiceIndex]);
         }
       }
-    }
-    return choicesThatChanged;
+    });
+    return updatedChoices;
   }
 
   protected getPreviousAndCurrentChoiceIds(previousBuckets: any[], currentBucket: any): any {
-    const currentBucketChoiceIds = this.getIds(currentBucket.items);
-    const previousBucket = this.matchService.getBucketById(currentBucket.id, previousBuckets);
-    const previousBucketChoiceIds = this.getIds(previousBucket.items);
+    const currentBucketChoiceIds = currentBucket.items.map((item) => item.id);
+    const previousBucket = this.getBucketById(currentBucket.id, previousBuckets);
+    const previousBucketChoiceIds = previousBucket.items.map((item) => item.id);
     return {
       currentBucketChoiceIds,
       previousBucketChoiceIds
     };
   }
 
-  isChoiceChanged(
+  private isChoiceChanged(
     previousBucketChoiceIds: string[],
     currentBucketChoiceIds: string[],
     currentChoiceIndex: number
@@ -354,43 +342,12 @@ export class MatchStudentDefault extends ComponentStudent {
     );
   }
 
-  choicePositionHasChangedInBucket(
+  private choicePositionHasChangedInBucket(
     previousBucketChoiceIds: string[],
     currentChoiceId: string,
     currentChoiceIndex: number
   ): boolean {
     return currentChoiceIndex != previousBucketChoiceIds.indexOf(currentChoiceId);
-  }
-
-  private shouldImportPrivateNotes(): boolean {
-    return this.isNotebookEnabled() && this.componentContent.importPrivateNotes;
-  }
-
-  initializeBuckets(): void {
-    this.buckets = [];
-    this.sourceBucket = this.createSourceBucket();
-    this.sourceBucket.items = this.sourceBucket.items.concat(this.choices);
-    this.buckets.push(this.sourceBucket);
-    for (const componentContentBucket of this.componentContent.buckets) {
-      const bucket = copy(componentContentBucket);
-      bucket.items = [];
-      this.buckets.push(bucket);
-    }
-  }
-
-  createSourceBucket(): any {
-    return {
-      id: this.sourceBucketId,
-      value: this.getSourceBucketLabel(),
-      type: 'bucket',
-      items: []
-    };
-  }
-
-  getSourceBucketLabel(): string {
-    return this.componentContent.choicesLabel
-      ? this.componentContent.choicesLabel
-      : $localize`Choices`;
   }
 
   /**
@@ -408,30 +365,24 @@ export class MatchStudentDefault extends ComponentStudent {
     buckets: any[] = this.buckets
   ): void {
     let isCorrect = true;
-    for (const bucket of buckets) {
+    buckets.forEach((bucket) => {
       const bucketId = bucket.id;
       const items = bucket.items;
-      for (let i = 0; i < items.length; i++) {
-        const item = items[i];
-        const position = i + 1;
+
+      let i = 0;
+      items.forEach((item) => {
+        const position = i++ + 1;
         const choiceId = item.id;
-        if (
-          choiceIdsExcludedFromFeedback.includes(choiceId) ||
-          this.getFeedbackObject(bucketId, choiceId) == null
-        ) {
-          item.feedback = null;
-        } else {
-          const isChoiceCorrect = this.checkAnswerAndDisplayFeedback(
-            bucketId,
-            item,
-            position,
-            this.hasCorrectAnswer
-          );
-          isCorrect &&= isChoiceCorrect;
-        }
-        this.matchService.setItemStatus(item, this.hasCorrectAnswer);
-      }
-    }
+        isCorrect = this.checkItemAnswer(
+          choiceIdsExcludedFromFeedback,
+          choiceId,
+          bucketId,
+          item,
+          position,
+          isCorrect
+        );
+      });
+    });
 
     if (this.hasCorrectAnswer) {
       this.isCorrect = isCorrect;
@@ -440,7 +391,33 @@ export class MatchStudentDefault extends ComponentStudent {
     }
   }
 
-  checkAnswerAndDisplayFeedback(
+  private checkItemAnswer(
+    choiceIdsExcludedFromFeedback: string[],
+    choiceId: any,
+    bucketId: any,
+    item: any,
+    position: number,
+    isCorrect: boolean
+  ): boolean {
+    if (
+      choiceIdsExcludedFromFeedback.includes(choiceId) ||
+      this.getFeedbackObject(bucketId, choiceId) == null
+    ) {
+      item.feedback = null;
+    } else {
+      const isChoiceCorrect = this.checkAnswerAndDisplayFeedback(
+        bucketId,
+        item,
+        position,
+        this.hasCorrectAnswer
+      );
+      isCorrect &&= isChoiceCorrect;
+    }
+    this.matchService.setItemStatus(item, this.hasCorrectAnswer);
+    return isCorrect;
+  }
+
+  private checkAnswerAndDisplayFeedback(
     bucketId: string,
     choice: any,
     position: number,
@@ -448,10 +425,10 @@ export class MatchStudentDefault extends ComponentStudent {
   ): boolean {
     const feedbackObject = this.getFeedbackObject(bucketId, choice.id);
     choice.feedback = this.getFeedback(feedbackObject, hasCorrectAnswer, position);
-    const isCorrect = this.getCorrectness(feedbackObject, hasCorrectAnswer, position);
+    const isCorrect = hasCorrectAnswer ? this.getCorrectness(feedbackObject, position) : null;
     choice.isCorrect = isCorrect;
     if (this.doesPositionMatter(feedbackObject.position)) {
-      choice.isIncorrectPosition = !this.isCorrectPosition(feedbackObject, position);
+      choice.isIncorrectPosition = feedbackObject.position !== position;
     }
     this.tryDisableComponent();
     return isCorrect;
@@ -472,7 +449,7 @@ export class MatchStudentDefault extends ComponentStudent {
     position: number,
     hasCorrectAnswer: boolean
   ): string {
-    if (this.isCorrectPosition(feedbackObject, position)) {
+    if (feedbackObject.position === position) {
       return feedbackObject.feedback
         ? feedbackObject.feedback
         : this.getNonPositionFeedback(feedbackObject, hasCorrectAnswer);
@@ -498,31 +475,18 @@ export class MatchStudentDefault extends ComponentStudent {
     return feedbackText;
   }
 
-  getCorrectness(feedbackObject: any, hasCorrectAnswer: boolean, position: number): boolean {
-    if (!hasCorrectAnswer) {
-      return null;
-    } else if (this.doesPositionMatter(feedbackObject.position)) {
-      return this.isCorrectPosition(feedbackObject, position);
-    } else {
-      return feedbackObject.isCorrect;
-    }
+  private getCorrectness(feedbackObject: any, position: number): boolean {
+    return this.doesPositionMatter(feedbackObject.position)
+      ? feedbackObject.position === position
+      : feedbackObject.isCorrect;
   }
 
-  private isCorrectPosition(feedbackObject: any, position: number): boolean {
-    return feedbackObject.position === position;
-  }
-
-  getFeedbackObject(bucketId: string, choiceId: string): any {
-    for (const bucketFeedback of this.componentContent.feedback) {
-      if (bucketFeedback.bucketId === bucketId) {
-        for (const choiceFeedback of bucketFeedback.choices) {
-          if (choiceFeedback.choiceId === choiceId) {
-            return choiceFeedback;
-          }
-        }
-      }
-    }
-    return null;
+  private getFeedbackObject(bucketId: string, choiceId: string): any {
+    return (
+      this.componentContent.feedback
+        .find((bucketFeedback) => bucketFeedback.bucketId === bucketId)
+        ?.choices.find((choiceFeedback) => choiceFeedback.choiceId === choiceId) ?? null
+    );
   }
 
   studentDataChanged(): void {
@@ -557,7 +521,7 @@ export class MatchStudentDefault extends ComponentStudent {
     });
   }
 
-  createComponentStateObject(action: string): any {
+  private createComponentStateObject(action: string): any {
     const componentState: any = this.createNewComponentState();
     componentState.componentType = 'Match';
     componentState.nodeId = this.nodeId;
@@ -586,13 +550,13 @@ export class MatchStudentDefault extends ComponentStudent {
    * @param buckets
    */
   private cleanBuckets(originalComponentContent: any, buckets: any): any {
-    for (const bucket of buckets) {
+    buckets.forEach((bucket) => {
       bucket.value = this.getCleanedValue(originalComponentContent, bucket);
-      for (const item of bucket.items) {
+      bucket.items.forEach((item) => {
         item.value = this.getCleanedValue(originalComponentContent, item);
         delete item.status;
-      }
-    }
+      });
+    });
     return buckets;
   }
 
@@ -601,30 +565,20 @@ export class MatchStudentDefault extends ComponentStudent {
    * injected into it such as onclick attributes and absolute asset paths.
    * @param matchObj
    */
-  getCleanedValue(originalComponentContent: any, matchObj: any): string {
-    return this.getValueById(originalComponentContent, matchObj.id) ?? matchObj.value;
+  private getCleanedValue(originalComponentContent: any, matchObj: any): string {
+    return (
+      originalComponentContent.buckets
+        .concat(originalComponentContent.choices)
+        .find((obj) => obj.id === matchObj.id)?.value ?? matchObj.value
+    );
   }
 
-  getValueById(componentContent: any, id: string): string {
-    for (const bucket of componentContent.buckets) {
-      if (bucket.id === id) {
-        return bucket.value;
-      }
-    }
-    for (const choice of componentContent.choices) {
-      if (choice.id === id) {
-        return choice.value;
-      }
-    }
-    return null;
-  }
-
-  clearFeedback(): void {
-    for (const choice of this.choices) {
+  private clearFeedback(): void {
+    this.choices.forEach((choice) => {
       choice.isCorrect = null;
       choice.isIncorrectPosition = null;
       choice.feedback = null;
-    }
+    });
   }
 
   /**
@@ -632,26 +586,26 @@ export class MatchStudentDefault extends ComponentStudent {
    * @param {string} choiceId the choice id
    * @return {boolean} whether the choice has a correct position in any bucket
    */
-  isAuthorHasSpecifiedACorrectPosition(choiceId: string): boolean {
-    for (const bucket of this.componentContent.feedback) {
-      for (const choice of bucket.choices) {
-        if (choice.choiceId === choiceId) {
-          if (choice.position != null) {
-            return true;
-          }
-        }
-      }
-    }
-    return false;
+  private isAuthorHasSpecifiedACorrectPosition(choiceId: string): boolean {
+    return this.componentContent.feedback.some((feedbackBucket) =>
+      feedbackBucket.choices.some(
+        (choice) => choice.choiceId === choiceId && choice.position != null
+      )
+    );
   }
 
   createMergedComponentState(componentStates: any[]): any[] {
     const mergedBuckets = [];
-    for (const componentState of componentStates) {
-      for (const bucket of componentState.studentData.buckets) {
-        this.mergeBucket(mergedBuckets, bucket);
+    componentStates.forEach((componentState) => {
+      if (componentState.componentType === 'Match') {
+        componentState.studentData.buckets.forEach((bucket) => mergeBucket(mergedBuckets, bucket));
+      } else if (componentState.componentType === 'DialogGuidance') {
+        this.addIdeasToSourceBucket(
+          componentState.studentData.responses,
+          this.craterService.getCRaterRubric(componentState.nodeId, componentState.componentId)
+        );
       }
-    }
+    });
     const mergedComponentState: any = this.createNewComponentState();
     mergedComponentState.studentData = {
       buckets: mergedBuckets
@@ -659,48 +613,23 @@ export class MatchStudentDefault extends ComponentStudent {
     return mergedComponentState;
   }
 
-  /**
-   * Merge a bucket into the array of buckets. If the bucket id already exists in the array, merge
-   * the choices in the bucket. If the bucket does not already exist in the array, add the bucket.
-   * The array of buckets will be modified.
-   * @param {array} buckets an array of buckets
-   * @param {object} bucket the bucket
-   * @return {array} an array of buckets
-   */
-  mergeBucket(buckets: any[], bucket: any): any[] {
-    let bucketFound = false;
-    for (const tempBucket of buckets) {
-      if (tempBucket.id == bucket.id) {
-        bucketFound = true;
-        tempBucket.items = this.mergeChoices(tempBucket.items, bucket.items);
-      }
-    }
-    if (!bucketFound) {
-      buckets.push(bucket);
-    }
-    return buckets;
+  private addIdeasToSourceBucket(responses: any[], rubric: CRaterRubric): void {
+    getUniqueIdeas(responses, rubric)
+      .filter((idea) => !this.isInSourceBucket(idea))
+      .forEach((idea) => {
+        const choice = new Choice(idea.name, idea.text);
+        this.choices.push(choice);
+        this.getBucketById(this.sourceBucketId).items.push(choice);
+      });
   }
 
-  /**
-   * Merge two arrays of choices.
-   * @param {array} choices1 an array of choice objects
-   * @param {array} choices2 an array of choice objects
-   * @return {array} A new array of unique choice objects
-   */
-  mergeChoices(choices1: Choice[], choices2: Choice[]): Choice[] {
-    const mergedChoices = choices1.slice();
-    const choices1Ids = this.getIds(choices1);
-    for (const choice2 of choices2) {
-      if (!choices1Ids.includes(choice2.id)) {
-        mergedChoices.push(choice2);
-      }
-    }
-    return mergedChoices;
+  private isInSourceBucket(idea: CRaterIdea): boolean {
+    return this.sourceBucket.items.some((item) => item.value === idea.text);
   }
 
-  addChoice(): void {
+  protected addChoice(): void {
     this.dialog
-      .open(AddMatchChoiceDialog, {
+      .open(AddMatchChoiceDialogComponent, {
         panelClass: 'dialog-sm'
       })
       .afterClosed()

@@ -29,14 +29,14 @@ import { HtmlAuthoring } from './html/html-authoring/html-authoring.component';
 import { HtmlStudentComponent } from './html/html-student/html-student.component';
 import { LabelAuthoring } from './label/label-authoring/label-authoring.component';
 import { LabelGradingComponent } from './label/label-grading/label-grading.component';
-import { LabelStudent } from './label/label-student/label-student.component';
-import { MatchAuthoring } from './match/match-authoring/match-authoring.component';
+import { LabelStudentComponent } from './label/label-student/label-student.component';
+import { MatchAuthoringComponent } from './match/match-authoring/match-authoring.component';
 import { MatchGradingComponent } from './match/match-grading/match-grading.component';
 import { MatchStudent } from './match/match-student/match-student.component';
 import { MultipleChoiceAuthoring } from './multipleChoice/multiple-choice-authoring/multiple-choice-authoring.component';
 import { MultipleChoiceGradingComponent } from './multipleChoice/multiple-choice-grading/multiple-choice-grading.component';
-import { MultipleChoiceStudent } from './multipleChoice/multiple-choice-student/multiple-choice-student.component';
-import { OpenResponseAuthoring } from './openResponse/open-response-authoring/open-response-authoring.component';
+import { MultipleChoiceStudentComponent } from './multipleChoice/multiple-choice-student/multiple-choice-student.component';
+import { OpenResponseAuthoringComponent } from './openResponse/open-response-authoring/open-response-authoring.component';
 import { OpenResponseGradingComponent } from './openResponse/open-response-grading/open-response-grading.component';
 import { OpenResponseStudent } from './openResponse/open-response-student/open-response-student.component';
 import { OutsideUrlAuthoring } from './outsideURL/outside-url-authoring/outside-url-authoring.component';
@@ -54,7 +54,7 @@ import { SummaryAuthoring } from './summary/summary-authoring/summary-authoring.
 import { SummaryStudent } from './summary/summary-student/summary-student.component';
 import { TableAuthoring } from './table/table-authoring/table-authoring.component';
 import { TableGradingComponent } from './table/table-grading/table-grading.component';
-import { TableStudent } from './table/table-student/table-student.component';
+import { TableStudentComponent } from './table/table-student/table-student.component';
 
 export const components = {
   AiChat: {
@@ -95,15 +95,23 @@ export const components = {
   },
   Graph: { authoring: GraphAuthoring, grading: GraphGradingComponent, student: GraphStudent },
   HTML: { authoring: HtmlAuthoring, student: HtmlStudentComponent },
-  Label: { authoring: LabelAuthoring, grading: LabelGradingComponent, student: LabelStudent },
-  Match: { authoring: MatchAuthoring, grading: MatchGradingComponent, student: MatchStudent },
+  Label: {
+    authoring: LabelAuthoring,
+    grading: LabelGradingComponent,
+    student: LabelStudentComponent
+  },
+  Match: {
+    authoring: MatchAuthoringComponent,
+    grading: MatchGradingComponent,
+    student: MatchStudent
+  },
   MultipleChoice: {
     authoring: MultipleChoiceAuthoring,
     grading: MultipleChoiceGradingComponent,
-    student: MultipleChoiceStudent
+    student: MultipleChoiceStudentComponent
   },
   OpenResponse: {
-    authoring: OpenResponseAuthoring,
+    authoring: OpenResponseAuthoringComponent,
     grading: OpenResponseGradingComponent,
     student: OpenResponseStudent
   },
@@ -124,5 +132,9 @@ export const components = {
     student: ShowMyWorkStudentComponent
   },
   Summary: { authoring: SummaryAuthoring, student: SummaryStudent },
-  Table: { authoring: TableAuthoring, grading: TableGradingComponent, student: TableStudent }
+  Table: {
+    authoring: TableAuthoring,
+    grading: TableGradingComponent,
+    student: TableStudentComponent
+  }
 };

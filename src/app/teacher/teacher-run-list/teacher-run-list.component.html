@@ -1,23 +1,20 @@
 <div
-  class="controls mat-app-background"
-  fxLayout="row"
-  fxLayout.xs="column"
-  fxLayoutGap.sm="16px"
-  fxLayoutAlign="start center"
+  class="controls mat-app-background content-block filters flex flex-col md:flex-row gap-4 items-center justify-start"
 >
+  <h2 class="flex items-center gap-2">
+    <mat-icon>calendar_month</mat-icon><span i18n>Class Schedule</span>
+  </h2>
+  <span class="hidden md:inline-flex flex-auto"></span>
   <app-search-bar
-    fxFlex="0 0 auto"
-    fxFlex.xs="0 0 100%"
-    fxFlex.sm="0 0 calc(50%-8px)"
+    class="flex-none self-stretch md:self-center"
     i18n-placeholderText
     placeholderText="Search"
     [disable]="!recentRunsLoaded"
     [value]="searchValue"
     (update)="searchChanged($event)"
   />
-  <span fxFlex="1 1 auto" fxHide fxShow.gt-sm></span>
-  <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="16px">
-    <mat-form-field>
+  <div class="flex flex-row items-center justify-center gap-4">
+    <mat-form-field [subscriptSizing]="'dynamic'" class="w-full">
       <mat-label>View</mat-label>
       <mat-select [(ngModel)]="showArchivedView" (selectionChange)="refreshProjects()">
         <mat-option [value]="false" i18n>Active</mat-option>
@@ -26,13 +23,8 @@
     </mat-form-field>
   </div>
 </div>
-<div class="run-list container-bg">
-  <div
-    fxLayout="column"
-    fxLayout.gt-xs="row"
-    fxLayoutGap="16px"
-    fxLayoutAlign="space-between center"
-  >
+<div class="run-list container-bg content-block">
+  <div class="flex flex-col sm:flex-row gap-4 items-center justify-between">
     <select-tags [selectedTags]="selectedTags" (selectTagEvent)="selectTags($event)" />
     <div class="notice run-counts">
       <p [ngStyle]="{ visibility: allRunsLoaded ? 'visible' : 'hidden' }">
@@ -77,7 +69,7 @@
     <div class="notice no-runs-message" *ngIf="showArchivedView && getNumArchivedRuns() === 0">
       <p i18n>Looks like you don't have any archived classroom units.</p>
     </div>
-    <div fxLayout="row">
+    <div class="flex flex-row">
       <select-runs-controls
         *ngIf="filteredRuns.length > 0"
         (archiveProjectsEvent)="archiveProjects($event)"

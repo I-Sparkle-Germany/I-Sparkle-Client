@@ -4,9 +4,11 @@ import { AiChatContent } from '../AiChatContent';
 
 @Component({
   selector: 'edit-ai-chat-advanced',
-  templateUrl: './edit-ai-chat-advanced.component.html'
+  templateUrl: './edit-ai-chat-advanced.component.html',
+  standalone: false
 })
 export class EditAiChatAdvancedComponent extends EditAdvancedComponentComponent {
+  protected allowedConnectedComponentTypes = ['OpenResponse'];
   componentContent: AiChatContent;
   protected models: string[] = ['gpt-3.5-turbo', 'gpt-4'];
 }

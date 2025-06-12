@@ -9,7 +9,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
-  standalone: true,
   selector: 'app-header-links',
   imports: [
     CommonModule,

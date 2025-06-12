@@ -5,8 +5,9 @@ import { ProjectLocale } from '../../../../../app/domain/projectLocale';
 import { localeToLanguage } from '../../../../../app/domain/localeToLanguage';
 
 @Component({
-  selector: 'edit-project-language-setting',
-  templateUrl: './edit-project-language-setting.component.html'
+    selector: 'edit-project-language-setting',
+    templateUrl: './edit-project-language-setting.component.html',
+    standalone: false
 })
 export class EditProjectLanguageSettingComponent {
   protected availableLanguages: Language[];
@@ -35,6 +36,8 @@ export class EditProjectLanguageSettingComponent {
   protected updateDefaultLanguage(): void {
     this.projectLocale.setDefaultLocale(this.defaultLanguage.locale);
     this.projectService.saveProject();
+    this.projectService.setCurrentLanguage(this.defaultLanguage);
+    this.projectService.uiChanged();
     this.updateModel();
   }
 

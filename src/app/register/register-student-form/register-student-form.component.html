@@ -1,15 +1,10 @@
 <mat-card class="standalone__content mat-elevation-z0 center">
   <mat-card-content>
-    <form
-      role="form"
-      fxLayout="column"
-      (submit)="createAccount()"
-      [formGroup]="createStudentAccountFormGroup"
-    >
-      <standalone-logo></standalone-logo>
+    <standalone-logo />
+    <form role="form" (submit)="createAccount()" [formGroup]="createStudentAccountFormGroup">
       <h2 class="standalone__title accent" i18n>Create Student Account</h2>
       <p>
-        <mat-form-field appearance="fill" fxFlex>
+        <mat-form-field appearance="fill" class="w-full">
           <mat-label i18n>First Name</mat-label>
           <input
             matInput
@@ -33,7 +28,7 @@
         </mat-form-field>
       </p>
       <p>
-        <mat-form-field appearance="fill" fxFlex>
+        <mat-form-field appearance="fill" class="w-full">
           <mat-label i18n>Last Name</mat-label>
           <input matInput id="lastName" name="lastName" formControlName="lastName" required />
           <mat-error
@@ -50,7 +45,7 @@
         </mat-form-field>
       </p>
       <p>
-        <mat-form-field appearance="fill" fxFlex>
+        <mat-form-field appearance="fill" class="w-full">
           <mat-label i18n>Gender</mat-label>
           <mat-select formControlName="gender" required>
             <mat-option *ngFor="let gender of genders" [value]="gender.code">
@@ -65,7 +60,7 @@
         </mat-form-field>
       </p>
       <p>
-        <mat-form-field appearance="fill" fxFlex>
+        <mat-form-field appearance="fill" class="w-full">
           <mat-label i18n>Birthday (Month)</mat-label>
           <mat-select formControlName="birthMonth" required>
             <mat-option *ngFor="let month of months" [value]="month.code">
@@ -80,7 +75,7 @@
         </mat-form-field>
       </p>
       <p>
-        <mat-form-field appearance="fill" fxFlex>
+        <mat-form-field appearance="fill" class="w-full">
           <mat-label i18n>Birthday (Day)</mat-label>
           <mat-select formControlName="birthDay" required>
             <mat-option *ngFor="let day of days" [value]="day">
@@ -96,7 +91,7 @@
       </p>
       <div *ngIf="user.googleUserId == null && user.microsoftUserId == null">
         <p>
-          <mat-form-field appearance="fill" fxFlex>
+          <mat-form-field appearance="fill" class="w-full">
             <mat-label i18n>Security Question</mat-label>
             <mat-select formControlName="securityQuestion" required>
               <mat-option
@@ -116,7 +111,7 @@
           </mat-form-field>
         </p>
         <p>
-          <mat-form-field appearance="fill" fxFlex>
+          <mat-form-field appearance="fill" class="w-full">
             <mat-label i18n>Security Question Answer</mat-label>
             <input matInput formControlName="securityQuestionAnswer" required />
             <mat-error
@@ -162,7 +157,7 @@
         color="primary"
         type="submit"
         [disabled]="!createStudentAccountFormGroup.valid || processing"
-        class="button--progress"
+        class="button--progress w-full"
       >
         <mat-progress-bar *ngIf="processing" mode="indeterminate"></mat-progress-bar>
         <span i18n>Create Account</span>

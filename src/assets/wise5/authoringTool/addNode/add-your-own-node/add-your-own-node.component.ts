@@ -21,26 +21,27 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatInputModule } from '@angular/material/input';
+import { InsertFirstNodeInBranchPathService } from '../../../services/insertFirstNodeInBranchPathService';
+import { AddStepTarget } from '../../../../../app/domain/addStepTarget';
 
 @Component({
-  imports: [
-    CommonModule,
-    ComponentTypeButtonComponent,
-    DragDropModule,
-    FlexLayoutModule,
-    FormsModule,
-    MatButtonModule,
-    MatDividerModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatInputModule,
-    MatProgressBarModule,
-    ReactiveFormsModule,
-    RouterModule
-  ],
-  standalone: true,
-  styleUrls: ['add-your-own-node.component.scss', '../../add-content.scss'],
-  templateUrl: 'add-your-own-node.component.html'
+    imports: [
+        CommonModule,
+        ComponentTypeButtonComponent,
+        DragDropModule,
+        FlexLayoutModule,
+        FormsModule,
+        MatButtonModule,
+        MatDividerModule,
+        MatFormFieldModule,
+        MatIconModule,
+        MatInputModule,
+        MatProgressBarModule,
+        ReactiveFormsModule,
+        RouterModule
+    ],
+    styleUrls: ['add-your-own-node.component.scss', '../../add-content.scss'],
+    templateUrl: 'add-your-own-node.component.html'
 })
 export class AddYourOwnNodeComponent {
   protected addNodeFormGroup: FormGroup = this.fb.group({
@@ -49,12 +50,13 @@ export class AddYourOwnNodeComponent {
   protected componentTypes: any[];
   protected initialComponents: string[] = [];
   protected submitting: boolean;
-  protected targetId: string;
+  protected target: AddStepTarget;
 
   constructor(
     private componentTypeService: ComponentTypeService,
     private createComponentService: CreateComponentService,
     private fb: FormBuilder,
+    private insertFirstNodeInBranchPathService: InsertFirstNodeInBranchPathService,
     private projectService: TeacherProjectService,
     private route: ActivatedRoute,
     private router: Router
@@ -63,7 +65,7 @@ export class AddYourOwnNodeComponent {
   }
 
   ngOnInit(): void {
-    this.targetId = history.state.targetId;
+    this.target = history.state;
   }
 
   protected addComponent(componentType: any): void {
@@ -81,10 +83,20 @@ export class AddYourOwnNodeComponent {
   protected submit(): void {
     this.submitting = true;
     const newNode = this.projectService.createNode(this.addNodeFormGroup.controls['title'].value);
-    if (this.isGroupNode(this.targetId)) {
-      this.projectService.createNodeInside(newNode, this.targetId);
-    } else {
-      this.projectService.createNodeAfter(newNode, this.targetId);
+    switch (this.target.type) {
+      case 'in':
+        this.projectService.createNodeInside(newNode, this.target.targetId);
+        break;
+      case 'after':
+        this.projectService.createNodeAfter(newNode, this.target.targetId);
+        break;
+      case 'firstStepInBranchPath':
+        this.insertFirstNodeInBranchPathService.insertNode(
+          newNode,
+          this.target.branchNodeId,
+          this.target.firstNodeIdInBranchPath
+        );
+        break;
     }
     this.addInitialComponents(newNode.id, this.initialComponents);
     this.save().then(() => {

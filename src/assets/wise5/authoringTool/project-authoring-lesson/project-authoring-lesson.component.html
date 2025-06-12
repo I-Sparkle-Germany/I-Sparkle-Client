@@ -1,32 +1,28 @@
-<div id="{{ lesson.id }}" class="lesson" [ngClass]="{ 'lesson-collapsed': !expanded }">
-  <div
-    (click)="toggleExpanded()"
-    class="lesson-bar full-width pointer"
-    fxLayout="row wrap"
-    fxLayoutAlign="start center"
-  >
-    <mat-checkbox
-      color="primary"
-      (change)="selectNode($event.checked)"
-      (click)="$event.stopPropagation()"
-      [disabled]="nodeTypeSelected() === 'step'"
-      aria-label="Select lesson"
-      i18n-aria-label
-    >
+<mat-expansion-panel
+  [expanded]="expanded"
+  class="lesson"
+  (opened)="toggleExpanded(true)"
+  (closed)="toggleExpanded(false)"
+>
+  <mat-expansion-panel-header aria-label="Expand/collapse lesson" i18n-aria-label>
+    <mat-panel-title>
+      <mat-checkbox
+        color="primary"
+        (change)="selectNode($event.checked)"
+        (click)="$event.stopPropagation()"
+        (keydown)="$event.stopPropagation()"
+        [disabled]="nodeTypeSelected() === 'step'"
+        aria-label="Select lesson"
+        i18n-aria-label
+      />
       <node-icon-and-title [nodeId]="lesson.id" [showPosition]="showPosition" />
-    </mat-checkbox>
-    <div
-      class="lesson-expand-collapse-div"
-      matTooltip="Click to expand/collapse lesson"
-      matTooltipPosition="above"
-      i18n-matTooltip
-    ></div>
-    <div class="lesson-buttons" [ngClass]="{ 'lesson-expanded': expanded }" fxLayoutGap="8px">
+    </mat-panel-title>
+    <mat-panel-description class="text" fxLayoutAlign="end center" fxLayoutGap="4px">
       <button
         class="enable-in-translation"
         mat-icon-button
-        (click)="setCurrentNode(lesson.id)"
-        color="primary"
+        (click)="$event.stopPropagation(); setCurrentNode(lesson.id)"
+        (keydown)="$event.stopPropagation()"
         matTooltip="Edit lesson"
         matTooltipPosition="above"
         i18n-matTooltip
@@ -36,7 +32,7 @@
       <button
         mat-icon-button
         (click)="$event.stopPropagation(); move()"
-        color="primary"
+        (keydown)="$event.stopPropagation()"
         matTooltip="Move lesson"
         matTooltipPosition="above"
         i18n-matTooltip
@@ -46,30 +42,17 @@
       <button
         mat-icon-button
         (click)="$event.stopPropagation(); delete()"
-        color="primary"
+        (keydown)="$event.stopPropagation()"
         matTooltip="Delete lesson"
         matTooltipPosition="above"
         i18n-matTooltip
       >
         <mat-icon>delete</mat-icon>
       </button>
-    </div>
-    <div class="expand-collapse-icon">
-      <div *ngIf="!expanded" fxLayoutAlign="center center">
-        <mat-icon>expand_more</mat-icon>
-      </div>
-      <div *ngIf="expanded" fxLayoutAlign="center center">
-        <mat-icon>expand_less</mat-icon>
-      </div>
-    </div>
-  </div>
-  <div *ngIf="expanded" fxLayout="column">
-    <div
-      *ngFor="let childId of lesson.ids; let first = first"
-      class="step-div"
-      fxLayout="row wrap"
-      fxLayoutAlign="start center"
-    >
+    </mat-panel-description>
+  </mat-expansion-panel-header>
+  <div>
+    <div *ngFor="let childId of lesson.ids" fxLayout="row wrap" fxLayoutAlign="start center">
       <project-authoring-step
         [step]="idToNode[childId]"
         (selectNodeEvent)="selectNodeEvent.emit($event)"
@@ -77,7 +60,7 @@
         [projectId]="projectId"
         fxFlex
       ></project-authoring-step>
-      <add-step-button [nodeId]="childId" [first]="first"></add-step-button>
+      <add-step-button [nodeId]="childId" />
     </div>
     <div *ngIf="lesson.ids.length === 0" class="no-steps-message" fxLayoutAlign="start center">
       <div i18n>This lesson has no steps</div>
@@ -93,4 +76,4 @@
       </button>
     </div>
   </div>
-</div>
+</mat-expansion-panel>

@@ -30,25 +30,18 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatChipsModule } from '@angular/material/chips';
 import { NotebookModule } from './notebook/notebook.module';
 import { MatSliderModule } from '@angular/material/slider';
-import { DialogResponseComponent } from '../assets/wise5/components/dialogGuidance/dialog-response/dialog-response.component';
 import { DialogResponsesComponent } from '../assets/wise5/components/dialogGuidance/dialog-responses/dialog-responses.component';
 import { HighchartsChartModule } from 'highcharts-angular';
 import { EditNotebookItemDialogModule } from '../assets/wise5/themes/default/notebook/edit-notebook-item-dialog/edit-notebook-item-dialog.module';
 import { StudentTeacherCommonServicesModule } from './student-teacher-common-services.module';
 import { MathModule } from './math/math.module';
 import { MatMenuModule } from '@angular/material/menu';
-import { MainMenuComponent } from '../assets/wise5/common/main-menu/main-menu.component';
-import { SideMenuComponent } from '../assets/wise5/common/side-menu/side-menu.component';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @NgModule({
-  declarations: [
-    DialogResponseComponent,
-    DialogResponsesComponent,
-    MainMenuComponent,
-    SideMenuComponent
-  ],
   imports: [
     CommonModule,
+    DialogResponsesComponent,
     DragDropModule,
     EditNotebookItemDialogModule,
     EditorModule,
@@ -82,17 +75,16 @@ import { SideMenuComponent } from '../assets/wise5/common/side-menu/side-menu.co
     NodeStatusIconComponent,
     NotebookModule,
     ReactiveFormsModule,
+    ScrollingModule,
     StudentTeacherCommonServicesModule
   ],
   exports: [
     CommonModule,
-    DialogResponseComponent,
     DialogResponsesComponent,
     DragDropModule,
     EditorModule,
     FlexLayoutModule,
     FormsModule,
-    MainMenuComponent,
     MatAutocompleteModule,
     MatButtonModule,
     MatButtonToggleModule,
@@ -119,8 +111,7 @@ import { SideMenuComponent } from '../assets/wise5/common/side-menu/side-menu.co
     MathModule,
     NodeIconComponent,
     NotebookModule,
-    ReactiveFormsModule,
-    SideMenuComponent
+    ReactiveFormsModule
   ]
 })
 export class StudentTeacherCommonModule {}

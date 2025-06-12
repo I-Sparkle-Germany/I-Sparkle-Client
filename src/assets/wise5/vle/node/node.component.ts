@@ -7,7 +7,6 @@ import { ComponentService } from '../../components/componentService';
 import { ComponentStateWrapper } from '../../components/ComponentStateWrapper';
 import { ConfigService } from '../../services/configService';
 import { ConstraintService } from '../../services/constraintService';
-import { NodeService } from '../../services/nodeService';
 import { NodeStatusService } from '../../services/nodeStatusService';
 import { SessionService } from '../../services/sessionService';
 import { StudentDataService } from '../../services/studentDataService';
@@ -19,6 +18,9 @@ import { ComponentComponent } from '../../components/component/component.compone
 import { MatButtonModule } from '@angular/material/button';
 import { ComponentStateInfoComponent } from '../../common/component-state-info/component-state-info.component';
 import { HelpIconComponent } from '../../themes/default/themeComponents/helpIcon/help-icon.component';
+import { StudentNodeService } from '../../services/studentNodeService';
+import { SubmitSurveyComponent } from '../submit-survey/submit-survey.component';
+import { MatDividerModule } from '@angular/material/divider';
 
 @Component({
   imports: [
@@ -27,10 +29,11 @@ import { HelpIconComponent } from '../../themes/default/themeComponents/helpIcon
     ComponentStateInfoComponent,
     FlexLayoutModule,
     HelpIconComponent,
-    MatButtonModule
+    MatButtonModule,
+    MatDividerModule,
+    SubmitSurveyComponent
   ],
   selector: 'node',
-  standalone: true,
   styleUrl: './node.component.scss',
   templateUrl: './node.component.html'
 })
@@ -42,7 +45,11 @@ export class NodeComponent implements OnInit {
   protected dirtyComponentIds: any = [];
   protected dirtySubmitComponentIds: any = [];
   protected disabled: boolean;
+  protected isBranchNode: boolean = false;
+  protected isLastNode: boolean = false;
+  protected isSurvey: boolean;
   protected latestComponentState: ComponentState;
+  protected nextNodeId: string;
   @Input() node: Node;
   protected nodeStatus: any;
   protected showRubric: boolean;
@@ -70,7 +77,7 @@ export class NodeComponent implements OnInit {
     private componentService: ComponentService,
     private configService: ConfigService,
     private constraintService: ConstraintService,
-    private nodeService: NodeService,
+    private nodeService: StudentNodeService,
     private nodeStatusService: NodeStatusService,
     private projectService: VLEProjectService,
     private sessionService: SessionService,
@@ -85,6 +92,8 @@ export class NodeComponent implements OnInit {
   ngOnInit(): void {
     this.workgroupId = this.configService.getWorkgroupId();
     this.disabled = !this.configService.isRunActive();
+    this.setIsLastNode();
+    this.isSurvey = this.configService.getConfigParam('isSurvey');
 
     this.initializeNode();
     this.startAutoSaveInterval();
@@ -152,6 +161,7 @@ export class NodeComponent implements OnInit {
         if (this.node.isEvaluateTransitionLogicOn('exitNode')) {
           this.nodeService.evaluateTransitionLogic();
         }
+        this.setIsLastNode();
         this.initializeNode();
       })
     );
@@ -435,6 +445,14 @@ export class NodeComponent implements OnInit {
         }
       }
     }
+  }
+
+  private setIsLastNode(): void {
+    this.nextNodeId = null;
+    this.nodeService.getNextNodeId(this.node.id).then((nextId) => {
+      this.nextNodeId = nextId;
+    });
+    this.isBranchNode = this.node.transitionLogic.transitions.length > 1;
   }
 
   protected getComponentStateByComponentId(componentId: string): any {

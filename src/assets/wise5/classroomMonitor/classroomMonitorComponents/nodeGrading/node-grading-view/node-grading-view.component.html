@@ -38,8 +38,7 @@
       fxLayoutAlign="center center"
       fxLayoutGap="8px"
     >
-      <component-select [nodeId]="nodeId" (modelChange)="onUpdateHiddenComponents($event)">
-      </component-select>
+      <component-select [nodeId]="nodeId" (modelChange)="onUpdateHiddenComponents($event)" />
       <button *ngIf="milestoneReport" mat-stroked-button (click)="showReport($event)" class="info">
         <div fxLayoutAlign="center center" fxLayoutGap="4px">
           <mat-icon class="info">flag</mat-icon>
@@ -75,7 +74,7 @@
         fxLayoutAlign="center center"
         fxLayoutGap.lt-md="8px"
       >
-        <workgroup-select-autocomplete></workgroup-select-autocomplete>
+        <workgroup-select-autocomplete />
         <span fxFlex fxHide fxShow.gt-sm></span>
         <div *ngIf="nodeHasWork" fxFlex.lt-md="100" fxLayoutAlign="center center">
           <button

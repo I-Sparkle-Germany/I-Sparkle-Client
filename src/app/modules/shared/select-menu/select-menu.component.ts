@@ -15,7 +15,6 @@ import { MatSelectModule } from '@angular/material/select';
   encapsulation: ViewEncapsulation.None,
   imports: [CommonModule, FormsModule, MatSelectModule, ReactiveFormsModule],
   selector: 'app-select-menu',
-  standalone: true,
   styleUrl: './select-menu.component.scss',
   templateUrl: './select-menu.component.html'
 })

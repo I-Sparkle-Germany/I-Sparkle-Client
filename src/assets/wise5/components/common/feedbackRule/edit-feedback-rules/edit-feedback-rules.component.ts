@@ -9,9 +9,10 @@ import { FeedbackRuleHelpComponent } from '../feedback-rule-help/feedback-rule-h
 import { generateRandomKey } from '../../../../common/string/string';
 
 @Component({
-  selector: 'edit-feedback-rules',
-  templateUrl: './edit-feedback-rules.component.html',
-  styleUrls: ['./edit-feedback-rules.component.scss']
+    selector: 'edit-feedback-rules',
+    templateUrl: './edit-feedback-rules.component.html',
+    styleUrls: ['./edit-feedback-rules.component.scss'],
+    standalone: false
 })
 export class EditFeedbackRulesComponent implements OnInit {
   @Input() feedbackRules: Partial<FeedbackRule>[] = [];
@@ -19,7 +20,10 @@ export class EditFeedbackRulesComponent implements OnInit {
   subscriptions: Subscription = new Subscription();
   @Input() version: number = 2;
 
-  constructor(protected dialog: MatDialog, protected projectService: TeacherProjectService) {}
+  constructor(
+    protected dialog: MatDialog,
+    protected projectService: TeacherProjectService
+  ) {}
 
   ngOnInit(): void {
     this.subscriptions.add(

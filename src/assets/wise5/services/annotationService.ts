@@ -1,5 +1,3 @@
-'use strict';
-
 import { Injectable } from '@angular/core';
 import { ProjectService } from './projectService';
 import { ConfigService } from './configService';
@@ -19,9 +17,9 @@ export class AnnotationService {
   public annotationReceived$: Observable<Annotation> = this.annotationReceivedSource.asObservable();
 
   constructor(
+    private configService: ConfigService,
     private http: HttpClient,
-    private ConfigService: ConfigService,
-    private ProjectService: ProjectService
+    private projectService: ProjectService
   ) {}
 
   getAnnotations(): Annotation[] {
@@ -43,60 +41,18 @@ export class AnnotationService {
    * @param params an object containing the params to match
    * @returns the latest annotation that matches the params
    */
-  getLatestAnnotation(params) {
-    let annotation = null;
-
-    if (params != null) {
-      let nodeId = params.nodeId;
-      let componentId = params.componentId;
-      let fromWorkgroupId = params.fromWorkgroupId;
-      let toWorkgroupId = params.toWorkgroupId;
-      let type = params.type;
-
-      let annotations = this.annotations;
-
-      if (annotations != null) {
-        for (let a = annotations.length - 1; a >= 0; a--) {
-          let tempAnnotation = annotations[a];
-
-          if (tempAnnotation != null) {
-            let match = true;
-
-            if (nodeId && tempAnnotation.nodeId !== nodeId) {
-              match = false;
-            }
-            if (match && componentId && tempAnnotation.componentId !== componentId) {
-              match = false;
-            }
-            if (match && fromWorkgroupId && tempAnnotation.fromWorkgroupId !== fromWorkgroupId) {
-              match = false;
-            }
-            if (match && toWorkgroupId && tempAnnotation.toWorkgroupId !== toWorkgroupId) {
-              match = false;
-            }
-            if (match && type) {
-              if (type.constructor === Array) {
-                for (let thisType of type) {
-                  if (tempAnnotation.type !== thisType) {
-                    match = false;
-                  }
-                }
-              } else {
-                if (tempAnnotation.type !== type) {
-                  match = false;
-                }
-              }
-            }
-
-            if (match) {
-              annotation = tempAnnotation;
-              break;
-            }
-          }
-        }
-      }
-    }
-    return annotation;
+  getLatestAnnotation(params): any {
+    return (
+      this.annotations.findLast((annotation) => {
+        return (
+          annotation.nodeId == params.nodeId &&
+          annotation.componentId == params.componentId &&
+          ((params.type.constructor === Array &&
+            params.type.every((thisType) => annotation.type === thisType)) ||
+            annotation.type === params.type)
+        );
+      }) ?? null
+    );
   }
 
   /**
@@ -155,7 +111,7 @@ export class AnnotationService {
     annotation.requestToken = generateRandomKey(); // use this to keep track of unsaved annotations.
     this.addOrUpdateAnnotation(annotation);
     const annotations = [annotation];
-    if (this.ConfigService.isPreview()) {
+    if (this.configService.isPreview()) {
       // if we're in preview, don't make any request to the server but pretend we did
       let savedAnnotationDataResponse = {
         annotations: annotations
@@ -164,13 +120,13 @@ export class AnnotationService {
       return Promise.resolve(annotation);
     } else {
       const params = {
-        runId: this.ConfigService.getRunId(),
-        workgroupId: this.ConfigService.getWorkgroupId(),
+        runId: this.configService.getRunId(),
+        workgroupId: this.configService.getWorkgroupId(),
         annotations: JSON.stringify(annotations)
       };
       const headers = new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' });
       return this.http
-        .post(this.ConfigService.getConfigParam('teacherDataURL'), $.param(params), {
+        .post(this.configService.getConfigParam('teacherDataURL'), $.param(params), {
           headers: headers
         })
         .toPromise()
@@ -206,7 +162,7 @@ export class AnnotationService {
               localAnnotation.serverSaveTime = savedAnnotation.serverSaveTime;
               localAnnotation.requestToken = null; // requestToken is no longer needed.
 
-              if (this.ConfigService.isPreview() && localAnnotation.id == null) {
+              if (this.configService.isPreview() && localAnnotation.id == null) {
                 /*
                  * we are in preview mode so we will set a dummy
                  * annotation id into the annotation
@@ -286,7 +242,7 @@ export class AnnotationService {
     return annotations.filter((annotation) => {
       return (
         this.isScoreOrAutoScore(annotation) &&
-        this.ProjectService.shouldIncludeInTotalScore(annotation.nodeId, annotation.componentId)
+        this.projectService.shouldIncludeInTotalScore(annotation.nodeId, annotation.componentId)
       );
     });
   }

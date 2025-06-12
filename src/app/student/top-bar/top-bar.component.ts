@@ -17,7 +17,6 @@ import { ProjectLocale } from '../../domain/projectLocale';
 import { StudentAccountMenuModule } from '../../../assets/wise5/vle/student-account-menu/student-account-menu.module';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
-import { NotificationsDialogModule } from '../../../assets/wise5/vle/notifications-dialog/notifications-dialog.module';
 import { DismissAmbientNotificationDialogModule } from '../../../assets/wise5/vle/dismiss-ambient-notification-dialog/dismiss-ambient-notification-dialog.module';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -28,8 +27,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { ProjectLanguageChooserComponent } from '../../common/project-language-chooser/project-language-chooser.component';
 
 @Component({
-  standalone: true,
-  selector: 'top-bar',
   imports: [
     CommonModule,
     DismissAmbientNotificationDialogModule,
@@ -41,10 +38,10 @@ import { ProjectLanguageChooserComponent } from '../../common/project-language-c
     MatMenuModule,
     MatProgressSpinnerModule,
     MatToolbarModule,
-    NotificationsDialogModule,
     ProjectLanguageChooserComponent,
     StudentAccountMenuModule
   ],
+  selector: 'top-bar',
   styleUrls: ['./top-bar.component.scss'],
   templateUrl: 'top-bar.component.html'
 })
@@ -132,9 +129,10 @@ export class TopBarComponent {
   }
 
   private setCompletionPercent(): void {
-    this.completionPercent = this.nodeStatusService.getNodeStatuses()[
-      this.projectService.getProjectRootNode().id
-    ].progress.completionPct;
+    this.completionPercent =
+      this.nodeStatusService.getNodeStatuses()[
+        this.projectService.getProjectRootNode().id
+      ].progress.completionPct;
   }
 
   private subscribeToStudentData(): void {
@@ -158,7 +156,7 @@ export class TopBarComponent {
     );
   }
 
-  viewAlerts($event: any): void {
+  protected viewAlerts($event: any): void {
     $event.stopPropagation();
     this.dialog.open(NotificationsDialogComponent, {
       panelClass: 'dialog-sm',

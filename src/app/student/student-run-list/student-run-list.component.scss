@@ -1,7 +1,4 @@
-@import
-  'style/abstracts/variables',
-  'style/abstracts/mixins',
-  'style/abstracts/functions';
+@use 'style/abstracts/functions';
 
 h2 {
   margin-bottom: 0;
@@ -15,11 +12,12 @@ h2 {
   margin: 0;
 }
 
-.run-list {
-  padding: 16px 16px 0;
+.content-block__header {
+  margin: -16px -16px 16px;
+  padding-bottom: 16px;
 
-  @media (min-width: breakpoint('sm.min')) {
-    padding: 24px 16px 16px;
+  @media (min-width: functions.breakpoint('sm.min')) {
+    margin: -24px -24px 16px;
   }
 }
 

@@ -1,4 +1,4 @@
-<div class="main content" fxLayout="column" fxLayoutAlign="center center">
+<div class="main content flex flex-col items-center justify-center">
   <div class="notice container-bg mat-subtitle-1">
     <p i18n>
       The i-sparkle mission is to combine the power of teachers and technology to transform learning
@@ -7,7 +7,7 @@
     <p i18n>Learn more, get engaged, and spread the sparkle!</p>
   </div>
 </div>
-<div class="main content" fxLayout="column" fxLayoutAlign="center center">
+<div class="main content flex flex-col items-center justify-center">
   <h1 i18n>The i-sparkle approach</h1>
   <div class="notice container-bg mat-subtitle-1">
     <p i18n>
@@ -39,17 +39,9 @@
   </div>
 </div>
 <div class="main content">
-  <div
-    fxLayout="row"
-    fxLayout.xs="column"
-    fxLayoutAlign="center stretch"
-    fxLayoutAlign.xs="center center"
-    fxLayoutGap="32px"
-    fxLayoutGap.sm="24px"
-    fxLayoutGap.gt-sm="32px"
-  >
+  <div class="flex flex-row flex-wrap items-stretch justify-center gap-8 sm:gap-6">
     <app-call-to-action
-      fxFlex
+      class="flex-1"
       icon="feed"
       iconColor="accent-2"
       i18n-headline
@@ -57,7 +49,7 @@
       destination=""
     ></app-call-to-action>
     <app-call-to-action
-      fxFlex
+      class="flex-1"
       icon="help"
       iconColor="accent"
       i18n-headline
@@ -65,7 +57,7 @@
       destination=""
     ></app-call-to-action>
     <app-call-to-action
-      fxFlex
+      class="flex-1"
       icon="info"
       iconColor="accent"
       i18n-headline
@@ -73,7 +65,7 @@
       destination=""
     ></app-call-to-action>
     <app-call-to-action
-      fxFlex
+      class="flex-1"
       icon="contact_mail"
       iconColor="accent"
       i18n-headline
@@ -82,7 +74,7 @@
     ></app-call-to-action>
   </div>
 </div>
-<div class="main content" fxLayout="column" fxLayoutAlign="center center">
+<div class="main content flex flex-col items-center justify-center">
   <div class="notice container-bg mat-subtitle-1">
     <p i18n>Wondering if i-sparkle is for you?</p>
     <p i18n>
@@ -91,7 +83,7 @@
     </p>
   </div>
 </div>
-<div class="main content center" fxLayoutAlign="center center" fxLayoutGap="8px">
+<div class="main content center flex items-center justify-center gap-2">
   <span class="mat-headline-5" i18n>Ready to use i-sparkle?</span>
   <a mat-flat-button color="primary" class="mat-subtitle-1" routerLink="join">Sign up for free!</a>
 </div>

@@ -27,7 +27,6 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { RunMenuComponent } from './run-menu/run-menu.component';
-import { CreateRunDialogComponent } from './create-run-dialog/create-run-dialog.component';
 import { LibraryModule } from '../modules/library/library.module';
 import { ShareRunDialogComponent } from './share-run-dialog/share-run-dialog.component';
 import { TimelineModule } from '../modules/timeline/timeline.module';
@@ -49,6 +48,7 @@ import { SelectTagsComponent } from './select-tags/select-tags.component';
 import { UnitTagsComponent } from './unit-tags/unit-tags.component';
 import { ColorService } from '../../assets/wise5/services/colorService';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { AccessLinkService } from '../services/accessLinkService';
 
 const materialModules = [
   MatAutocompleteModule,
@@ -91,7 +91,6 @@ const materialModules = [
     UnitTagsComponent
   ],
   declarations: [
-    CreateRunDialogComponent,
     EditComponent,
     EditRunWarningDialogComponent,
     ListClassroomCoursesDialogComponent,
@@ -105,7 +104,7 @@ const materialModules = [
     TeacherRunListComponent,
     TeacherRunListItemComponent
   ],
-  providers: [AuthGuard, ColorService, ProjectTagService],
+  providers: [AccessLinkService, AuthGuard, ColorService, ProjectTagService],
   exports: [TeacherComponent, UnitTagsComponent, materialModules]
 })
 export class TeacherModule {}

@@ -14,14 +14,13 @@ import { FlexLayoutModule } from '@angular/flex-layout';
   selector: 'app-header-account-menu',
   templateUrl: './header-account-menu.component.html',
   styleUrl: './header-account-menu.component.scss',
-  standalone: true,
   imports: [
     CommonModule,
     FlexLayoutModule,
     MatButtonModule,
+    MatDividerModule,
     MatIconModule,
     MatMenuModule,
-    MatDividerModule,
     RouterModule
   ]
 })
@@ -34,7 +33,10 @@ export class HeaderAccountMenuComponent implements OnInit {
   private switchToOriginalUserURL = '/api/logout/impersonate';
   @Input() user: User;
 
-  constructor(private configService: ConfigService, private http: HttpClient) {}
+  constructor(
+    private configService: ConfigService,
+    private http: HttpClient
+  ) {}
 
   ngOnInit(): void {
     this.configService.getConfig().subscribe((config) => {

@@ -3,7 +3,7 @@
 <div id="top" class="app-styles authoring" disable-delete-keypress role="main">
   <mat-drawer-container>
     <mat-drawer #drawer [(opened)]="isMenuOpen" mode="over" class="mat-elevation-z4">
-      <main-menu [title]="title" [views]="views"></main-menu>
+      <main-menu [title]="title" [views]="views" />
     </mat-drawer>
     <mat-drawer-content>
       <at-top-bar
@@ -12,8 +12,10 @@
         [projectTitle]="projectTitle"
         [runId]="runId"
         [runCode]="runCode"
-      ></at-top-bar>
-      <authoring-tool-bar *ngIf="showToolbar" (onMenuToggle)="toggleMenu()"></authoring-tool-bar>
+      />
+      @if (showToolbar) {
+        <authoring-tool-bar (onMenuToggle)="toggleMenu()" />
+      }
       <content
         id="content"
         fxLayout="column"
@@ -21,10 +23,13 @@
         class="l-main"
         [ngClass]="{ 'l-main--with-toolbar': showToolbar }"
         role="main"
+        cdkScrollable
       >
-        <router-outlet></router-outlet>
+        <router-outlet />
       </content>
-      <side-menu *ngIf="showToolbar" [views]="views"></side-menu>
+      @if (showToolbar) {
+        <side-menu [views]="views" />
+      }
     </mat-drawer-content>
   </mat-drawer-container>
 </div>

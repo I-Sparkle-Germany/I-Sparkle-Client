@@ -5,10 +5,11 @@ import { ComponentShowWorkDirective } from '../../component-show-work.directive'
 import { DrawService } from '../drawService';
 
 @Component({
-  selector: 'draw-show-work',
-  templateUrl: 'draw-show-work.component.html',
-  styleUrls: ['draw-show-work.component.scss', '../drawing-tool.scss'],
-  encapsulation: ViewEncapsulation.None
+    selector: 'draw-show-work',
+    templateUrl: 'draw-show-work.component.html',
+    styleUrls: ['draw-show-work.component.scss', '../drawing-tool.scss'],
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class DrawShowWorkComponent extends ComponentShowWorkDirective {
   drawingToolId: string;
@@ -51,6 +52,7 @@ export class DrawShowWorkComponent extends ComponentShowWorkDirective {
       this.componentContent.height
     );
     this.DrawService.setUpTools(this.drawingToolId, this.componentContent.tools, false);
+    this.drawingTool.canvasOnly();
     this.drawingTool.canvas.removeListeners();
   }
 

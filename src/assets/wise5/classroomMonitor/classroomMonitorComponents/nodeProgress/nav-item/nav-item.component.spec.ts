@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { Observable, Subject } from 'rxjs';
 import { NotificationService } from '../../../../services/notificationService';
 import { TeacherDataService } from '../../../../services/teacherDataService';
@@ -8,7 +7,6 @@ import { ClassroomMonitorTestingModule } from '../../../classroom-monitor-testin
 import { NavItemComponent } from './nav-item.component';
 import { NodeService } from '../../../../services/nodeService';
 import { Node } from '../../../../common/Node';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 class MockNotificationService {
   getAlertNotifications() {
@@ -40,6 +38,9 @@ class MockTeacherProjectService {
   isGroupNode() {}
   nodeHasWork() {}
   getMaxScoreForNode() {}
+  getNodeById() {
+    return { constraints: [] };
+  }
   getNode() {
     return new Node();
   }
@@ -56,15 +57,13 @@ let node1;
 describe('NavItemComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [NavItemComponent],
-      imports: [ClassroomMonitorTestingModule, MatSnackBarModule],
+      imports: [ClassroomMonitorTestingModule, NavItemComponent],
       providers: [
         { provide: NodeService, useClass: MockNodeService },
         { provide: NotificationService, useClass: MockNotificationService },
         { provide: TeacherDataService, useClass: MockTeacherDataService },
         { provide: TeacherProjectService, useClass: MockTeacherProjectService }
-      ],
-      schemas: [NO_ERRORS_SCHEMA]
+      ]
     }).compileComponents();
   });
 
@@ -82,22 +81,22 @@ describe('NavItemComponent', () => {
 function itemClicked() {
   describe('itemClicked', () => {
     it('should set expanded to false when itemClicked() is called on an expanded group', () => {
-      component.isGroup = true;
-      component.expanded = true;
+      component['isGroup'] = true;
+      component['expanded'] = true;
       component.itemClicked();
-      expect(component.expanded).toBeFalse();
+      expect(component['expanded']).toBeFalse();
     });
 
     it('should set expanded to true when itemClicked() is called on a collapsed group', () => {
-      component.isGroup = true;
-      component.expanded = false;
+      component['isGroup'] = true;
+      component['expanded'] = false;
       component.itemClicked();
-      expect(component.expanded).toBeTrue();
+      expect(component['expanded']).toBeTrue();
     });
 
     it('should set current node when a step is clicked', () => {
       const spy = spyOn(TestBed.inject(NodeService), 'setCurrentNode');
-      component.isGroup = false;
+      component['isGroup'] = false;
       component.itemClicked();
       expect(spy).toHaveBeenCalled();
     });
@@ -112,7 +111,7 @@ function toggleLockNode() {
     beforeEach(() => {
       node1 = new Node();
       node1.id = nodeId;
-      component.isGroup = true;
+      component['isGroup'] = true;
       component.type = 'card';
       fixture.detectChanges();
       projectService = TestBed.inject(TeacherProjectService);
@@ -121,7 +120,7 @@ function toggleLockNode() {
     });
     describe('when there is no teacherRemovalConstraint', () => {
       it('should add constraint', () => {
-        const getNodeSpy = spyOn(projectService, 'getNode').and.returnValue(node1);
+        const getNodeSpy = spyOn(projectService, 'getNodeById').and.returnValue(node1);
         expect(node1.constraints.length).toEqual(0);
         lockNodeButton.click();
         expect(getNodeSpy).toHaveBeenCalled();
@@ -141,7 +140,7 @@ function toggleLockNode() {
             Object({ name: 'teacherRemoval', params: Object({ periodId: periodId }) })
           ]
         });
-        const getNodeSpy = spyOn(projectService, 'getNode').and.returnValue(node1);
+        const getNodeSpy = spyOn(projectService, 'getNodeById').and.returnValue(node1);
         const dataService = TestBed.inject(TeacherDataService);
         const currentPeriodSpy = spyOn(dataService, 'getCurrentPeriod').and.returnValue({
           periodId: periodId

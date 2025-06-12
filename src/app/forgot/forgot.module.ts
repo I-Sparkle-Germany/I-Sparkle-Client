@@ -20,7 +20,6 @@ import { ForgotTeacherPasswordChangeComponent } from './teacher/forgot-teacher-p
 import { ForgotTeacherPasswordVerifyComponent } from './teacher/forgot-teacher-password-verify/forgot-teacher-password-verify.component';
 import { PasswordModule } from '../password/password.module';
 import { ForgotUserPasswordCompleteComponent } from './forgot-user-password-complete/forgot-user-password-complete.component';
-import { StandaloneLogoComponent } from '../common/standalone-logo/standalone-logo.comonent';
 import { CallToActionComponent } from '../modules/shared/call-to-action/call-to-action.component';
 
 @NgModule({
@@ -38,9 +37,6 @@ import { CallToActionComponent } from '../modules/shared/call-to-action/call-to-
     PasswordModule,
     ReactiveFormsModule,
     SharedModule,
-    StandaloneLogoComponent
-  ],
-  declarations: [
     ForgotStudentPasswordComponent,
     ForgotStudentUsernameComponent,
     ForgotTeacherUsernameComponent,
@@ -52,6 +48,6 @@ import { CallToActionComponent } from '../modules/shared/call-to-action/call-to-
     ForgotTeacherPasswordVerifyComponent,
     ForgotUserPasswordCompleteComponent
   ],
-  exports: [ForgotComponent, StandaloneLogoComponent]
+  exports: [ForgotComponent]
 })
 export class ForgotModule {}

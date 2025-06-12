@@ -14,7 +14,8 @@ declare let gtag: Function;
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
+  standalone: false
 })
 export class AppComponent {
   title = 'app';
@@ -139,7 +140,11 @@ export class AppComponent {
     });
   }
 
-  setGTagManager() {
+  private setGTagManager(): void {
+    const googleTagManagerId = this.configService.getGoogleTagManagerId();
+    if (googleTagManagerId) {
+      this.activateGTM(window, document, 'script', 'dataLayer', googleTagManagerId);
+    }
     this.googleAnalyticsId = this.configService.getGoogleAnalyticsId();
     if (this.googleAnalyticsId) {
       const gtagScript = this.document.createElement('script');
@@ -152,6 +157,17 @@ export class AppComponent {
           gtag('config', '${this.googleAnalyticsId}');`;
       this.document.head.appendChild(script);
     }
+  }
+
+  private activateGTM(w, d, s, l, i): void {
+    w[l] = w[l] || [];
+    w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+    var f = d.getElementsByTagName(s)[0],
+      j = d.createElement(s),
+      dl = l != 'dataLayer' ? '&l=' + l : '';
+    j.async = true;
+    j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+    f.parentNode.insertBefore(j, f);
   }
 
   fixScrollTop(ev: any) {
@@ -174,7 +190,8 @@ export class AppComponent {
       !this.router.url.includes('/login') &&
       !this.router.url.includes('/join') &&
       !this.router.url.includes('/contact') &&
-      !this.router.url.includes('/forgot')
+      !this.router.url.includes('/forgot') &&
+      !this.router.url.includes('/survey')
     );
   }
 
@@ -208,8 +225,9 @@ export class AppComponent {
     this.hasAnnouncement = false;
   }
 
-  onYPositionChange(el: HTMLElement) {
-    this.pageY = el.scrollTop;
+  onYPositionChange(event: Event) {
+    const target = event.target as HTMLElement;
+    this.pageY = target.scrollTop;
     this.scroll = this.pageY > 360 && this.pageY < this.prevPageY;
     this.prevPageY = this.pageY;
   }

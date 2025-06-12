@@ -3,21 +3,10 @@
   class="standalone__content standalone__content--sm mat-elevation-z0 center"
 >
   <mat-card-content>
-    <div class="standalone__logo">
-      <a routerLink="/">
-        <picture>
-          <source
-            type="image/webp"
-            srcset="assets/img/i-sparkle-logo.webp, assets/img/i-sparkle-logo@2x.webp 2x"
-          />
-          <source srcset="assets/img/i-sparkle-logo.png, assets/img/i-sparkle-logo@2x.png 2x" />
-          <img src="assets/img/i-sparkle-logo@2x.png" i18n-alt alt="i-sparkle logo" />
-        </picture>
-      </a>
-    </div>
+    <standalone-logo />
     <h2 class="standalone__title accent" i18n>Create Account</h2>
-    <p class="mat-subtitle-2" i18n>Hi! This Google user already has a i-sparkle account.</p>
-    <mat-card-actions fxLayout="row" fxLayoutAlign="center center">
+    <p class="mat-subtitle-2" i18n>Hi! This Google user already has an i-sparkle account.</p>
+    <mat-card-actions class="flex flex-row items-center justify-center">
       <button
         class="button--social-login button--google"
         color="accent"

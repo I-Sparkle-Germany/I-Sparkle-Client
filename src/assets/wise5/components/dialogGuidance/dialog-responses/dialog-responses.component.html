@@ -1,12 +1,20 @@
-<dialog-response
-  *ngFor="let response of responses"
-  [response]="response"
-  [computerAvatar]="computerAvatar"
->
-</dialog-response>
-<dialog-response
-  *ngIf="isWaitingForComputerResponse"
-  [response]="{ text: '...' }"
-  [computerAvatar]="computerAvatar"
->
-</dialog-response>
+@if (showDetectedIdeas && hasRubricData) {
+  <div class="flex items-center justify-end">
+    <mat-icon class="mat-18" color="primary">auto_awesome</mat-icon>&nbsp;<a
+      tabindex="0"
+      (click)="openIdeasRubric()"
+      (keyup.enter)="openIdeasRubric()"
+      i18n
+      >Detectable ideas</a
+    >
+  </div>
+}
+@for (response of responses; track response.timestamp) {
+  @if (response.user === 'Computer' && showDetectedIdeas && cRaterRubric.ideas.length) {
+    <detected-ideas [cRaterRubric]="cRaterRubric" [responses]="[response]" />
+  }
+  <dialog-response [response]="response" [computerAvatar]="computerAvatar" />
+}
+@if (isWaitingForComputerResponse) {
+  <dialog-response [response]="{ text: '...' }" [computerAvatar]="computerAvatar" />
+}

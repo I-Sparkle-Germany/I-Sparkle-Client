@@ -16,10 +16,11 @@ import { convertToPNGFile } from '../../../common/canvas/canvas';
 import { hasConnectedComponent } from '../../../common/ComponentContent';
 
 @Component({
-  selector: 'draw-student',
-  templateUrl: 'draw-student.component.html',
-  styleUrls: ['draw-student.component.scss', '../drawing-tool.scss'],
-  encapsulation: ViewEncapsulation.None
+    selector: 'draw-student',
+    templateUrl: 'draw-student.component.html',
+    styleUrls: ['draw-student.component.scss', '../drawing-tool.scss'],
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class DrawStudent extends ComponentStudent {
   drawingTool: any;
@@ -96,6 +97,7 @@ export class DrawStudent extends ComponentStudent {
       this.disableSubmitButton();
     }
     if (this.isDisabled) {
+      this.drawingTool.canvasOnly();
       this.drawingTool.canvas.removeListeners();
     }
 
@@ -323,14 +325,13 @@ export class DrawStudent extends ComponentStudent {
 
   addToNotebook(): void {
     if (this.isDirty) {
-      const studentWorkSavedToServerSubscription = this.StudentDataService.studentWorkSavedToServer$.subscribe(
-        (componentState: any) => {
+      const studentWorkSavedToServerSubscription =
+        this.StudentDataService.studentWorkSavedToServer$.subscribe((componentState: any) => {
           if (this.isForThisComponent(componentState)) {
             this.addNoteWithImage(componentState.id);
             studentWorkSavedToServerSubscription.unsubscribe();
           }
-        }
-      );
+        });
       this.saveButtonClicked();
     } else {
       const componentState = this.StudentDataService.getLatestComponentStateByNodeIdAndComponentId(
