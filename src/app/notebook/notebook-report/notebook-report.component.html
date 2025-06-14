@@ -4,11 +4,7 @@
     fxLayout="column"
     [ngClass]="{ collapsed: collapsed, full: full && !collapsed }"
   >
-    <mat-card-header
-      class="dark-theme mat-app-background"
-      (click)="toggleCollapse()"
-      fxLayoutAlign="start center"
-    >
+    <mat-card-header (click)="toggleCollapse()" fxLayoutAlign="start center">
       <mat-card-title
         class="mat-body-2 overflow--ellipsis"
         fxLayoutAlign="start center"
