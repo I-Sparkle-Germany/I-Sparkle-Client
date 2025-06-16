@@ -1,12 +1,10 @@
 import { Component } from '@angular/core';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { CallToActionComponent } from '../../../modules/shared/call-to-action/call-to-action.component';
-import { StandaloneLogoComponent } from '../../../common/standalone-logo/standalone-logo.comonent';
 import { MatCardModule } from '@angular/material/card';
+import { StandaloneLogoComponent } from '../../../common/standalone-logo/standalone-logo.comonent';
 
 @Component({
-  imports: [CallToActionComponent, FlexLayoutModule, MatCardModule, StandaloneLogoComponent],
-  standalone: true,
+  imports: [CallToActionComponent, MatCardModule, StandaloneLogoComponent],
   styleUrl: './forgot-student.component.scss',
   templateUrl: './forgot-student.component.html'
 })

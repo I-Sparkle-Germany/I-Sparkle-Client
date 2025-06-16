@@ -13,10 +13,11 @@ import { NodeGradingViewComponent } from '../../nodeGrading/node-grading-view/no
 import { Annotation } from '../../../../common/Annotation';
 
 @Component({
-  selector: 'milestone-grading-view',
-  templateUrl: './milestone-grading-view.component.html',
-  styleUrls: ['./milestone-grading-view.component.scss'],
-  encapsulation: ViewEncapsulation.None
+    selector: 'milestone-grading-view',
+    templateUrl: './milestone-grading-view.component.html',
+    styleUrls: ['./milestone-grading-view.component.scss'],
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class MilestoneGradingViewComponent extends NodeGradingViewComponent {
   componentId: string;
@@ -32,23 +33,23 @@ export class MilestoneGradingViewComponent extends NodeGradingViewComponent {
     protected annotationService: AnnotationService,
     protected classroomStatusService: ClassroomStatusService,
     protected configService: ConfigService,
+    protected dataService: TeacherDataService,
     protected dialog: MatDialog,
     protected milestoneService: MilestoneService,
     protected notificationService: NotificationService,
     protected peerGroupService: TeacherPeerGroupService,
-    protected projectService: TeacherProjectService,
-    protected teacherDataService: TeacherDataService
+    protected projectService: TeacherProjectService
   ) {
     super(
       annotationService,
       classroomStatusService,
       configService,
+      dataService,
       dialog,
       milestoneService,
       notificationService,
       peerGroupService,
-      projectService,
-      teacherDataService
+      projectService
     );
   }
 
@@ -57,9 +58,8 @@ export class MilestoneGradingViewComponent extends NodeGradingViewComponent {
     this.node = this.projectService.getNode(this.nodeId);
     if (this.milestone.report.locations.length > 1) {
       this.firstNodeId = this.milestone.report.locations[0].nodeId;
-      this.lastNodeId = this.milestone.report.locations[
-        this.milestone.report.locations.length - 1
-      ].nodeId;
+      this.lastNodeId =
+        this.milestone.report.locations[this.milestone.report.locations.length - 1].nodeId;
     }
     this.componentId = this.milestone.componentId;
     this.retrieveStudentData();
@@ -131,15 +131,7 @@ export class MilestoneGradingViewComponent extends NodeGradingViewComponent {
       componentType = null,
       category = 'Navigation',
       data = { milestoneId: this.milestone.id };
-    this.teacherDataService.saveEvent(
-      context,
-      nodeId,
-      componentId,
-      componentType,
-      category,
-      event,
-      data
-    );
+    this.dataService.saveEvent(context, nodeId, componentId, componentType, category, event, data);
   }
 
   onUpdateExpand({ workgroupId, value }): void {
@@ -185,15 +177,7 @@ export class MilestoneGradingViewComponent extends NodeGradingViewComponent {
       componentType = null,
       category = 'Navigation',
       data = { milestoneId: this.milestone.id, workgroupId: workgroupId };
-    this.teacherDataService.saveEvent(
-      context,
-      nodeId,
-      componentId,
-      componentType,
-      category,
-      event,
-      data
-    );
+    this.dataService.saveEvent(context, nodeId, componentId, componentType, category, event, data);
   }
 
   protected sortWorkgroups(): void {

@@ -1,16 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatListModule } from '@angular/material/list';
-import { WorkgroupSelectAutocompleteComponent } from '../../../../app/classroom-monitor/workgroup-select/workgroup-select-autocomplete/workgroup-select-autocomplete.component';
 import { ConfigService } from '../../services/configService';
 import { TeacherDataService } from '../../services/teacherDataService';
 import { ClassroomMonitorTestingModule } from '../classroom-monitor-testing.module';
 import { ClassroomMonitorTestHelper } from '../classroomMonitorComponents/shared/testing/ClassroomMonitorTestHelper';
 import { StudentProgressComponent } from './student-progress.component';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideRouter } from '@angular/router';
 
 class SortTestParams {
   constructor(
@@ -25,21 +19,11 @@ let component: StudentProgressComponent;
 let fixture: ComponentFixture<StudentProgressComponent>;
 const testHelper: ClassroomMonitorTestHelper = new ClassroomMonitorTestHelper();
 const { workgroupId1, workgroupId2, workgroupId3, workgroupId4, workgroupId5 } = testHelper;
-
 describe('StudentProgressComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [StudentProgressComponent, WorkgroupSelectAutocompleteComponent],
-      imports: [
-        ClassroomMonitorTestingModule,
-        FormsModule,
-        MatAutocompleteModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatListModule,
-        ReactiveFormsModule,
-        RouterTestingModule
-      ]
+      imports: [ClassroomMonitorTestingModule, StudentProgressComponent],
+      providers: [provideRouter([])]
     }).compileComponents();
   });
 
@@ -60,7 +44,7 @@ describe('StudentProgressComponent', () => {
 });
 
 function initializeWorkgroups(component: StudentProgressComponent) {
-  component.students = testHelper.students;
+  component['students'] = testHelper.students;
 }
 
 function setSort() {
@@ -172,7 +156,7 @@ function setSort() {
       it(sortTest.testDescription, () => {
         setSortAndDirection(sortTest.sortField, sortTest.sortDirection);
         testHelper.expectWorkgroupOrder(
-          component.sortedStudents,
+          component['sortedStudents'],
           sortTest.expectedWorkgroupIdOrder
         );
       });
@@ -181,9 +165,9 @@ function setSort() {
 }
 
 function setSortAndDirection(field: string, direction: string) {
-  component.sort = '';
-  component.setSort(field);
+  component['sort'] = '';
+  component['setSort'](field);
   if (direction === 'desc') {
-    component.setSort(field);
+    component['setSort'](field);
   }
 }

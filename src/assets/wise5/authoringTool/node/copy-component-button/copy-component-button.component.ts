@@ -7,10 +7,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
-  imports: [MatButtonModule, MatIconModule, MatTooltipModule],
-  selector: 'copy-component-button',
-  standalone: true,
-  templateUrl: './copy-component-button.component.html'
+    imports: [MatButtonModule, MatIconModule, MatTooltipModule],
+    selector: 'copy-component-button',
+    templateUrl: './copy-component-button.component.html'
 })
 export class CopyComponentButtonComponent {
   @Input() componentId: string;
@@ -22,8 +21,7 @@ export class CopyComponentButtonComponent {
     private projectService: TeacherProjectService
   ) {}
 
-  protected copy(event: Event): void {
-    event.stopPropagation();
+  protected copy(): void {
     const newComponents = this.node.copyComponents([this.componentId], this.componentId);
     this.projectService.saveProject();
     this.copyTranslationsService.tryCopyComponents(this.node, newComponents);

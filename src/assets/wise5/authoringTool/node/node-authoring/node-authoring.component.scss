@@ -1,105 +1,34 @@
-@import
-  'style/abstracts/variables',
-  'style/abstracts/functions';
-
-.top-button-bar {
-  padding: 16px 8px 4px;
-  background-color: white;
-  position: sticky;
-  top: 26px;
-  z-index: 2;
-}
-
-.node-title {
-  width: 50%;
-}
-
-.node-buttons {
-  margin: 8px 0;
-}
-
-.insert-component-message {
-  margin-top: 10px;
-}
-
-.insert-as-first-component-div {
-  margin: 10px 30px;
-}
-
-.insert-as-first-component-message {
-  font-weight: bold;
-}
-
-.no-components-message {
-  margin-left: 45px;
-  margin-top: 45px;
-  font-size: 1em;
-  font-weight: bold;
-}
-
-.components-header {
-  margin-top: 8px;
-  margin-left: 8px;
-  margin-right: 8px;
-}
+.node-authoring-header {
+    margin: 16px 8px 0;
+  }
 
 .component {
-  margin: 4px 16px 16px;
-  border: 2px solid #dddddd;
-  border-radius: 6px;
-  position: relative;
-}
+  flex: 1;
 
-.component-header {
-  height: 48px;
-  padding: 0px 20px 0px 10px;
-  cursor: pointer;
-}
+  &.component-editing {
+    border-inline-start: 4px solid;
 
-.component-header-highlight:hover {
-  background-color: #add8e6;
-}
-
-.component-label {
-  font-weight: bold;
-}
-
-.component-expand-collapse-div {
-  flex-grow: 1;
-  align-self: stretch;
-}
-
-.dynamic-component-button {
-  display: none;
-  margin-right: 20px;
-  &.show-dynamic-component-button {
-    display: block;
+    edit-component-advanced-button {
+      display: block;
+    }
   }
 }
 
-.component-header:hover .dynamic-component-button {
+edit-component-advanced-button {
+  display: none;
+}
+
+.component-header {
+  padding: 0 8px;
+}
+
+component-authoring {
   display: block;
+  margin: 16px;
 }
 
-.component-authoring {
-  padding: 0px 20px;
-}
-
-.insert-after-div {
-  margin: 0px 30px;
-}
-
-.mat-icon {
-  margin: 0px;
-}
-
-.add-component {
-  position: absolute;
-  bottom: 24px;
-  height: 0px;
-  width: 100%;
-  text-align: center;
-  z-index: 1;
+.mat-divider-horizontal {
+  margin: 0;
 }
 
 .drag-handle {
@@ -110,12 +39,12 @@
 
 .cdk-drag-placeholder {
   opacity: .4;
+  background: #ccc;
+  border: dotted 3px #999;
+  min-height: 40px;
+  min-width: 360px;
 }
 
-mat-icon[disabled=true] {
-  opacity: .5;
-}
-
-.component-label {
-  color: rgba(0,0,0,.87);
+.mat-icon {
+  margin: 0;
 }

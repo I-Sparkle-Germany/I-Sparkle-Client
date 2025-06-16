@@ -4,11 +4,9 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TeacherService } from '../../../teacher/teacher.service';
 import { Observable, throwError } from 'rxjs';
-import { Router } from '@angular/router';
+import { provideRouter, Router } from '@angular/router';
 import { PasswordModule } from '../../../password/password.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatCardModule } from '@angular/material/card';
-import { MatDividerModule } from '@angular/material/divider';
 import { PasswordRequirementComponent } from '../../../password/password-requirement/password-requirement.component';
 import { StandaloneLogoComponent } from '../../../common/standalone-logo/standalone-logo.comonent';
 
@@ -46,18 +44,13 @@ describe('ForgotTeacherPasswordChangeComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ForgotTeacherPasswordChangeComponent],
       imports: [
         BrowserAnimationsModule,
-        MatCardModule,
-        MatDividerModule,
         PasswordModule,
         ReactiveFormsModule,
-        RouterTestingModule,
-        StandaloneLogoComponent
+        ForgotTeacherPasswordChangeComponent
       ],
-      providers: [{ provide: TeacherService, useClass: MockTeacherService }],
-      schemas: []
+      providers: [{ provide: TeacherService, useClass: MockTeacherService }, provideRouter([])]
     });
     fixture = TestBed.createComponent(ForgotTeacherPasswordChangeComponent);
     component = fixture.componentInstance;

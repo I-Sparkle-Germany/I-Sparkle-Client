@@ -3,34 +3,39 @@ import { Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { AnnotationService } from '../../../services/annotationService';
 import { NotificationService } from '../../../services/notificationService';
+import { CommonModule } from '@angular/common';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatInputModule } from '@angular/material/input';
+import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'edit-component-score',
-  templateUrl: 'edit-component-score.component.html'
+    imports: [CommonModule, FlexLayoutModule, FormsModule, MatFormFieldModule, MatInputModule],
+    selector: 'edit-component-score',
+    templateUrl: 'edit-component-score.component.html'
 })
 export class EditComponentScoreComponent {
   @Input() componentId: string;
   @Input() componentStateId: string;
   @Input() disabled: boolean;
   @Input() fromWorkgroupId: number;
+  protected isAutoScore: boolean;
   @Input() latestAnnotationScore: any;
   @Input() nodeId: string;
   @Input() periodId: string;
   @Input() runId: string;
-  @Input() toWorkgroupId: number;
-  @ViewChild('scoreInput') scoreInputElement: ElementRef;
-
-  isAutoScore: boolean;
   score: number;
-  scoreChanged: Subject<number> = new Subject<number>();
-  subscriptions: Subscription = new Subscription();
+  protected scoreChanged: Subject<number> = new Subject<number>();
+  @ViewChild('scoreInput') scoreInputElement: ElementRef;
+  private subscriptions: Subscription = new Subscription();
+  @Input() toWorkgroupId: number;
 
   constructor(
     private annotationService: AnnotationService,
     private notificationService: NotificationService
   ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.isAutoScore = this.latestAnnotationScore?.type === 'autoScore';
     this.score = this.latestAnnotationScore?.data.value ?? 0;
     this.subscriptions.add(
@@ -41,7 +46,7 @@ export class EditComponentScoreComponent {
     );
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
 
@@ -66,7 +71,7 @@ export class EditComponentScoreComponent {
     });
   }
 
-  focusScoreInput() {
+  protected focusScoreInput(): void {
     this.scoreInputElement.nativeElement.focus();
   }
 }

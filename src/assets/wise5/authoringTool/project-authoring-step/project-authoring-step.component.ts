@@ -11,9 +11,10 @@ import { CopyTranslationsService } from '../../services/copyTranslationsService'
 import { ConstraintService } from '../../services/constraintService';
 
 @Component({
-  selector: 'project-authoring-step',
-  templateUrl: './project-authoring-step.component.html',
-  styleUrls: ['./project-authoring-step.component.scss']
+    selector: 'project-authoring-step',
+    templateUrl: './project-authoring-step.component.html',
+    styleUrls: ['./project-authoring-step.component.scss'],
+    standalone: false
 })
 export class ProjectAuthoringStepComponent {
   protected nodeTypeSelected: Signal<NodeTypeSelected>;
@@ -112,15 +113,21 @@ export class ProjectAuthoringStepComponent {
   }
 
   protected constraintIconClicked(nodeId: string): void {
-    this.dataService.setCurrentNodeByNodeId(nodeId);
-    this.router.navigate([
-      `/teacher/edit/unit/${this.projectId}/node/${nodeId}/advanced/constraint`
-    ]);
+    if (!this.isNodeInAnyBranchPath(nodeId)) {
+      this.dataService.setCurrentNodeByNodeId(nodeId);
+      this.router.navigate([
+        `/teacher/edit/unit/${this.projectId}/node/${nodeId}/advanced/constraint`
+      ]);
+    }
   }
 
-  protected branchIconClicked(nodeId: string): void {
-    this.dataService.setCurrentNodeByNodeId(nodeId);
-    this.router.navigate([`/teacher/edit/unit/${this.projectId}/node/${nodeId}/advanced/path`]);
+  protected goToEditBranch(nodeId: string): void {
+    this.router.navigate(['edit-branch'], {
+      relativeTo: this.route,
+      state: {
+        targetId: nodeId
+      }
+    });
   }
 
   protected move(): void {

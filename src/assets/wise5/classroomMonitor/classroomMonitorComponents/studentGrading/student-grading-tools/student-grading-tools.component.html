@@ -1,8 +1,6 @@
 <div fxLayoutAlign="center center" fxLayoutGap="4px">
   <button
     mat-icon-button
-    aria-label="Previous Team"
-    i18n-aria-label
     [disabled]="!prevWorkgroup"
     (click)="goToTeam(prevWorkgroup)"
     matTooltip="Previous Team"
@@ -12,11 +10,9 @@
     <mat-icon>chevron_left</mat-icon>
   </button>
   <mat-icon class="mat-30" fxHide.xs style="color: {{ avatarColor }};"> account_circle </mat-icon>
-  <workgroup-select-autocomplete></workgroup-select-autocomplete>
+  <workgroup-select-autocomplete />
   <button
     mat-icon-button
-    aria-label="Next Team"
-    i18n-aria-label
     [disabled]="!nextWorkgroup"
     (click)="goToTeam(nextWorkgroup)"
     matTooltip="Next Team"

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, Signal } from '@angular/core';
+import { Component, EventEmitter, Input, Output, Signal, ViewEncapsulation } from '@angular/core';
 import { TeacherDataService } from '../../services/teacherDataService';
 import { TeacherProjectService } from '../../services/teacherProjectService';
 import { SelectNodeEvent } from '../domain/select-node-event';
@@ -7,11 +7,14 @@ import { ExpandEvent } from '../domain/expand-event';
 import { DeleteNodeService } from '../../services/deleteNodeService';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DeleteTranslationsService } from '../../services/deleteTranslationsService';
+import { AddStepTarget } from '../../../../app/domain/addStepTarget';
 
 @Component({
-  selector: 'project-authoring-lesson',
-  templateUrl: './project-authoring-lesson.component.html',
-  styleUrls: ['./project-authoring-lesson.component.scss']
+    selector: 'project-authoring-lesson',
+    templateUrl: './project-authoring-lesson.component.html',
+    styleUrls: ['./project-authoring-lesson.component.scss'],
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class ProjectAuthoringLessonComponent {
   @Input() expanded: boolean = true;
@@ -46,8 +49,8 @@ export class ProjectAuthoringLessonComponent {
     this.dataService.setCurrentNodeByNodeId(nodeId);
   }
 
-  protected toggleExpanded(): void {
-    this.expanded = !this.expanded;
+  protected toggleExpanded(opened: boolean = true): void {
+    this.expanded = opened;
     this.onExpandedChanged.emit({ id: this.lesson.id, expanded: this.expanded });
   }
 
@@ -67,12 +70,10 @@ export class ProjectAuthoringLessonComponent {
     }
   }
 
-  protected addStepInside(nodeId: string): void {
+  protected addStepInside(groupId: string): void {
     this.router.navigate(['add-node', 'choose-template'], {
       relativeTo: this.route,
-      state: {
-        targetId: nodeId
-      }
+      state: new AddStepTarget('in', groupId)
     });
   }
 

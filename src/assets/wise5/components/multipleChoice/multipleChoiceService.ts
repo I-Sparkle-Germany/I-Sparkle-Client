@@ -1,8 +1,8 @@
-'use strict';
-
 import { ComponentService } from '../componentService';
 import { Injectable } from '@angular/core';
 import { arraysContainSameValues } from '../../common/array/array';
+import { Choice } from './Choice';
+import { generateRandomKey } from '../../common/string/string';
 
 @Injectable()
 export class MultipleChoiceService extends ComponentService {
@@ -10,11 +10,15 @@ export class MultipleChoiceService extends ComponentService {
     return $localize`Multiple Choice`;
   }
 
-  createComponent() {
+  createComponent(): any {
     const component: any = super.createComponent();
     component.type = 'MultipleChoice';
+    component.prompt = $localize`Choose an option from below`;
     component.choiceType = 'radio';
-    component.choices = [];
+    component.choices = [
+      new Choice(generateRandomKey(), $localize`Choice 1`, false, ''),
+      new Choice(generateRandomKey(), $localize`Choice 2`, false, '')
+    ];
     component.showFeedback = true;
     return component;
   }
@@ -35,11 +39,9 @@ export class MultipleChoiceService extends ComponentService {
     studentChoiceIds: string[],
     constraintChoiceIds: string | string[]
   ): boolean {
-    if (constraintChoiceIds instanceof Array) {
-      return arraysContainSameValues(studentChoiceIds, constraintChoiceIds);
-    } else {
-      return studentChoiceIds.includes(constraintChoiceIds);
-    }
+    return constraintChoiceIds instanceof Array
+      ? arraysContainSameValues(studentChoiceIds, constraintChoiceIds)
+      : studentChoiceIds.includes(constraintChoiceIds);
   }
 
   isCompleted(component: any, componentStates: any[], nodeEvents: any[], node: any) {
@@ -59,11 +61,8 @@ export class MultipleChoiceService extends ComponentService {
     return false;
   }
 
-  getStudentChoicesFromComponentState(componentState: any) {
-    if (componentState.studentData) {
-      return componentState.studentData.studentChoices;
-    }
-    return [];
+  private getStudentChoicesFromComponentState(componentState: any): any[] {
+    return componentState.studentData ? componentState.studentData.studentChoices : [];
   }
 
   /**
@@ -97,12 +96,7 @@ export class MultipleChoiceService extends ComponentService {
     return false;
   }
 
-  componentHasCorrectAnswer(component: any) {
-    for (const choice of component.choices) {
-      if (choice.isCorrect) {
-        return true;
-      }
-    }
-    return false;
+  componentHasCorrectAnswer(component: any): boolean {
+    return component.choices.some((choice) => choice.isCorrect);
   }
 }

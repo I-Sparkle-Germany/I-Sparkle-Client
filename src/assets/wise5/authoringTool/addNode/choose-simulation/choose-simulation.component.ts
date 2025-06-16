@@ -1,10 +1,22 @@
 import { Component } from '@angular/core';
 import { TeacherProjectService } from '../../../services/teacherProjectService';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ConfigService } from '../../../services/configService';
 import { CopyNodesService } from '../../../services/copyNodesService';
 import { InsertNodesService } from '../../../services/insertNodesService';
 import { AbstractImportStepComponent } from '../abstract-import-step/abstract-import-step.component';
+import { InsertFirstNodeInBranchPathService } from '../../../services/insertFirstNodeInBranchPathService';
+import { CardSelectorComponent } from '../../components/card-selector/card-selector.component';
+import { FormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatIconModule } from '@angular/material/icon';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 class SimulationNode {
   metadata = {
@@ -17,9 +29,22 @@ class SimulationNode {
 }
 
 @Component({
-  selector: 'choose-simulation',
-  templateUrl: './choose-simulation.component.html',
-  styleUrls: ['./choose-simulation.component.scss', '../../add-content.scss']
+    imports: [
+        CardSelectorComponent,
+        FlexLayoutModule,
+        FormsModule,
+        MatButtonModule,
+        MatDividerModule,
+        MatFormFieldModule,
+        MatIconModule,
+        MatInputModule,
+        MatProgressBarModule,
+        MatSelectModule,
+        MatTooltipModule,
+        RouterModule
+    ],
+    templateUrl: './choose-simulation.component.html',
+    styleUrls: ['./choose-simulation.component.scss', '../../add-content.scss']
 })
 export class ChooseSimulationComponent extends AbstractImportStepComponent {
   private allNodes: SimulationNode[] = [];
@@ -34,12 +59,21 @@ export class ChooseSimulationComponent extends AbstractImportStepComponent {
   constructor(
     protected configService: ConfigService,
     protected copyNodesService: CopyNodesService,
+    protected insertFirstNodeInBranchPathService: InsertFirstNodeInBranchPathService,
     protected insertNodesService: InsertNodesService,
     protected projectService: TeacherProjectService,
     protected route: ActivatedRoute,
     protected router: Router
   ) {
-    super(configService, copyNodesService, insertNodesService, projectService, route, router);
+    super(
+      configService,
+      copyNodesService,
+      insertFirstNodeInBranchPathService,
+      insertNodesService,
+      projectService,
+      route,
+      router
+    );
   }
 
   ngOnInit(): void {

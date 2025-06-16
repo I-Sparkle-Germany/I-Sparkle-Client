@@ -5,24 +5,25 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatchChoiceItemComponent } from './match-choice-item/match-choice-item.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { DeleteChoiceButton } from './delete-choice-button/delete-choice-button.component';
-import { MatchChoiceItem } from './match-choice-item/match-choice-item.component';
-import { MatchStatusIcon } from './match-status-icon/match-status-icon.component';
-import { MatchFeedbackSection } from './match-student/match-feedback-section/match-feedback-section.component';
+import { MatchStatusIconComponent } from './match-status-icon/match-status-icon.component';
+import { MatchFeedbackSectionComponent } from './match-student/match-feedback-section/match-feedback-section.component';
 
 @NgModule({
-  declarations: [DeleteChoiceButton, MatchChoiceItem, MatchFeedbackSection, MatchStatusIcon],
   imports: [
     CommonModule,
     DragDropModule,
     FlexLayoutModule,
     MatButtonModule,
     MatCardModule,
+    MatchChoiceItemComponent,
+    MatchFeedbackSectionComponent,
+    MatchStatusIconComponent,
     MatDialogModule,
     MatFormFieldModule,
     MatIconModule,
@@ -32,15 +33,14 @@ import { MatchFeedbackSection } from './match-student/match-feedback-section/mat
   ],
   exports: [
     CommonModule,
-    DeleteChoiceButton,
     DragDropModule,
     FlexLayoutModule,
     MatButtonModule,
     MatCardModule,
     MatDialogModule,
-    MatchChoiceItem,
-    MatchFeedbackSection,
-    MatchStatusIcon,
+    MatchChoiceItemComponent,
+    MatchFeedbackSectionComponent,
+    MatchStatusIconComponent,
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,

@@ -7,10 +7,19 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
-  selector: 'add-lesson-button',
-  templateUrl: './add-lesson-button.component.html',
-  standalone: true,
-  imports: [CommonModule, MatButtonModule, MatIconModule, MatMenuModule, MatTooltipModule]
+    imports: [CommonModule, MatButtonModule, MatIconModule, MatMenuModule, MatTooltipModule],
+    selector: 'add-lesson-button',
+    styles: [
+        `
+      .rotate-180 {
+        transform: rotate(180deg);
+      }
+      .flip-vertical {
+        transform: scaleY(-1);
+      }
+    `
+    ],
+    templateUrl: './add-lesson-button.component.html'
 })
 export class AddLessonButtonComponent {
   @Input() active: boolean;
@@ -18,14 +27,13 @@ export class AddLessonButtonComponent {
   @Input() lessonId: string;
   @ViewChild(MatMenuTrigger) menuTrigger: MatMenuTrigger;
 
-  constructor(private route: ActivatedRoute, private router: Router) {}
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
 
   protected addFirstLesson(): void {
     this.goToAddLessonView(this.active ? 'group0' : 'inactiveGroups');
-  }
-
-  protected addLessonAfter(): void {
-    this.goToAddLessonView(this.lessonId);
   }
 
   private goToAddLessonView(nodeId: string): void {

@@ -1,10 +1,8 @@
-<nav class="header__links" [ngSwitch]="location" fxLayout="row" fxLayoutAlign="start center">
-  <span class="mat-body-1">
-    <ng-container *ngSwitchCase="'teacher'" i18n>Welcome {{ user.firstName }}!</ng-container>
-    <ng-container *ngSwitchCase="'student'" i18n>Welcome {{ user.firstName }}!</ng-container>
-  </span>
-  <ng-container *ngSwitchDefault>
-    <div>
+<nav class="header__links flex flex-row items-center justify-start">
+  @if (location === 'student') {
+    <span class="mat-body-1" i18n>Welcome {{ user.firstName }}!</span>
+  } @else {
+    <div class="flex items-center">
       <a
         class="header-link mat-body-1"
         routerLink=""
@@ -29,17 +27,18 @@
         i18n
         >Researchers</a
       >
-      <a
+      <button
+        mat-flat-button
         class="header-link mat-body-1"
         routerLink=""
         routerLinkActive="active"
         [routerLinkActiveOptions]="{ exact: true }"
         [matMenuTriggerFor]="iSparkleMenu"
       >
-        <span class="menu-link" fxLayoutAlign="start center" i18n
-          >i-sparkle <mat-icon>arrow_drop_down</mat-icon></span
-        >
-      </a>
+        <span class="menu-link flex items-center">
+          <span i18n>i-sparkle</span> <mat-icon>arrow_drop_down</mat-icon>
+        </span>
+      </button>
       <mat-menu #iSparkleMenu="matMenu" xPosition="before">
         <a
           routerLinkActive="active"
@@ -63,7 +62,7 @@
           routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }"
           mat-menu-item
-          routerLink=""
+          routerLink="/curriculum"
           i18n
         >
           Curriculum
@@ -88,10 +87,8 @@
         </a>
       </mat-menu>
     </div>
-  </ng-container>
-  <ng-container *ngIf="!roles.length">
-    <div fxLayout="row" fxLayoutGap="8px">
-      &nbsp;|&nbsp;&nbsp;<app-header-signin></app-header-signin>
-    </div>
-  </ng-container>
+  }
+  @if (roles.length === 0) {
+    |&nbsp;&nbsp;<app-header-signin></app-header-signin>
+  }
 </nav>

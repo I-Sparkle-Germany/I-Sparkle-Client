@@ -3,11 +3,12 @@ import { EditAdvancedComponentComponent } from '../../../../../app/authoring-too
 import { MatchContent } from '../MatchContent';
 
 @Component({
-  selector: 'edit-match-advanced',
-  templateUrl: 'edit-match-advanced.component.html',
-  styleUrls: ['edit-match-advanced.component.scss']
+    selector: 'edit-match-advanced',
+    templateUrl: 'edit-match-advanced.component.html',
+    styleUrls: ['edit-match-advanced.component.scss'],
+    standalone: false
 })
 export class EditMatchAdvancedComponent extends EditAdvancedComponentComponent {
-  allowedConnectedComponentTypes = ['Match'];
+  allowedConnectedComponentTypes = ['DialogGuidance', 'Match'];
   componentContent: MatchContent;
 }

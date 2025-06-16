@@ -9,7 +9,6 @@ import { ProjectAuthoringComponent } from '../../assets/wise5/authoringTool/proj
 import { NodeAuthoringComponent } from '../../assets/wise5/authoringTool/node/node-authoring/node-authoring.component';
 import { NodeAdvancedAuthoringComponent } from '../../assets/wise5/authoringTool/node/advanced/node-advanced-authoring/node-advanced-authoring.component';
 import { NodeAdvancedConstraintAuthoringComponent } from '../../assets/wise5/authoringTool/node/advanced/constraint/node-advanced-constraint-authoring.component';
-import { ChooseComponentLocationComponent } from '../../assets/wise5/authoringTool/node/chooseComponentLocation/choose-component-location.component';
 import { AddLessonConfigureComponent } from '../../assets/wise5/authoringTool/addLesson/add-lesson-configure/add-lesson-configure.component';
 import { ChooseNewNodeTemplateComponent } from '../../assets/wise5/authoringTool/addNode/choose-new-node-template/choose-new-node-template.component';
 import { AddYourOwnNodeComponent } from '../../assets/wise5/authoringTool/addNode/add-your-own-node/add-your-own-node.component';
@@ -22,7 +21,6 @@ import { NodeAdvancedGeneralAuthoringComponent } from '../../assets/wise5/author
 import { EditNodeRubricComponent } from '../../assets/wise5/authoringTool/node/editRubric/edit-node-rubric.component';
 import { NodeAdvancedPathAuthoringComponent } from '../../assets/wise5/authoringTool/node/advanced/path/node-advanced-path-authoring.component';
 import { NodeAdvancedJsonAuthoringComponent } from '../../assets/wise5/authoringTool/node/advanced/json/node-advanced-json-authoring.component';
-import { NodeAdvancedBranchAuthoringComponent } from '../../assets/wise5/authoringTool/node/advanced/branch/node-advanced-branch-authoring.component';
 import { MilestonesAuthoringComponent } from '../../assets/wise5/authoringTool/milestones-authoring/milestones-authoring.component';
 import { ProjectInfoAuthoringComponent } from '../../assets/wise5/authoringTool/project-info-authoring/project-info-authoring.component';
 import { ProjectAssetAuthoringComponent } from '../../assets/wise5/authoringTool/project-asset-authoring/project-asset-authoring.component';
@@ -36,6 +34,8 @@ import { ChooseImportUnitComponent } from '../authoring-tool/import-step/choose-
 import { NodeAuthoringParentComponent } from '../../assets/wise5/authoringTool/node/node-authoring-parent/node-authoring-parent.component';
 import { AddLessonChooseTemplateComponent } from '../../assets/wise5/authoringTool/addLesson/add-lesson-choose-template/add-lesson-choose-template.component';
 import { RecoveryAuthoringProjectResolver } from './recovery-authoring-project.resolver';
+import { CreateBranchComponent } from '../../assets/wise5/authoringTool/create-branch/create-branch.component';
+import { EditBranchComponent } from '../../assets/wise5/authoringTool/edit-branch/edit-branch.component';
 
 const routes: Routes = [
   {
@@ -116,6 +116,10 @@ const routes: Routes = [
               }
             ]
           },
+          {
+            path: 'create-branch',
+            component: CreateBranchComponent
+          },
           { path: 'advanced', component: AdvancedProjectAuthoringComponent },
           {
             path: 'asset',
@@ -123,6 +127,10 @@ const routes: Routes = [
           },
           { path: 'choose-copy-location', component: ChooseCopyNodeLocationComponent },
           { path: 'choose-move-location', component: ChooseMoveNodeLocationComponent },
+          {
+            path: 'edit-branch',
+            component: EditBranchComponent
+          },
           { path: 'info', component: ProjectInfoAuthoringComponent },
           { path: 'milestones', component: MilestonesAuthoringComponent },
           {
@@ -137,7 +145,6 @@ const routes: Routes = [
                 path: 'advanced',
                 component: NodeAdvancedAuthoringComponent,
                 children: [
-                  { path: 'branch', component: NodeAdvancedBranchAuthoringComponent },
                   { path: 'constraint', component: NodeAdvancedConstraintAuthoringComponent },
                   { path: 'general', component: NodeAdvancedGeneralAuthoringComponent },
                   { path: 'json', component: NodeAdvancedJsonAuthoringComponent },
@@ -146,12 +153,17 @@ const routes: Routes = [
                 ]
               },
               {
-                path: 'choose-component-location',
-                component: ChooseComponentLocationComponent
-              },
-              {
                 path: 'import-component',
-                children: [{ path: 'choose-component', component: ChooseImportComponentComponent }]
+                children: [
+                  {
+                    path: 'choose-component',
+                    component: ChooseImportComponentComponent
+                  },
+                  {
+                    path: 'choose-unit',
+                    component: ChooseImportUnitComponent
+                  }
+                ]
               }
             ]
           },

@@ -9,13 +9,14 @@ import {
   ViewChild,
   createComponent
 } from '@angular/core';
-import { MatchStudentChoiceReuse } from './match-student-choice-reuse/match-student-choice-reuse';
-import { MatchStudentDefault } from './match-student-default/match-student-default.component';
+import { MatchStudentChoiceReuseComponent } from './match-student-choice-reuse/match-student-choice-reuse.component';
+import { MatchStudentDefaultComponent } from './match-student-default/match-student-default.component';
 import { MatchContent } from '../MatchContent';
 
 @Component({
-  selector: 'match-student',
-  template: '<div #component></div>'
+    selector: 'match-student',
+    template: '<div #component></div>',
+    standalone: false
 })
 export class MatchStudent {
   @Input() component: any;
@@ -26,13 +27,16 @@ export class MatchStudent {
   @Output() saveComponentStateEvent: EventEmitter<any> = new EventEmitter<any>();
   @ViewChild('component') private componentElementRef: ElementRef;
 
-  constructor(private applicationRef: ApplicationRef, private injector: EnvironmentInjector) {}
+  constructor(
+    private applicationRef: ApplicationRef,
+    private injector: EnvironmentInjector
+  ) {}
 
   ngAfterViewInit(): void {
     this.componentRef = createComponent(
       (this.component.content as MatchContent).choiceReuseEnabled
-        ? MatchStudentChoiceReuse
-        : MatchStudentDefault,
+        ? MatchStudentChoiceReuseComponent
+        : MatchStudentDefaultComponent,
       {
         hostElement: this.componentElementRef.nativeElement,
         environmentInjector: this.injector

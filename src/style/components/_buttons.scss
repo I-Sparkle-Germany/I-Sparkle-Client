@@ -1,4 +1,5 @@
 @use '@angular/material' as mat;
+@use 'style/abstracts/variables';
 
 .mat-mdc-button, .mat-mdc-raised-button, .mat-mdc-icon-button, .mat-mdc-stroked-button,
 .mat-mdc-flat-button, .mat-mdc-fab, .mat-mdc-mini-fab {
@@ -20,8 +21,8 @@
       position: absolute;
     left: 0;
     bottom: 0;
-    border-bottom-left-radius: $card-border-radius;
-    border-bottom-right-radius: $card-border-radius;
+    border-bottom-left-radius: variables.$card-border-radius;
+    border-bottom-right-radius: variables.$card-border-radius;
   }
 
   .mat-mdc-progress-bar {

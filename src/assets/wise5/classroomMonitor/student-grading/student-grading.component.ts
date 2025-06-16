@@ -10,9 +10,10 @@ import { TeacherProjectService } from '../../services/teacherProjectService';
 import { Annotation } from '../../common/Annotation';
 
 @Component({
-  selector: 'student-grading',
-  templateUrl: './student-grading.component.html',
-  styleUrls: ['./student-grading.component.scss']
+    selector: 'student-grading',
+    templateUrl: './student-grading.component.html',
+    styleUrls: ['./student-grading.component.scss'],
+    standalone: false
 })
 export class StudentGradingComponent implements OnInit {
   isExpandAll: boolean;
@@ -351,31 +352,14 @@ export class StudentGradingComponent implements OnInit {
    * @returns boolean whether the workgroup should be shown
    */
   private isNodeShown(nodeId: string): boolean {
-    let show = false;
-    const node = this.nodesById[nodeId];
-
-    if (node.isVisible && (this.projectService.nodeHasWork(nodeId) || this.showNonWorkNodes)) {
-      let currentStep = this.dataService.getCurrentStep();
-      if (currentStep) {
-        // there is a currently selected step, so check if this one matches
-        if (currentStep.nodeId === parseInt(nodeId)) {
-          show = true;
-        }
-      } else {
-        // there is no currently selected step, so show this one
-        show = true;
-      }
-    }
-
-    return show;
+    return (
+      this.nodesById[nodeId].isVisible &&
+      (this.projectService.nodeHasWork(nodeId) || this.showNonWorkNodes)
+    );
   }
 
-  setSort(value: string): void {
-    if (this.sort === value) {
-      this.sort = `-${value}`;
-    } else {
-      this.sort = value;
-    }
+  protected setSort(value: string): void {
+    this.sort = this.sort === value ? `-${value}` : value;
 
     // update value in the teacher data service so we can persist across view instances and
     // workgroup changes

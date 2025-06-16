@@ -9,10 +9,10 @@ import { MatInputModule } from '@angular/material/input';
   selector: 'chat-input',
   templateUrl: './chat-input.component.html',
   styleUrls: ['./chat-input.component.scss'],
-  standalone: true,
   imports: [FormsModule, FlexLayoutModule, MatButtonModule, MatFormFieldModule, MatInputModule]
 })
 export class ChatInputComponent {
+  @Output() focusEvent = new EventEmitter<string>();
   protected response: string = '';
   @Input() submitDisabled: boolean = false;
   @Output() submitEvent: EventEmitter<string> = new EventEmitter<string>();

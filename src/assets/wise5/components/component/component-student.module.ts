@@ -7,15 +7,13 @@ import { StudentAssetsDialogModule } from '../../vle/studentAsset/student-assets
 import { AnimationStudentModule } from '../animation/animation-student/animation-student.module';
 import { AudioOscillatorStudentModule } from '../audioOscillator/audio-oscillator-student/audio-oscillator.module';
 import { ConceptMapStudentModule } from '../conceptMap/concept-map-student/concept-map-student.module';
-import { DialogGuidanceStudentModule } from '../dialogGuidance/dialogGuidanceStudentModule';
 import { DiscussionStudentModule } from '../discussion/discussion-student/discussion-student.module';
 import { DrawStudentModule } from '../draw/draw-student/draw-student-module';
 import { EmbeddedStudentModule } from '../embedded/embedded-student/embedded-student.module';
 import { GraphStudentModule } from '../graph/graph-student/graph-student.module';
 import { HtmlStudentComponent } from '../html/html-student/html-student.component';
-import { LabelStudentModule } from '../label/label-student/label-student.module';
+import { LabelStudentComponent } from '../label/label-student/label-student.component';
 import { MatchStudentModule } from '../match/match-student/match-student.module';
-import { MultipleChoiceStudentModule } from '../multipleChoice/multiple-choice-student/multiple-choice-student.module';
 import { OpenResponseStudentModule } from '../openResponse/open-response-student/open-response-student.module';
 import { OutsideUrlStudentModule } from '../outsideURL/outside-url-student/outside-url-student.module';
 import { PeerChatStudentModule } from '../peerChat/peer-chat-student/peer-chat-student.module';
@@ -26,6 +24,8 @@ import { TableStudentModule } from '../table/table-student/table-student.module'
 import { ComponentComponent } from './component.component';
 import { AiChatStudentModule } from '../aiChat/ai-chat-student/ai-chat-student.module';
 import { HelpIconComponent } from '../../themes/default/themeComponents/helpIcon/help-icon.component';
+import { MultipleChoiceStudentComponent } from '../multipleChoice/multiple-choice-student/multiple-choice-student.component';
+import { DialogGuidanceStudentComponent } from '../dialogGuidance/dialog-guidance-student/dialog-guidance-student.component';
 
 @NgModule({
   imports: [
@@ -35,7 +35,7 @@ import { HelpIconComponent } from '../../themes/default/themeComponents/helpIcon
     CommonModule,
     ComponentComponent,
     ConceptMapStudentModule,
-    DialogGuidanceStudentModule,
+    DialogGuidanceStudentComponent,
     DiscussionStudentModule,
     DrawStudentModule,
     EmbeddedStudentModule,
@@ -43,9 +43,9 @@ import { HelpIconComponent } from '../../themes/default/themeComponents/helpIcon
     HelpIconComponent,
     HighchartsChartModule,
     HtmlStudentComponent,
-    LabelStudentModule,
+    LabelStudentComponent,
     MatchStudentModule,
-    MultipleChoiceStudentModule,
+    MultipleChoiceStudentComponent,
     OpenResponseStudentModule,
     OutsideUrlStudentModule,
     PeerChatStudentModule,

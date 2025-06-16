@@ -46,6 +46,7 @@
       *ngSwitchCase="'DialogGuidance'"
       [nodeId]="component.nodeId"
       [componentId]="component.id"
+      [cRaterRubric]="component.content.cRaterRubric"
     ></edit-dialog-guidance-advanced>
     <edit-html-advanced
       *ngSwitchCase="'HTML'"
@@ -89,9 +90,7 @@
           : ''
       "
     >
-      <edit-component-constraints
-        [componentContent]="component.content"
-      ></edit-component-constraints>
+      <edit-component-constraints [componentContent]="component.content" />
       <edit-component-json [component]="component"></edit-component-json>
     </ng-container>
     <edit-summary-advanced
