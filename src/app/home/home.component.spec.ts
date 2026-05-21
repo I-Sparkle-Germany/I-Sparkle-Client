@@ -1,10 +1,10 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { HomeComponent } from './home.component';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ConfigService } from '../services/config.service';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { provideHttpClient } from '@angular/common/http';
+import { MockComponent } from 'ng-mocks';
+import { CallToActionComponent } from '../modules/shared/call-to-action/call-to-action.component';
+import { provideAnimations } from '@angular/platform-browser/animations';
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
@@ -12,14 +12,8 @@ describe('HomeComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [HomeComponent],
-      schemas: [NO_ERRORS_SCHEMA],
-      imports: [BrowserAnimationsModule],
-      providers: [
-        ConfigService,
-        provideHttpClient(withInterceptorsFromDi()),
-        provideHttpClientTesting()
-      ]
+      imports: [HomeComponent, MockComponent(CallToActionComponent)],
+      providers: [ConfigService, provideAnimations(), provideHttpClient()]
     }).compileComponents();
   }));
 

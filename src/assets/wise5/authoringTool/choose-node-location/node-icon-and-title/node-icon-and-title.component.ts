@@ -1,30 +1,45 @@
 import { Component, Input } from '@angular/core';
 import { TeacherProjectService } from '../../../services/teacherProjectService';
 import { NodeIconComponent } from '../../../vle/node-icon/node-icon.component';
-import { FlexLayoutModule } from '@angular/flex-layout';
-import { CommonModule } from '@angular/common';
 import { TeacherProjectTranslationService } from '../../../services/teacherProjectTranslationService';
+import { Subscription } from 'rxjs';
 
 @Component({
-    imports: [CommonModule, FlexLayoutModule, NodeIconComponent],
-    selector: 'node-icon-and-title',
-    styles: ['.step-number,.step-title {color:rgba(0,0,0,.87)}'],
-    templateUrl: './node-icon-and-title.component.html'
+  imports: [NodeIconComponent],
+  selector: 'node-icon-and-title',
+  styles: ['.step-number,.step-title {color:rgba(0,0,0,.87)}'],
+  templateUrl: './node-icon-and-title.component.html'
 })
 export class NodeIconAndTitleComponent {
   @Input() protected nodeId: string;
+  protected nodePosition: string;
+  protected nodeTitle: string;
   @Input() protected showPosition: boolean;
+  private subscriptions: Subscription;
 
   constructor(
     private projectService: TeacherProjectService,
     private projectTranslationService: TeacherProjectTranslationService
   ) {}
 
-  protected getNodePosition(nodeId: string): string {
+  ngOnInit(): void {
+    this.nodePosition = this.getNodePosition(this.nodeId);
+    this.nodeTitle = this.getNodeTitle(this.nodeId);
+    this.subscriptions = this.projectService.projectParsed$.subscribe(() => {
+      this.nodePosition = this.getNodePosition(this.nodeId);
+      this.nodeTitle = this.getNodeTitle(this.nodeId);
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
+  }
+
+  private getNodePosition(nodeId: string): string {
     return this.projectService.getNodePositionById(nodeId);
   }
 
-  protected getNodeTitle(nodeId: string): string {
+  private getNodeTitle(nodeId: string): string {
     return this.projectService.isDefaultLocale()
       ? this.projectService.getNodeTitle(nodeId)
       : this.translateNodeTitle(nodeId);
@@ -32,9 +47,8 @@ export class NodeIconAndTitleComponent {
 
   private translateNodeTitle(nodeId: string): string {
     const node = this.projectService.getNode(nodeId);
-    const translatedTitle = this.projectTranslationService.currentTranslations()[
-      node['title.i18n']?.id
-    ]?.value;
+    const translatedTitle =
+      this.projectTranslationService.currentTranslations()[node['title.i18n']?.id]?.value;
     return translatedTitle ? translatedTitle : node['title'];
   }
 }

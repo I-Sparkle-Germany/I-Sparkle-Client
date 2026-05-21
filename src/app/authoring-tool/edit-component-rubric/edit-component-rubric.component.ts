@@ -1,19 +1,22 @@
 import { Component, Input } from '@angular/core';
 import { TeacherProjectService } from '../../../assets/wise5/services/teacherProjectService';
+import { TranslatableRichTextEditorComponent } from '../../../assets/wise5/authoringTool/components/translatable-rich-text-editor/translatable-rich-text-editor.component';
 
 @Component({
-    selector: 'edit-component-rubric',
-    templateUrl: 'edit-component-rubric.component.html',
-    styleUrls: ['edit-component-rubric.component.scss'],
-    standalone: false
+  imports: [TranslatableRichTextEditorComponent],
+  selector: 'edit-component-rubric',
+  template: `<translatable-rich-text-editor
+    [content]="componentContent"
+    key="rubric"
+    (defaultLanguageTextChanged)="save()"
+  />`
 })
 export class EditComponentRubricComponent {
   @Input() componentContent: any;
-  protected showRubricAuthoring: boolean = false;
 
   constructor(private projectService: TeacherProjectService) {}
 
-  protected rubricChanged(): void {
+  protected save(): void {
     this.projectService.componentChanged();
   }
 }

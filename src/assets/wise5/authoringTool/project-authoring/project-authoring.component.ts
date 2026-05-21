@@ -1,10 +1,16 @@
 import { Component, Input, OnInit, Signal, WritableSignal, computed, signal } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatIconModule } from '@angular/material/icon';
+import { FormsModule } from '@angular/forms';
+import { ProjectAuthoringLessonComponent } from '../project-authoring-lesson/project-authoring-lesson.component';
+import { ProjectAuthoringStepComponent } from '../project-authoring-step/project-authoring-step.component';
+import { AddLessonButtonComponent } from '../add-lesson-button/add-lesson-button.component';
 import { DeleteNodeService } from '../../services/deleteNodeService';
 import { TeacherProjectService } from '../../services/teacherProjectService';
 import { TeacherDataService } from '../../services/teacherDataService';
-import $ from 'jquery';
 import { Subscription } from 'rxjs';
-import { temporarilyHighlightElement } from '../../common/dom/dom';
+import { scrollToElement, temporarilyHighlightElement } from '../../common/dom/dom';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SelectNodeEvent } from '../domain/select-node-event';
 import { NodeTypeSelected } from '../domain/node-type-selected';
@@ -12,23 +18,38 @@ import { ExpandEvent } from '../domain/expand-event';
 import { DeleteTranslationsService } from '../../services/deleteTranslationsService';
 import { ComponentContent } from '../../common/ComponentContent';
 import { copy } from '../../common/object/object';
+import { MatSlideToggle } from '@angular/material/slide-toggle';
+import { CdkDrag, CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
+import { MoveNodesService } from '../../services/moveNodesService';
 
 @Component({
-    selector: 'project-authoring',
-    templateUrl: './project-authoring.component.html',
-    styleUrls: ['./project-authoring.component.scss'],
-    standalone: false
+  imports: [
+    DragDropModule,
+    FormsModule,
+    MatButtonModule,
+    MatTooltipModule,
+    MatIconModule,
+    MatSlideToggle,
+    ProjectAuthoringLessonComponent,
+    ProjectAuthoringStepComponent,
+    AddLessonButtonComponent
+  ],
+  styleUrl: './project-authoring.component.scss',
+  templateUrl: './project-authoring.component.html'
 })
 export class ProjectAuthoringComponent implements OnInit {
+  protected allGroupIds: string[];
   protected allLessonsCollapsed: Signal<boolean> = computed(() =>
     this.isAllLessonsExpandedValue(false)
   );
   protected allLessonsExpanded: Signal<boolean> = computed(() =>
     this.isAllLessonsExpandedValue(true)
   );
+  protected batchEditMode: boolean = false;
   protected inactiveGroupNodes: any[];
   private inactiveNodes: any[];
   protected inactiveStepNodes: any[];
+  protected isDragging: Signal<boolean>;
   protected items: any;
   protected lessons: any[] = [];
   protected lessonIdToExpanded: WritableSignal<{ [key: string]: boolean }> = signal({});
@@ -38,20 +59,23 @@ export class ProjectAuthoringComponent implements OnInit {
   private subscriptions: Subscription = new Subscription();
 
   constructor(
+    private dataService: TeacherDataService,
     private deleteNodeService: DeleteNodeService,
     private deleteTranslationsService: DeleteTranslationsService,
+    private moveNodesService: MoveNodesService,
     private projectService: TeacherProjectService,
-    private dataService: TeacherDataService,
     private route: ActivatedRoute,
     private router: Router
   ) {}
 
   ngOnInit(): void {
+    this.allGroupIds = this.projectService.getAllGroupIds();
     this.projectId = Number(this.projectId);
     this.refreshProject();
     this.dataService.setCurrentNode(null);
     this.temporarilyHighlightNewNodes(history.state.newNodes);
     this.nodeTypeSelected = this.projectService.getNodeTypeSelected();
+    this.isDragging = this.moveNodesService.getIsDragging();
     this.subscriptions.add(
       this.projectService.refreshProject$.subscribe(() => {
         this.refreshProject();
@@ -151,13 +175,7 @@ export class ProjectAuthoringComponent implements OnInit {
     if (newNodes.length > 0) {
       setTimeout(() => {
         newNodes.forEach((newNode) => temporarilyHighlightElement(newNode.id));
-        const firstNodeElementAdded = $('#' + newNodes[0].id);
-        $('#content').animate(
-          {
-            scrollTop: firstNodeElementAdded.prop('offsetTop') - 60
-          },
-          1000
-        );
+        scrollToElement(newNodes[0].id);
       });
     }
   }
@@ -243,5 +261,55 @@ export class ProjectAuthoringComponent implements OnInit {
       }
     });
     this.projectService.setNodeTypeSelected(nodeTypeSelected);
+  }
+
+  protected dropGroup(event: CdkDragDrop<any>): void {
+    const { container, currentIndex, item, previousContainer, previousIndex } = event;
+    if (previousContainer === container) {
+      moveItemInArray(container.data.nodes, previousIndex, currentIndex);
+    } else {
+      // do nothing. the UI will be updated by moveNodesAfter() and refreshProject() calls
+    }
+    if (currentIndex == 0) {
+      this.moveNodesService.moveNodesInsideGroup(
+        [item.data.id],
+        container.data.type === 'active' ? 'group0' : 'inactiveGroups'
+      );
+    } else {
+      this.moveNodesService.moveNodesAfter(
+        [item.data.id],
+        container.data.nodes[currentIndex - 1].id
+      );
+    }
+    this.projectService.checkPotentialStartNodeIdChangeThenSaveProject().then(() => {
+      this.projectService.refreshProject();
+    });
+  }
+
+  protected dropInactiveNode(event: CdkDragDrop<any>): void {
+    const { container, currentIndex, item } = event;
+    if (currentIndex == 0) {
+      this.moveNodesService.moveNodesInsideGroup([item.data.id], 'inactiveNodes');
+    } else {
+      this.moveNodesService.moveNodesAfter(
+        [item.data.id],
+        container.data.nodes[currentIndex - 1].id
+      );
+    }
+    this.projectService.checkPotentialStartNodeIdChangeThenSaveProject().then(() => {
+      this.projectService.refreshProject();
+    });
+  }
+
+  protected groupPredicate(item: CdkDrag<any>): boolean {
+    return item.data.type === 'group';
+  }
+
+  protected stepPredicate(item: CdkDrag<any>): boolean {
+    return item.data.type === 'step';
+  }
+
+  protected drag(isDragging: boolean): void {
+    this.moveNodesService.setIsDragging(isDragging);
   }
 }

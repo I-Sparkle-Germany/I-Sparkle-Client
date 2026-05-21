@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { TeacherDataService } from '../../../services/teacherDataService';
 import { TeacherProjectService } from '../../../services/teacherProjectService';
@@ -7,22 +7,59 @@ import { ComponentServiceLookupService } from '../../../services/componentServic
 import { Node } from '../../../common/Node';
 import { ComponentContent } from '../../../common/ComponentContent';
 import { scrollToTopOfPage, temporarilyHighlightElement } from '../../../common/dom/dom';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
 import { TeacherNodeService } from '../../../services/teacherNodeService';
 import { DeleteTranslationsService } from '../../../services/deleteTranslationsService';
+import { AddComponentComponent } from '../add-component/add-component.component';
+import { CopyComponentButtonComponent } from '../copy-component-button/copy-component-button.component';
+import { EditNodeTitleComponent } from '../edit-node-title/edit-node-title.component';
+import { FormsModule } from '@angular/forms';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { TeacherNodeIconComponent } from '../../teacher-node-icon/teacher-node-icon.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { CommonModule } from '@angular/common';
+import { ComponentAuthoringComponent } from '../../components/component-authoring.component';
+import { EditComponentAdvancedButtonComponent } from '../../components/edit-component-advanced-button/edit-component-advanced-button.component';
+import { ToggleComponentTagComponent } from '../../components/toggle-component-tag/toggle-component-tag.component';
+import { VisibilityConstraintIconComponent } from '../../components/visibility-constraint-icon/visibility-constraint-icon.component';
+import { EditNodeAdvancedButtonComponent } from '../../components/edit-node-advanced-button/edit-node-advanced-button.component';
 
 @Component({
-    selector: 'node-authoring',
-    templateUrl: './node-authoring.component.html',
-    styleUrls: ['./node-authoring.component.scss'],
-    standalone: false
+  imports: [
+    AddComponentComponent,
+    CommonModule,
+    ComponentAuthoringComponent,
+    CopyComponentButtonComponent,
+    DragDropModule,
+    EditComponentAdvancedButtonComponent,
+    EditNodeAdvancedButtonComponent,
+    EditNodeTitleComponent,
+    FormsModule,
+    MatButtonModule,
+    MatCardModule,
+    MatCheckboxModule,
+    MatDividerModule,
+    MatIconModule,
+    MatInputModule,
+    MatTooltipModule,
+    TeacherNodeIconComponent,
+    ToggleComponentTagComponent,
+    VisibilityConstraintIconComponent
+  ],
+  styleUrl: './node-authoring.component.scss',
+  templateUrl: './node-authoring.component.html'
 })
 export class NodeAuthoringComponent implements OnInit {
   components: ComponentContent[] = [];
   protected editingComponentId: string;
-  isGroupNode: boolean;
-  node: Node;
-  nodeJson: any;
+  protected isGroupNode: boolean;
+  protected node: Node;
+  private nodeJson: any;
   @Input() nodeId?: string;
   private subscriptions: Subscription = new Subscription();
 
@@ -130,7 +167,7 @@ export class NodeAuthoringComponent implements OnInit {
     event.stopPropagation();
     if (
       confirm(
-        $localize`Are you sure you want to delete this component?\n\n${componentNumber}. ${component.type}`
+        $localize`Are you sure you want to delete this activity?\n\n${componentNumber}. ${component.type}`
       )
     ) {
       this.deleteComponentsOnServer([this.node.deleteComponent(component.id)]);
@@ -190,6 +227,10 @@ export class NodeAuthoringComponent implements OnInit {
 
   protected getComponentTypeLabel(componentType: string): string {
     return this.componentTypeService.getComponentTypeLabel(componentType);
+  }
+
+  protected hasVisibilityConstraint(component: ComponentContent): boolean {
+    return component.constraints?.length > 0;
   }
 
   private setShowSaveButtonForAllComponents(node: Node, showSaveButton: boolean): void {

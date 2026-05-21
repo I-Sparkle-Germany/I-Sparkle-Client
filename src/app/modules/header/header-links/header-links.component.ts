@@ -1,26 +1,16 @@
 import { Component, Input, SimpleChanges } from '@angular/core';
 import { User } from '../../../domain/user';
-import { CommonModule } from '@angular/common';
 import { HeaderSigninComponent } from '../header-signin/header-signin.component';
 import { MatButtonModule } from '@angular/material/button';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
+  imports: [HeaderSigninComponent, MatButtonModule, MatIconModule, MatMenuModule, RouterModule],
   selector: 'app-header-links',
-  imports: [
-    CommonModule,
-    FlexLayoutModule,
-    HeaderSigninComponent,
-    MatButtonModule,
-    MatIconModule,
-    MatMenuModule,
-    RouterModule
-  ],
-  templateUrl: './header-links.component.html',
-  styleUrl: './header-links.component.scss'
+  styleUrl: './header-links.component.scss',
+  templateUrl: './header-links.component.html'
 })
 export class HeaderLinksComponent {
   @Input() location: string;

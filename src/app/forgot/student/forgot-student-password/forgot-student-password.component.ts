@@ -15,10 +15,9 @@ import { MatProgressBar } from '@angular/material/progress-bar';
 import { MatButton } from '@angular/material/button';
 import { MatInput } from '@angular/material/input';
 import { MatFormField, MatLabel, MatError } from '@angular/material/form-field';
-import { NgIf } from '@angular/common';
-import { FlexModule } from '@angular/flex-layout/flex';
 import { MatCard, MatCardContent } from '@angular/material/card';
 import { StandaloneLogoComponent } from '../../../common/standalone-logo/standalone-logo.comonent';
+import { RecaptchaV3Module } from 'ng-recaptcha-2';
 
 @Component({
   templateUrl: './forgot-student-password.component.html',
@@ -27,9 +26,7 @@ import { StandaloneLogoComponent } from '../../../common/standalone-logo/standal
     MatCard,
     MatCardContent,
     FormsModule,
-    FlexModule,
     ReactiveFormsModule,
-    NgIf,
     RouterLink,
     MatFormField,
     MatLabel,
@@ -38,6 +35,7 @@ import { StandaloneLogoComponent } from '../../../common/standalone-logo/standal
     MatButton,
     MatProgressBar,
     MatDivider,
+    RecaptchaV3Module,
     StandaloneLogoComponent
   ]
 })

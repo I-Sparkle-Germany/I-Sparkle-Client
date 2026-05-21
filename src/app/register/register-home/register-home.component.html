@@ -1,38 +1,34 @@
-<mat-card class="standalone__content mat-elevation-z0 container-bg center">
-  <mat-card-content>
-    <standalone-logo />
-    <div class="register-home">
-      <p *ngIf="googleUserNotFoundError" class="mat-subtitle-1 warn center" i18n>
-        Sorry, your Google User ID was not found in i-sparkle.
-      </p>
-      <p *ngIf="microsoftUserNotFoundError" class="mat-subtitle-1 warn center" i18n>
-        Sorry, your Microsoft User ID was not found in i-sparkle.
-      </p>
-      <h1 class="standalone__title accent" i18n>Create i-sparkle Account</h1>
-      <div
-        class="flex flex-col sm:flex-row items-center justify-center standalone__content register"
-      >
-        <app-call-to-action
-          class="w-full sm:w-auto"
-          icon="supervised_user_circle"
-          iconColor="accent"
-          i18n-headline
-          headline="Student"
-          i18n-content
-          content="Students can view and complete i-sparkle lessons offered by teachers."
-          destination="student"
-        ></app-call-to-action>
-        <app-call-to-action
-          class="w-full sm:w-auto"
-          icon="school"
-          iconColor="accent"
-          i18n-headline
-          headline="Teacher"
-          i18n-content
-          content="Teachers can select, author, and run i-sparkle lessons with their students."
-          destination="teacher"
-        ></app-call-to-action>
-      </div>
-    </div>
-  </mat-card-content>
-</mat-card>
+<standalone-logo />
+<div class="register-home">
+  @if (googleUserNotFoundError) {
+    <p class="mat-subtitle-1 warn center" i18n>Sorry, your Google User ID was not found in i-sparkle.</p>
+  }
+  @if (microsoftUserNotFoundError) {
+    <p class="mat-subtitle-1 warn center" i18n>
+      Sorry, your Microsoft User ID was not found in i-sparkle.
+    </p>
+  }
+  <h1 class="standalone__title accent" i18n>Create i-sparkle Account</h1>
+  <div class="flex flex-col sm:flex-row items-center justify-center standalone__content register">
+    <app-call-to-action
+      class="w-full sm:w-auto"
+      icon="supervised_user_circle"
+      iconColor="accent"
+      i18n-headline
+      headline="Student"
+      i18n-content
+      content="Students can view and complete i-sparkle lessons offered by teachers."
+      destination="student"
+    />
+    <app-call-to-action
+      class="w-full sm:w-auto"
+      icon="school"
+      iconColor="accent"
+      i18n-headline
+      headline="Teacher"
+      i18n-content
+      content="Teachers can select, author, and run i-sparkle lessons with their students."
+      destination="teacher"
+    />
+  </div>
+</div>

@@ -1,26 +1,25 @@
 name: Test coverage
+permissions:
+  id-token: write
 on:
   workflow_call:
-    secrets:
-      test_reporter:
-        required: true
 jobs:
   test-coverage:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [20.x]
+        node-version: [24.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v6
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version }}
-      - run: npm ci
-      - uses: paambaati/codeclimate-action@v2.7.5
-        env:
-          CC_TEST_REPORTER_ID: ${{secrets.test_reporter}}
+      - run: |
+          npm ci
+          npm run test-coverage
+      - uses: qltysh/qlty-action/coverage@v1
         with:
-          coverageCommand: npm run test-coverage
-          coverageLocations: ${{github.workspace}}/coverage/lcov.info:lcov
+          oidc: true
+          files: ${{github.workspace}}/coverage/lcov.info

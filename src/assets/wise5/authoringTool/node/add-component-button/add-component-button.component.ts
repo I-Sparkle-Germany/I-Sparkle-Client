@@ -10,29 +10,25 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatMenuModule } from '@angular/material/menu';
-import { CommonModule } from '@angular/common';
 
 @Component({
-    imports: [CommonModule, MatButtonModule, MatIconModule, MatMenuModule, MatTooltipModule],
-    selector: 'add-component-button',
-    styles: [
-        `
-      .rotate-180 {
-        transform: rotate(180deg);
-      }
+  imports: [MatButtonModule, MatIconModule, MatMenuModule, MatTooltipModule],
+  selector: 'add-component-button',
+  styles: [
+    `
       .flip-vertical {
         transform: scaleY(-1);
       }
     `
-    ],
-    templateUrl: './add-component-button.component.html'
+  ],
+  templateUrl: './add-component-button.component.html'
 })
 export class AddComponentButtonComponent {
   protected firstComponent = false;
   @Input() insertAfterComponentId: string = null;
   @Output() newComponentsEvent: EventEmitter<any> = new EventEmitter<any>();
   @Input() node: Node;
-  protected tooltipText = $localize`Add component`;
+  protected tooltipText = $localize`Add activity`;
 
   constructor(
     private createComponentService: CreateComponentService,
@@ -49,7 +45,7 @@ export class AddComponentButtonComponent {
   private updateUI(): void {
     this.firstComponent = this.node.getComponentPosition(this.insertAfterComponentId) === 0;
     if (this.node.components.length > 0 && !this.firstComponent) {
-      this.tooltipText = $localize`Add component after`;
+      this.tooltipText = $localize`Add activity after`;
     }
   }
 

@@ -1,35 +1,52 @@
-import { Component } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDialog } from '@angular/material/dialog';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatRadioModule } from '@angular/material/radio';
+import { Subject, debounceTime } from 'rxjs';
 import { ConfigService } from '../../services/configService';
 import { TeacherProjectService } from '../../services/teacherProjectService';
-import { MatDialog } from '@angular/material/dialog';
-import { Subject, debounceTime } from 'rxjs';
+import { TranslatableInputComponent } from '../components/translatable-input/translatable-input.component';
+import { TranslatableTextareaComponent } from '../components/translatable-textarea/translatable-textarea.component';
+import { EditUnitResourcesComponent } from '../edit-unit-resources/edit-unit-resources.component';
 import { AssetChooser } from '../project-asset-authoring/asset-chooser';
-import { UserService } from '../../../../app/services/user.service';
+import { EditProjectLanguageSettingComponent } from '../project-info/edit-project-language-setting/edit-project-language-setting.component';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
-  selector: 'project-info-authoring',
-  templateUrl: './project-info-authoring.component.html',
-  styleUrls: ['./project-info-authoring.component.scss'],
-  standalone: false
+  encapsulation: ViewEncapsulation.None,
+  imports: [
+    EditProjectLanguageSettingComponent,
+    EditUnitResourcesComponent,
+    MatButtonModule,
+    MatCheckboxModule,
+    MatIconModule,
+    MatProgressSpinnerModule,
+    MatRadioModule,
+    MatTabsModule,
+    TranslatableInputComponent,
+    TranslatableTextareaComponent
+  ],
+  styleUrl: './project-info-authoring.component.scss',
+  templateUrl: './project-info-authoring.component.html'
 })
 export class ProjectInfoAuthoringComponent {
   isEditingProjectIcon: boolean = false;
-  protected isMyUnit: boolean;
   isShowProjectIcon: boolean = false;
   isShowProjectIconError: boolean = false;
   isShowProjectIconLoading: boolean = false;
-  metadata: any;
+  protected metadata: any;
   metadataAuthoring: any;
   metadataChanged: Subject<void> = new Subject<void>();
   projectIcon: string = '';
   projectIcons: any = [];
-  protected publishUnitUrl;
 
   constructor(
     private configService: ConfigService,
     private dialog: MatDialog,
-    private projectService: TeacherProjectService,
-    private userService: UserService
+    private projectService: TeacherProjectService
   ) {}
 
   ngOnInit(): void {
@@ -37,16 +54,9 @@ export class ProjectInfoAuthoringComponent {
     if (this.metadata.resources == null) {
       this.metadata.resources = [];
     }
-    if (this.metadata.unitType == null) {
-      this.metadata.unitType = 'Platform';
-    }
     this.metadataAuthoring = JSON.parse(
       this.configService.getConfigParam('projectMetadataSettings')
     );
-    this.isMyUnit = this.metadata.authors.some(
-      (author) => author.id === this.userService.getUserId()
-    );
-    this.publishUnitUrl = `${this.configService.getContextPath()}/contact?projectId=${this.configService.getProjectId()}&publish=true`;
     this.loadProjectIcon();
     this.processMetadata();
     this.metadataChanged.pipe(debounceTime(1000)).subscribe(() => {

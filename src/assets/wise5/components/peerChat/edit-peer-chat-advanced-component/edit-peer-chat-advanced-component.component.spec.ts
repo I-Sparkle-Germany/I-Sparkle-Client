@@ -1,13 +1,13 @@
-import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatDialogModule } from '@angular/material/dialog';
-import { StudentTeacherCommonServicesModule } from '../../../../../app/student-teacher-common-services.module';
+import { MockComponent, MockProviders } from 'ng-mocks';
+import { NotebookService } from '../../../services/notebookService';
+import { TeacherNodeService } from '../../../services/teacherNodeService';
 import { TeacherProjectService } from '../../../services/teacherProjectService';
 import { PeerChatContent } from '../PeerChatContent';
 import { EditPeerChatAdvancedComponentComponent } from './edit-peer-chat-advanced-component.component';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { TeacherNodeService } from '../../../services/teacherNodeService';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { EditComponentJsonComponent } from '../../../../../app/authoring-tool/edit-component-json/edit-component-json.component';
+import { ComponentServiceLookupService } from '../../../services/componentServiceLookupService';
 
 describe('EditPeerChatAdvancedComponentComponent', () => {
   let component: EditPeerChatAdvancedComponentComponent;
@@ -15,17 +15,24 @@ describe('EditPeerChatAdvancedComponentComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    declarations: [EditPeerChatAdvancedComponentComponent],
-    schemas: [NO_ERRORS_SCHEMA],
-    imports: [MatDialogModule, StudentTeacherCommonServicesModule],
-    providers: [TeacherNodeService, TeacherProjectService, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
-}).compileComponents();
+      imports: [EditPeerChatAdvancedComponentComponent, MockComponent(EditComponentJsonComponent)],
+      providers: [
+        MockProviders(
+          ComponentServiceLookupService,
+          TeacherNodeService,
+          TeacherProjectService,
+          NotebookService
+        ),
+        provideHttpClient(withInterceptorsFromDi())
+      ]
+    }).compileComponents();
   });
 
   beforeEach(() => {
     spyOn(TestBed.inject(TeacherProjectService), 'getComponent').and.returnValue(
       {} as PeerChatContent
     );
+    spyOn(TestBed.inject(TeacherProjectService), 'getProject').and.returnValue({});
     fixture = TestBed.createComponent(EditPeerChatAdvancedComponentComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
