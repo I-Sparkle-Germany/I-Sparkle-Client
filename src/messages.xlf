@@ -2214,28 +2214,28 @@
         <source>Thank you for contacting i-sparkle!</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.html</context>
-          <context context-type="linenumber">6,7</context>
+          <context context-type="linenumber">7,8</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4103120565906069522" datatype="html">
         <source>Your message has been sent. We will get back to you as soon as possible.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.html</context>
-          <context context-type="linenumber">7,9</context>
+          <context context-type="linenumber">8,10</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3780580800668728693" datatype="html">
         <source>Return to Home</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.html</context>
-          <context context-type="linenumber">9,13</context>
+          <context context-type="linenumber">10,14</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1520569789111462308" datatype="html">
         <source>Contact i-sparkle</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.html</context>
-          <context context-type="linenumber">14,16</context>
+          <context context-type="linenumber">15,17</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/forgot/student/forgot-student-password-change/forgot-student-password-change.component.html</context>
@@ -2274,7 +2274,7 @@
         <source>Name</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.html</context>
-          <context context-type="linenumber">16,17</context>
+          <context context-type="linenumber">17,18</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/library/share-project-dialog/share-project-dialog.component.html</context>
@@ -2297,14 +2297,14 @@
         <source>Name required</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.html</context>
-          <context context-type="linenumber">19,22</context>
+          <context context-type="linenumber">20,23</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4768749765465246664" datatype="html">
         <source>Email</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.html</context>
-          <context context-type="linenumber">24,25</context>
+          <context context-type="linenumber">25,26</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/forgot/teacher/forgot-teacher-username/forgot-teacher-username.component.html</context>
@@ -2327,7 +2327,7 @@
         <source>Email required</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.html</context>
-          <context context-type="linenumber">27,29</context>
+          <context context-type="linenumber">28,30</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/forgot/teacher/forgot-teacher-username/forgot-teacher-username.component.html</context>
@@ -2346,14 +2346,14 @@
         <source>Invalid Email</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.html</context>
-          <context context-type="linenumber">30,33</context>
+          <context context-type="linenumber">31,34</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4250948520990652627" datatype="html">
         <source>Teacher</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.html</context>
-          <context context-type="linenumber">37,39</context>
+          <context context-type="linenumber">38,40</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/forgot/forgot-home/forgot-home.component.html</context>
@@ -2361,7 +2361,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/register/register-home/register-home.component.html</context>
-          <context context-type="linenumber">29,30</context>
+          <context context-type="linenumber">35,36</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/assets/wise5/components/peerChat/peerChatService.ts</context>
@@ -2372,49 +2372,49 @@
         <source>Teacher required</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.html</context>
-          <context context-type="linenumber">46,49</context>
+          <context context-type="linenumber">47,50</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3187063371811307868" datatype="html">
         <source>Issue Type</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.html</context>
-          <context context-type="linenumber">53,55</context>
+          <context context-type="linenumber">54,56</context>
         </context-group>
       </trans-unit>
       <trans-unit id="305786410811878097" datatype="html">
         <source>Issue Type required</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.html</context>
-          <context context-type="linenumber">62,65</context>
+          <context context-type="linenumber">63,66</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3476285207374951390" datatype="html">
         <source>Unit Name</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.html</context>
-          <context context-type="linenumber">67,68</context>
+          <context context-type="linenumber">68,69</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4739818603756173797" datatype="html">
         <source>Summary</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.html</context>
-          <context context-type="linenumber">72,73</context>
+          <context context-type="linenumber">73,74</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6416297464279464070" datatype="html">
         <source>Summary required</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.html</context>
-          <context context-type="linenumber">75,78</context>
+          <context context-type="linenumber">76,79</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4902817035128594900" datatype="html">
         <source>Description</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.html</context>
-          <context context-type="linenumber">79,82</context>
+          <context context-type="linenumber">80,83</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/assets/wise5/authoringTool/milestones-authoring/milestones-authoring.component.html</context>
@@ -2449,14 +2449,14 @@
         <source>Description required</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.html</context>
-          <context context-type="linenumber">95,98</context>
+          <context context-type="linenumber">96,99</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1818615214955413398" datatype="html">
         <source> This site is protected by reCAPTCHA and the Google <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://policies.google.com/privacy&quot;&gt;"/>Privacy Policy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> and <x id="START_LINK_1" equiv-text="&lt;a href=&quot;https://policies.google.com/terms&quot;&gt;"/>Terms of Service<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> apply. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.html</context>
-          <context context-type="linenumber">100,103</context>
+          <context context-type="linenumber">101,104</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/forgot/student/forgot-student-password-security/forgot-student-password-security.component.html</context>
@@ -2483,28 +2483,28 @@
         <source> Recaptcha failed. Please reload the page and try again! </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.html</context>
-          <context context-type="linenumber">108,111</context>
+          <context context-type="linenumber">109,112</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2030256990555278300" datatype="html">
         <source> Sorry, there was a problem submitting the form. Please try again. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.html</context>
-          <context context-type="linenumber">112,116</context>
+          <context context-type="linenumber">113,117</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7898998821450935640" datatype="html">
         <source> By submitting, you will be sending your unit to be reviewed. If approved, it will be added to the Community Built library. Make sure you have filled out all appropriate fields in the Unit Info page in the authoring tool. We will be in touch if we require any more information. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.html</context>
-          <context context-type="linenumber">118,123</context>
+          <context context-type="linenumber">119,124</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3357031660050032232" datatype="html">
         <source>Thank you!</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.html</context>
-          <context context-type="linenumber">123,127</context>
+          <context context-type="linenumber">124,128</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/student/survey/survey-completed/survey-completed.component.html</context>
@@ -2522,28 +2522,6 @@
         <source>Trouble Signing In</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.ts</context>
-          <context context-type="linenumber">162</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.ts</context>
-          <context context-type="linenumber">170</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="6892681827231609313" datatype="html">
-        <source>Need Help Using WISE</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.ts</context>
-          <context context-type="linenumber">163</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.ts</context>
-          <context context-type="linenumber">171</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="2072690839988671006" datatype="html">
-        <source>Problems with a WISE Unit</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.ts</context>
           <context context-type="linenumber">164</context>
         </context-group>
         <context-group purpose="location">
@@ -2551,26 +2529,48 @@
           <context context-type="linenumber">172</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2959002981630304422" datatype="html">
-        <source>Feedback to WISE</source>
+      <trans-unit id="6892681827231609313" datatype="html">
+        <source>Need Help Using WISE</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.ts</context>
           <context context-type="linenumber">165</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.ts</context>
-          <context context-type="linenumber">176</context>
+          <context context-type="linenumber">173</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8693603235657020323" datatype="html">
-        <source>Other</source>
+      <trans-unit id="2072690839988671006" datatype="html">
+        <source>Problems with a WISE Unit</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.ts</context>
           <context context-type="linenumber">166</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.ts</context>
-          <context context-type="linenumber">177</context>
+          <context context-type="linenumber">174</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2959002981630304422" datatype="html">
+        <source>Feedback to WISE</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.ts</context>
+          <context context-type="linenumber">167</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.ts</context>
+          <context context-type="linenumber">178</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8693603235657020323" datatype="html">
+        <source>Other</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.ts</context>
+          <context context-type="linenumber">168</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.ts</context>
+          <context context-type="linenumber">179</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/domain/profile.constants.ts</context>
@@ -2581,7 +2581,7 @@
         <source>Student Management</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.ts</context>
-          <context context-type="linenumber">173</context>
+          <context context-type="linenumber">175</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/help/faq/teacher-faq/teacher-faq.component.html</context>
@@ -2596,21 +2596,21 @@
         <source>Need Help with Authoring</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.ts</context>
-          <context context-type="linenumber">174</context>
+          <context context-type="linenumber">176</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6193846139411583890" datatype="html">
         <source>Publish Unit</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.ts</context>
-          <context context-type="linenumber">175</context>
+          <context context-type="linenumber">177</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1936787644032074292" datatype="html">
         <source>Publish my unit to the WISE Community Built library</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/contact/contact-form/contact-form.component.ts</context>
-          <context context-type="linenumber">186</context>
+          <context context-type="linenumber">188</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4340256332658641886" datatype="html">
@@ -2632,7 +2632,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/teacher/teacher-run-list/teacher-run-list.component.html</context>
-          <context context-type="linenumber">5,8</context>
+          <context context-type="linenumber">3,6</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2584586546524894002" datatype="html">
@@ -3233,7 +3233,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/register/register-home/register-home.component.html</context>
-          <context context-type="linenumber">19,20</context>
+          <context context-type="linenumber">25,26</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/assets/wise5/classroomMonitor/student-progress/student-progress.component.ts</context>
@@ -3284,7 +3284,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/header/header-signin/header-signin.component.html</context>
-          <context context-type="linenumber">3,4</context>
+          <context context-type="linenumber">4,6</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/mobile-menu/mobile-menu.component.html</context>
@@ -3620,7 +3620,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/teacher/teacher-run-list/teacher-run-list.component.html</context>
-          <context context-type="linenumber">12,14</context>
+          <context context-type="linenumber">10,12</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/assets/wise5/authoringTool/addNode/choose-simulation/choose-simulation.component.html</context>
@@ -3822,7 +3822,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/student/account/edit/edit.component.html</context>
-          <context context-type="linenumber">13,16</context>
+          <context context-type="linenumber">13,15</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/student/team-sign-in-dialog/team-sign-in-dialog.component.html</context>
@@ -3830,7 +3830,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/teacher/account/edit/edit.component.html</context>
-          <context context-type="linenumber">13,16</context>
+          <context context-type="linenumber">13,15</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1636934520301910285" datatype="html">
@@ -4003,7 +4003,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/help/help-home/help-home.component.html</context>
-          <context context-type="linenumber">9,12</context>
+          <context context-type="linenumber">7,10</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7517033109105721446" datatype="html">
@@ -4093,15 +4093,15 @@
           <context context-type="linenumber">36,41</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3475312434271308442" datatype="html">
-        <source>Using a i-sparkle Unit</source>
+      <trans-unit id="4663298649177245656" datatype="html">
+        <source>Using an i-sparkle Unit</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/help/faq/getting-started/getting-started.component.html</context>
           <context context-type="linenumber">31,33</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8858585600722411766" datatype="html">
-        <source> To use a i-sparkle unit with your class, you must first choose a unit to use and then set up a &quot;Run&quot; of that unit. </source>
+      <trans-unit id="6605515436862428031" datatype="html">
+        <source> To use an i-sparkle unit with your class, you must first choose a unit to use and then set up a &quot;Run&quot; of that unit. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/help/faq/getting-started/getting-started.component.html</context>
           <context context-type="linenumber">33,36</context>
@@ -4251,7 +4251,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/help/help-home/help-home.component.html</context>
-          <context context-type="linenumber">19,22</context>
+          <context context-type="linenumber">17,20</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2486948483215076043" datatype="html">
@@ -4266,7 +4266,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/help/help-home/help-home.component.html</context>
-          <context context-type="linenumber">21,25</context>
+          <context context-type="linenumber">19,23</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5327650578137881121" datatype="html">
@@ -4281,7 +4281,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/help/help-home/help-home.component.html</context>
-          <context context-type="linenumber">29,32</context>
+          <context context-type="linenumber">27,30</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8631937243382662611" datatype="html">
@@ -4296,7 +4296,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/help/help-home/help-home.component.html</context>
-          <context context-type="linenumber">31,37</context>
+          <context context-type="linenumber">29,33</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2206462199601912572" datatype="html">
@@ -4318,7 +4318,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/privacy/privacy.component.html</context>
-          <context context-type="linenumber">4,6</context>
+          <context context-type="linenumber">5,7</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6666239055510430738" datatype="html">
@@ -4668,7 +4668,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/help/help-home/help-home.component.html</context>
-          <context context-type="linenumber">11,14</context>
+          <context context-type="linenumber">9,13</context>
         </context-group>
       </trans-unit>
       <trans-unit id="603413250364178961" datatype="html">
@@ -5464,7 +5464,7 @@
         <source>FAQ</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/home/home.component.html</context>
-          <context context-type="linenumber">57,60</context>
+          <context context-type="linenumber">57,59</context>
         </context-group>
       </trans-unit>
       <trans-unit id="641716500460785755" datatype="html">
@@ -5831,63 +5831,63 @@
         <source>Researchers</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/header/header-links/header-links.component.html</context>
-          <context context-type="linenumber">28,32</context>
+          <context context-type="linenumber">28,30</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1032840403368562209" datatype="html">
         <source>i-sparkle</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/header/header-links/header-links.component.html</context>
-          <context context-type="linenumber">39,41</context>
+          <context context-type="linenumber">32,34</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4572695450034127483" datatype="html">
         <source> Mission </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/header/header-links/header-links.component.html</context>
-          <context context-type="linenumber">50,54</context>
+          <context context-type="linenumber">43,47</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8175341508287961056" datatype="html">
         <source> Partnership </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/header/header-links/header-links.component.html</context>
-          <context context-type="linenumber">59,63</context>
+          <context context-type="linenumber">52,56</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4558772519882891408" datatype="html">
         <source> Curriculum </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/header/header-links/header-links.component.html</context>
-          <context context-type="linenumber">68,72</context>
+          <context context-type="linenumber">61,65</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3425117496792813297" datatype="html">
         <source> Tech </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/header/header-links/header-links.component.html</context>
-          <context context-type="linenumber">77,81</context>
+          <context context-type="linenumber">70,74</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5863280141007311392" datatype="html">
         <source> Impact </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/header/header-links/header-links.component.html</context>
-          <context context-type="linenumber">86,91</context>
+          <context context-type="linenumber">79,84</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3301086086650990787" datatype="html">
         <source>Register</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/header/header-signin/header-signin.component.html</context>
-          <context context-type="linenumber">1,3</context>
+          <context context-type="linenumber">2,4</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6627551976444260400" datatype="html">
         <source>or</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modules/header/header-signin/header-signin.component.html</context>
-          <context context-type="linenumber">3,4</context>
+          <context context-type="linenumber">3,5</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8359660888243306571" datatype="html">
@@ -6492,7 +6492,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/teacher/teacher-run-list/teacher-run-list.component.html</context>
-          <context context-type="linenumber">19,21</context>
+          <context context-type="linenumber">17,19</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1562584780596394495" datatype="html">
@@ -6503,7 +6503,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/teacher/teacher-run-list/teacher-run-list.component.html</context>
-          <context context-type="linenumber">20,24</context>
+          <context context-type="linenumber">18,22</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4695560068796806274" datatype="html">
@@ -6977,7 +6977,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/teacher/teacher-run-list/teacher-run-list.component.html</context>
-          <context context-type="linenumber">119,124</context>
+          <context context-type="linenumber">117,122</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4168485708389700387" datatype="html">
@@ -7234,92 +7234,92 @@
           <context context-type="linenumber">4,10</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8295851396168346196" datatype="html">
-        <source>WISE Terms of Use &amp; Privacy Policy</source>
+      <trans-unit id="4145029554397942080" datatype="html">
+        <source>i-sparkle Terms of Use &amp; Privacy Policy</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/privacy/privacy.component.html</context>
-          <context context-type="linenumber">3,6</context>
+          <context context-type="linenumber">4,7</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2785927571630251176" datatype="html">
         <source>User Agreement</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/privacy/privacy.component.html</context>
-          <context context-type="linenumber">6,7</context>
+          <context context-type="linenumber">7,8</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8398106310102423139" datatype="html">
         <source>Information We Collect</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/privacy/privacy.component.html</context>
-          <context context-type="linenumber">7,8</context>
+          <context context-type="linenumber">8,9</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1411143649053293295" datatype="html">
         <source>How We Use the Data</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/privacy/privacy.component.html</context>
-          <context context-type="linenumber">8,9</context>
+          <context context-type="linenumber">9,10</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5742097247697550534" datatype="html">
         <source>Rules of Use</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/privacy/privacy.component.html</context>
-          <context context-type="linenumber">9,10</context>
+          <context context-type="linenumber">10,11</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1373569752614047184" datatype="html">
         <source>Information Security</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/privacy/privacy.component.html</context>
-          <context context-type="linenumber">10,11</context>
+          <context context-type="linenumber">11,12</context>
         </context-group>
       </trans-unit>
       <trans-unit id="761634746300694455" datatype="html">
         <source>State &amp; Federal Laws</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/privacy/privacy.component.html</context>
-          <context context-type="linenumber">11,12</context>
+          <context context-type="linenumber">12,13</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1940134620621615224" datatype="html">
         <source>Changes &amp; Updates</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/privacy/privacy.component.html</context>
-          <context context-type="linenumber">12,15</context>
+          <context context-type="linenumber">13,16</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3260371041255540049" datatype="html">
         <source>1. User Agreement</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/privacy/privacy.component.html</context>
-          <context context-type="linenumber">15,17</context>
+          <context context-type="linenumber">16,18</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2923596642944634127" datatype="html">
-        <source> We understand how important privacy is to our community, especially the teachers and students all over the world who use WISE resources in their educational endeavors. This policy explains what information we collect, how we use it, and what we do to keep it safe. </source>
+      <trans-unit id="4361494428188461498" datatype="html">
+        <source> We understand how important privacy is to our community, especially the teachers and students all over the world who use i-Sparkle resources in their educational endeavors. This policy explains what information we collect, how we use it, and what we do to keep it safe. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/privacy/privacy.component.html</context>
-          <context context-type="linenumber">17,22</context>
+          <context context-type="linenumber">18,23</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2226565367945752799" datatype="html">
-        <source> These Terms of Use and Privacy Policy constitute an agreement between you and the Web-based Inquiry Science Environment team that governs your use of wise.berkeley.edu and all associated services and websites (collectively &quot;WISE&quot;). The WISE team is a federally-funded research group headquartered at the University of California, Berkeley and is a non-profit organization. </source>
+      <trans-unit id="7518685458283989175" datatype="html">
+        <source> These Terms of Use and Privacy Policy constitute an agreement between you and the i-sparkle team that governs your use of i-sparkle.net and all associated services and websites (collectively &quot;i-sparkle&quot;). The i-sparkle team is a federally-funded research group headquartered at the University of California, Berkeley and is a non-profit organization. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/privacy/privacy.component.html</context>
-          <context context-type="linenumber">22,29</context>
+          <context context-type="linenumber">23,29</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5306999961061772811" datatype="html">
-        <source> Please read this document carefully. By using WISE you affirm that you have read, understood, and accepted the terms and conditions outlined here. If you do not agree with any of these conditions, please do not use WISE. If you have questions about this policy, please feel free to contact us using our <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;/contact&quot;&gt;"/>Contact Form<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
+      <trans-unit id="7245596878398141889" datatype="html">
+        <source> Please read this document carefully. By using i-sparkle you affirm that you have read, understood, and accepted the terms and conditions outlined here. If you do not agree with any of these conditions, please do not use i-sparkle. If you have questions about this policy, please feel free to contact us using our <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;/contact&quot;&gt;"/>Contact Form<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/privacy/privacy.component.html</context>
           <context context-type="linenumber">29,34</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8090114861164306936" datatype="html">
-        <source>This policy was last updated on February 24, 2023.</source>
+      <trans-unit id="2531898097209760970" datatype="html">
+        <source>This policy was last updated on May 27, 2026.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/privacy/privacy.component.html</context>
           <context context-type="linenumber">34,35</context>
@@ -7339,15 +7339,15 @@
           <context context-type="linenumber">37,39</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4667537469218238878" datatype="html">
-        <source> In order to use some features of WISE, you will need to register by creating a user account. Creating an account is optional, but without an account you will not be able to create or publish curriculum units or use WISE curricula to capture, store, review, or assess student work. </source>
+      <trans-unit id="3721977960549238415" datatype="html">
+        <source> In order to use some features of i-sparkle, you will need to register by creating a user account. Creating an account is optional, but without an account you will not be able to create or publish curriculum units or use i-sparkle curricula to capture, store, review, or assess student work. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/privacy/privacy.component.html</context>
           <context context-type="linenumber">39,45</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8035602346055814151" datatype="html">
-        <source> When creating a WISE teacher account, we ask you to provide your first and last name, email address, password, city, state, country, school name, school level, and school subjects. To create a WISE student account, we ask you to provide your first and last name, birth day and month, gender, and password, and choose a security question and answer. </source>
+      <trans-unit id="9051769078088922867" datatype="html">
+        <source> When creating an i-sparkle teacher account, we ask you to provide your first and last name, email address, password, city, state, country, school name, school level, and school subjects. To create an i-sparkle student account, we ask you to provide your first and last name, birth day and month, gender, and password, and choose a security question and answer. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/privacy/privacy.component.html</context>
           <context context-type="linenumber">45,51</context>
@@ -7374,22 +7374,22 @@
           <context context-type="linenumber">62,64</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="105431287475742003" datatype="html">
-        <source> When students submit work in a WISE unit run (while logged into their accounts), we save their responses to questions and any content they create within the WISE platform. Teachers can review the responses and artifacts students create in the WISE runs they own. Teachers can also grade student work and provide feedback. Scores and comments generated by teachers through the WISE platform are stored by WISE and can be viewed by the students they are sent to. </source>
+      <trans-unit id="5486226840464735986" datatype="html">
+        <source> When students submit work in a i-sparkle unit run (while logged into their accounts), we save their responses to questions and any content they create within the i-sparkle platform. Teachers can review the responses and artifacts students create in the i-sparkle runs they own. Teachers can also grade student work and provide feedback. Scores and comments generated by teachers through the i-sparkle platform are stored by i-sparkle and can be viewed by the students they are sent to. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/privacy/privacy.component.html</context>
           <context context-type="linenumber">64,72</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5606397339681829820" datatype="html">
-        <source> Curriculum units that teachers author using the WISE platform are also saved and stored on our servers and may be published to a public units library that is accessible to other WISE users or visitors (with the owner&apos;s permission). Please note: Every WISE unit hosted by the WISE site (whether it is shared in a unit project library or not) is viewable by anyone using the internet via the unit&apos;s unique URL. </source>
+      <trans-unit id="6619932111143474593" datatype="html">
+        <source> Curriculum units that teachers author using the i-sparkle platform are also saved and stored on our servers and may be published to a public units library that is accessible to other i-sparkle users or visitors (with the owner&apos;s permission). Please note: Every i-sparkle unit hosted by the i-sparkle site (whether it is shared in a unit project library or not) is viewable by anyone using the internet via the unit&apos;s unique URL. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/privacy/privacy.component.html</context>
           <context context-type="linenumber">72,79</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7238991572971374666" datatype="html">
-        <source> Some sections or features of WISE may allow you to share information concerning your opinions, experiences, or preferences about WISE content or other topics. For example, you might be able to voluntarily review or rate WISE resources, answer user questions, designate favorite WISE projects, respond to surveys, share personal information or social media profile links to your public WISE profile, etc. Information you provide will be stored by WISE and may be shared with other WISE users either anonymously or not (as long as you provide permission). Unless otherwise expressly provided for in this policy, WISE shall have no liability to you or to any third party with respect to information submitted voluntarily by you via the WISE site. </source>
+      <trans-unit id="5500577026023782370" datatype="html">
+        <source> Some sections or features of i-sparkle may allow you to share information concerning your opinions, experiences, or preferences about i-sparkle content or other topics. For example, you might be able to voluntarily review or rate i-sparkle resources, answer user questions, designate favorite i-sparkle projects, respond to surveys, share personal information or social media profile links to your public i-sparkle profile, etc. Information you provide will be stored by i-sparkle and may be shared with other i-sparkle users either anonymously or not (as long as you provide permission). Unless otherwise expressly provided for in this policy, i-sparkle shall have no liability to you or to any third party with respect to information submitted voluntarily by you via the i-sparkle site. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/privacy/privacy.component.html</context>
           <context context-type="linenumber">79,88</context>
@@ -7399,289 +7399,261 @@
         <source>Licensing</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/privacy/privacy.component.html</context>
-          <context context-type="linenumber">88,90</context>
+          <context context-type="linenumber">89,91</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2489693480273233215" datatype="html">
-        <source> All units that you create on or share to the WISE site shall be licensed under the Creative Commons Attribution-ShareAlike 4.0 license. For more information about the terms of this license, visit <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://creativecommons.org/licenses/by-sa/4.0/&quot; target=&quot;_blank&quot;
-        &gt;"/>https://creativecommons.org/licenses/by-sa/4.0/<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a
-      &gt;"/>. The WISE team reserves the right to remove any content that, in the WISE team&apos;s discretion, is harmful to the community or violates the WISE Terms of Use. Harmful use includes spam or repeated commercial advertisement through projects, comments, or discussion posts, as well as inappropriate or offensive material. </source>
+      <trans-unit id="9828684258488869" datatype="html">
+        <source> All units that you create on or share to the i-sparkle site shall be licensed under the Creative Commons Attribution-ShareAlike 4.0 license. For more information about the terms of this license, visit <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://creativecommons.org/licenses/by-sa/4.0/&quot; target=&quot;_blank&quot;
+          &gt;"/>https://creativecommons.org/licenses/by-sa/4.0/<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a
+        &gt;"/>. The i-sparkle team reserves the right to remove any content that, in the i-sparkle team&apos;s discretion, is harmful to the community or violates the i-sparkle Terms of Use. Harmful use includes spam or repeated commercial advertisement through projects, comments, or discussion posts, as well as inappropriate or offensive material. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/privacy/privacy.component.html</context>
-          <context context-type="linenumber">90,98</context>
+          <context context-type="linenumber">91,99</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1663528334815048990" datatype="html">
-        <source> You may link to or include outside resources or materials in your WISE units or in any public parts of the WISE site, but it is your responsibility to obtain any necessary permission from the original owners and include any required attribution for your use of such content. WISE will not be held responsible for the unauthorized use by a WISE account holder of any third-party content in WISE units or on any other sections of the WISE site. </source>
+      <trans-unit id="9131833106266642012" datatype="html">
+        <source> You may link to or include outside resources or materials in your i-sparkle units or in any public parts of the i-sparkle site, but it is your responsibility to obtain any necessary permission from the original owners and include any required attribution for your use of such content. The i-sparkle team will not be held responsible for the unauthorized use by a i-sparkle account holder of any third-party content in i-sparkle units or on any other sections of the i-sparkle site. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/privacy/privacy.component.html</context>
-          <context context-type="linenumber">101,107</context>
+          <context context-type="linenumber">102,109</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7986713112338835619" datatype="html">
         <source>Auto-Generated Data</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/privacy/privacy.component.html</context>
-          <context context-type="linenumber">107,109</context>
+          <context context-type="linenumber">109,111</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1396635478566867591" datatype="html">
-        <source> When students and teachers use WISE, we save event data such as mouse clicks, time spent viewing pages, and other site interactions. This data is used for research purposes and for automated analyses and tools within WISE unit runs. (See &apos;How We Use the Data&apos; for more information.) </source>
+      <trans-unit id="1260462597155316449" datatype="html">
+        <source> When students and teachers use i-sparkle, we save event data such as mouse clicks, time spent viewing pages, and other site interactions. This data is used for research purposes and for automated analyses and tools within i-sparkle unit runs. (See &apos;How We Use the Data&apos; for more information.) </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/privacy/privacy.component.html</context>
-          <context context-type="linenumber">109,115</context>
+          <context context-type="linenumber">111,116</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4516124744118816397" datatype="html">
         <source>Cookies</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/privacy/privacy.component.html</context>
-          <context context-type="linenumber">114,116</context>
+          <context context-type="linenumber">116,118</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8269785489416564850" datatype="html">
-        <source> When you log in, WISE will ask your browser to put a &quot;cookie&quot; on your computer. This allows WISE to remember that you are logged in when you go to a different page. You can delete this cookie at any time through your browser&apos;s settings. </source>
+      <trans-unit id="8685588188031008769" datatype="html">
+        <source> When you log in, i-sparkle will ask your browser to put a &quot;cookie&quot; on your computer. This allows i-sparkle to remember that you are logged in when you go to a different page. You can delete this cookie at any time through your browser&apos;s settings. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/privacy/privacy.component.html</context>
-          <context context-type="linenumber">116,120</context>
+          <context context-type="linenumber">118,122</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4250762451700893239" datatype="html">
         <source>Google Analytics</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/privacy/privacy.component.html</context>
-          <context context-type="linenumber">120,122</context>
+          <context context-type="linenumber">122,124</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5294591098028824888" datatype="html">
-        <source> WISE uses Google Analytics to help us understand our site usage. We use data like which pages you visit and clicks you make to help us improve the site. Information collected and processed by Google Analytics is anonymized and does not contain IP addresses or similar personally identifiable information. Some browsers allow you to opt-out of the Google Analytics tracking by installing add-ons for your browser. </source>
+      <trans-unit id="8076362006888168286" datatype="html">
+        <source> i-sparkle uses Google Analytics to help us understand our site usage. We use data like which pages you visit and clicks you make to help us improve the site. Information collected and processed by Google Analytics is anonymized and does not contain IP addresses or similar personally identifiable information. Some browsers allow you to opt-out of the Google Analytics tracking by installing add-ons for your browser. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/privacy/privacy.component.html</context>
-          <context context-type="linenumber">122,128</context>
+          <context context-type="linenumber">124,130</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8839520767333668994" datatype="html">
         <source>3. How We Use the Data</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/privacy/privacy.component.html</context>
-          <context context-type="linenumber">128,129</context>
+          <context context-type="linenumber">130,131</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4250356526189572224" datatype="html">
         <source>We will not sell your information to anyone under any circumstances.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/privacy/privacy.component.html</context>
-          <context context-type="linenumber">129,131</context>
+          <context context-type="linenumber">131,133</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5763027262683669000" datatype="html">
-        <source> The WISE team uses de-identified user data to perform research. Researchers in the School of Education at the University of California, Berkeley and partner institutions may use de-identified data to perform data analyses and explore research topics. This data includes both user-generated and auto-generated content (see &apos;Information We Collect&apos; section). Results of our research may be shared with educators and other researchers through conferences, journals, and other publications. </source>
+      <trans-unit id="4846494831086681206" datatype="html">
+        <source> The i-sparkle team uses de-identified user data to perform research. Researchers in the School of Education at the University of California, Berkeley and partner institutions may use de-identified data to perform data analyses and explore research topics. This data includes both user-generated and auto-generated content (see &apos;Information We Collect&apos; section). Results of our research may be shared with educators and other researchers through conferences, journals, and other publications. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/privacy/privacy.component.html</context>
-          <context context-type="linenumber">131,139</context>
+          <context context-type="linenumber">133,141</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="907601961099518366" datatype="html">
-        <source> When generating and analyzing research data, student names are removed from all student work and replaced with identification numbers. This process of replacing names with identification numbers is performed automatically by the WISE platform when exporting research data and will be performed by teachers if any other student work (e.g., from other instructional materials) is to be analyzed by researchers. </source>
+      <trans-unit id="2630276317967825829" datatype="html">
+        <source> When generating and analyzing research data, student names are removed from all student work and replaced with identification numbers. This process of replacing names with identification numbers is performed automatically by the i-sparkle platform when exporting research data and will be performed by teachers if any other student work (e.g., from other instructional materials) is to be analyzed by researchers. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/privacy/privacy.component.html</context>
-          <context context-type="linenumber">139,146</context>
+          <context context-type="linenumber">141,148</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2589637733541136350" datatype="html">
-        <source> Email addresses for teacher accounts are used for communication: (a) for support, and (b) for occasional public announcements from the WISE Team. Teacher email addresses are also used to facilitate resetting of passwords. </source>
+      <trans-unit id="6372198477098909006" datatype="html">
+        <source> Email addresses for teacher accounts are used for communication: (a) for support, and (b) for occasional public announcements from the i-sparkle Team. Teacher email addresses are also used to facilitate resetting of passwords. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/privacy/privacy.component.html</context>
-          <context context-type="linenumber">146,151</context>
+          <context context-type="linenumber">148,153</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3208462680188387657" datatype="html">
-        <source> We do not ask students for their email address (unless they create a WISE account using a Google account) and do not share any student personal information with outside parties. Only the students&apos; teachers and, in some cases, fellow classmates can access student names and/or usernames within WISE (for purposes of reviewing student work, grading, sending feedback, etc.). Each participating teacher will have access to their own students&apos; unit work and will not be able to see any information from other teachers&apos; students (unless another unit&apos;s teacher owner shares access through WISE). Teachers are also able to reset passwords for their students. </source>
+      <trans-unit id="7781055603763900758" datatype="html">
+        <source> We do not ask students for their email address (unless they create an i-sparkle account using a Google account) and do not share any student personal information with outside parties. Only the students&apos; teachers and, in some cases, fellow classmates can access student names and/or usernames within i-sparkle (for purposes of reviewing student work, grading, sending feedback, etc.). Each participating teacher will have access to their own students&apos; unit work and will not be able to see any information from other teachers&apos; students (unless another unit&apos;s teacher owner shares access through i-sparkle). Teachers are also able to reset passwords for their students. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/privacy/privacy.component.html</context>
-          <context context-type="linenumber">151,161</context>
+          <context context-type="linenumber">153,161</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2102811722627283553" datatype="html">
-        <source> A small set of WISE administrators are able to access user account information and data for support and technical purposes. A few select researchers may access teacher accounts to view anonymized student work or support teachers in setting up and managing units and runs. </source>
+      <trans-unit id="3829887160872238027" datatype="html">
+        <source> A small set of i-sparkle administrators are able to access user account information and data for support and technical purposes. A few select researchers may access teacher accounts to view anonymized student work or support teachers in setting up and managing units and runs. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/privacy/privacy.component.html</context>
-          <context context-type="linenumber">161,166</context>
+          <context context-type="linenumber">163,168</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3112886869608975413" datatype="html">
         <source> We will not disclose your personally identifying information to any other parties except in the following cases: 1) In cases where you (or a legal guardian) have provided your express consent; 2) As required by applicable law; or 3) With the appropriate authorities (including schools, school districts, and law enforcement, when necessary) for the purposes of protecting the safety of users, other individuals, or the security of the site. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/privacy/privacy.component.html</context>
-          <context context-type="linenumber">166,172</context>
+          <context context-type="linenumber">168,174</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2175516083959231157" datatype="html">
         <source>4. Rules of Use</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/privacy/privacy.component.html</context>
-          <context context-type="linenumber">172,174</context>
+          <context context-type="linenumber">174,176</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4100173553389941646" datatype="html">
-        <source> WISE promotes and supports freedom of speech and expression and strives to create a welcoming, supportive, and productive community of educators and learners. </source>
+      <trans-unit id="5592690195821885023" datatype="html">
+        <source> i-sparkle promotes and supports freedom of speech and expression and strives to create a welcoming, supportive, and productive community of educators and learners. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/privacy/privacy.component.html</context>
-          <context context-type="linenumber">174,178</context>
+          <context context-type="linenumber">176,180</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3488515248915523924" datatype="html">
-        <source> You may not use WISE to promote bigotry, discrimination, hatred, or violence against any individual or group. You may not expose any other person&apos;s identifying or contact information without that person&apos;s permission. Threatening, harassing, or intimidating any other person is not allowed and we reserve the right to remove any user-generated content that, in our discretion, does so. Projects, discussion posts, and user-profile pages containing offensive or sexually explicit material will not be tolerated and removed from the site immediately once brought to the attention of the WISE team. </source>
+      <trans-unit id="6499245260202298699" datatype="html">
+        <source> You may not use i-sparkle to promote bigotry, discrimination, hatred, or violence against any individual or group. You may not expose any other person&apos;s identifying or contact information without that person&apos;s permission. Threatening, harassing, or intimidating any other person is not allowed and we reserve the right to remove any user-generated content that, in our discretion, does so. Projects, discussion posts, and user-profile pages containing offensive or sexually explicit material will not be tolerated and removed from the site immediately once brought to the attention of the i-sparkle team. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/privacy/privacy.component.html</context>
-          <context context-type="linenumber">178,187</context>
+          <context context-type="linenumber">180,188</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="466813979169487825" datatype="html">
-        <source> You may not deliberately perform actions that are intended to negatively affect the WISE website or its users. You may not post links to harmful sites to download viruses or malware. </source>
+      <trans-unit id="877031430499768801" datatype="html">
+        <source> You may not deliberately perform actions that are intended to negatively affect the i-sparkle website or its users. You may not post links to harmful sites to download viruses or malware. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/privacy/privacy.component.html</context>
-          <context context-type="linenumber">187,191</context>
+          <context context-type="linenumber">189,194</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6109095034746647292" datatype="html">
-        <source> All user-generated content is provided as-is. The WISE Team is not responsible for the accuracy or reliability of any user-generated content available through WISE. The WISE Team does not endorse any views, opinions, or advice expressed in user-generated content. You agree to relieve the WISE Team of any and all liability arising from your user-generated content. </source>
+      <trans-unit id="4549868204119489269" datatype="html">
+        <source> All user-generated content is provided as-is. The i-sparkle Team is not responsible for the accuracy or reliability of any user-generated content available through i-sparkle. The i-sparkle Team does not endorse any views, opinions, or advice expressed in user-generated content. You agree to relieve the i-sparkle Team of any and all liability arising from your user-generated content. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/privacy/privacy.component.html</context>
-          <context context-type="linenumber">191,197</context>
+          <context context-type="linenumber">194,201</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="871295214701802033" datatype="html">
-        <source> If you notice any offensive material or user-generated content that are in violation with the rules above, please report it to the WISE Team using our <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;/contact&quot;&gt;"/>Contact Form<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
+      <trans-unit id="4851002387731448542" datatype="html">
+        <source> If you notice any offensive material or user-generated content that are in violation with the rules above, please report it to the i-sparkle Team using our <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;/contact&quot;&gt;"/>Contact Form<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/privacy/privacy.component.html</context>
-          <context context-type="linenumber">197,200</context>
+          <context context-type="linenumber">201,205</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8290478462373172153" datatype="html">
         <source>5. Information Security</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/privacy/privacy.component.html</context>
-          <context context-type="linenumber">200,202</context>
+          <context context-type="linenumber">205,207</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2352222534820943700" datatype="html">
-        <source> The security of your information is important to us and we try to maintain a high standard for security by using technical safeguards. We will try our best to keep your data safe. However, no system can ever be 100% secure so we can not guarantee your personal information will be 100% safe from unauthorized access, either while stored on our site or our databases or while being transmitted to WISE over the internet. </source>
+      <trans-unit id="5336793458939324655" datatype="html">
+        <source> The security of your information is important to us and we try to maintain a high standard for security by using technical safeguards. We will try our best to keep your data safe. However, no system can ever be 100% secure so we can not guarantee your personal information will be 100% safe from unauthorized access, either while stored on our site or our databases or while being transmitted to i-sparkle over the internet. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/privacy/privacy.component.html</context>
-          <context context-type="linenumber">202,209</context>
+          <context context-type="linenumber">207,214</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6572588430878726391" datatype="html">
         <source> You can help us protect against unauthorized access to your account by choosing a strong password and keeping your password secret at all times. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/privacy/privacy.component.html</context>
-          <context context-type="linenumber">209,212</context>
+          <context context-type="linenumber">214,217</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3263463434658105119" datatype="html">
         <source>6. State &amp; Federal Laws</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/privacy/privacy.component.html</context>
-          <context context-type="linenumber">212,213</context>
+          <context context-type="linenumber">217,218</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5915719634406988048" datatype="html">
         <source>California Privacy Rights for Minors</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/privacy/privacy.component.html</context>
-          <context context-type="linenumber">213,215</context>
+          <context context-type="linenumber">218,220</context>
         </context-group>
       </trans-unit>
       <trans-unit id="459866238814046632" datatype="html">
         <source> If you live in California and are under the age of 18 or the parent or legal guardian of a student under the age of 18, you may request the removal of your information from our site. When you request removal of your information, we will remove all your personal information to the best of our ability. Please note that we may not be able to remove all de-identified information or pieces of content stored in our databases and we may not remove content that we are required to retain under applicable federal and state laws. If you would like to request removal of your or your child&apos;s content or information, please <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;/contect&quot;&gt;"/>contact<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> us for assistance or you can delete specific information from you or your child&apos;s account. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/privacy/privacy.component.html</context>
-          <context context-type="linenumber">215,224</context>
+          <context context-type="linenumber">220,229</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2850704197406102611" datatype="html">
         <source>Children&apos;s Online Privacy Protection Act (COPPA)</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/privacy/privacy.component.html</context>
-          <context context-type="linenumber">225,227</context>
+          <context context-type="linenumber">230,232</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8002842415127553276" datatype="html">
         <source> Our collection of personal information for children under 13 is intended to follow the principles of the Children&apos;s Online Privacy Protection Act (COPPA), a U.S. law designed to protect the online privacy of children under the age of 13. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/privacy/privacy.component.html</context>
-          <context context-type="linenumber">227,233</context>
+          <context context-type="linenumber">232,238</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7065272050942716251" datatype="html">
-        <source> Please note that it is the responsibility of any teacher, school, school district, or any other entity or institution that intends to use WISE with any child under the age of 13 to obtain consent from the child&apos;s parent(s) or legal guardian(s) before having the child create a WISE account, utilizing the WISE platform to collect personal information from the child, or having the child generate stored content on the platform. WISE does not obtain and is not responsible for obtaining this consent. </source>
+      <trans-unit id="3656030610782134220" datatype="html">
+        <source> Please note that it is the responsibility of any teacher, school, school district, or any other entity or institution that intends to use i-sparkle with any child under the age of 13 to obtain consent from the child&apos;s parent(s) or legal guardian(s) before having the child create an i-sparkle account, utilizing the i-sparkle platform to collect personal information from the child, or having the child generate stored content on the platform. i-sparkle does not obtain and is not responsible for obtaining this consent. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/privacy/privacy.component.html</context>
-          <context context-type="linenumber">233,241</context>
+          <context context-type="linenumber">238,244</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2315732623407840296" datatype="html">
         <source>Family Educational Rights and Privacy Act (FERPA)</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/privacy/privacy.component.html</context>
-          <context context-type="linenumber">254,256</context>
+          <context context-type="linenumber">259,261</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6318223855834822156" datatype="html">
-        <source> We take care to be familiar with FERPA legislation and we take all possible measures to ensure compliance with FERPA&apos;s requirements when you use WISE. We are confident that the protection of data outlined in this document satisfies its requirements. </source>
+      <trans-unit id="4045995972257042757" datatype="html">
+        <source> We take care to be familiar with FERPA legislation and we take all possible measures to ensure compliance with FERPA&apos;s requirements when you use i-sparkle. We are confident that the protection of data outlined in this document satisfies its requirements. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/privacy/privacy.component.html</context>
-          <context context-type="linenumber">256,261</context>
+          <context context-type="linenumber">261,265</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3149204788520140833" datatype="html">
         <source> 7. Changes and Updates to the Terms of Use &amp; Privacy Policy </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/privacy/privacy.component.html</context>
-          <context context-type="linenumber">261,264</context>
+          <context context-type="linenumber">266,269</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2078681428797671669" datatype="html">
-        <source> We may occasionally update or modify our Terms of Use and Privacy Policy. We will always display the date this document was last updated. If we make significant changes to these terms, we will display a prominent notice on the WISE home page and may notify users via registered email. We encourage you to review this document periodically. By continuing to use WISE after any changes to this document, you acknowledge that you agree to the current version of these terms. </source>
+      <trans-unit id="3606060762570026318" datatype="html">
+        <source> We may occasionally update or modify our Terms of Use and Privacy Policy. We will always display the date this document was last updated. If we make significant changes to these terms, we will display a prominent notice on the i-sparkle home page and may notify users via registered email. We encourage you to review this document periodically. By continuing to use i-sparkle after any changes to this document, you acknowledge that you agree to the current version of these terms. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/privacy/privacy.component.html</context>
-          <context context-type="linenumber">264,272</context>
+          <context context-type="linenumber">269,277</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="456873450373870149" datatype="html">
-        <source> If you have any questions or concerns about this document or the WISE site, please contact us using our <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;/contact&quot;&gt;"/>Contact Form<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. We can also be reached by mail at: </source>
+      <trans-unit id="4344907976598139161" datatype="html">
+        <source> If you have any questions or concerns about this document or the i-sparkle site, please contact us using our <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;/contact&quot;&gt;"/>Contact Form<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/privacy/privacy.component.html</context>
-          <context context-type="linenumber">272,275</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="5285234945273639747" datatype="html">
-        <source>UC Berkeley School of Education</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/privacy/privacy.component.html</context>
-          <context context-type="linenumber">276,277</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="8002206450669983478" datatype="html">
-        <source>Web-based Inquiry Science Environment (WISE)</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/privacy/privacy.component.html</context>
-          <context context-type="linenumber">277,279</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="7525476560491494200" datatype="html">
-        <source>2121 Berkeley Way, Room 4203</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/privacy/privacy.component.html</context>
-          <context context-type="linenumber">278,281</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="3297819609663471090" datatype="html">
-        <source>Berkeley, CA 94720-1670</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/privacy/privacy.component.html</context>
-          <context context-type="linenumber">279,283</context>
+          <context context-type="linenumber">277,280</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4186711602136496333" datatype="html">
@@ -7691,39 +7663,39 @@
           <context context-type="linenumber">8,9</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2351968767484749028" datatype="html">
-        <source>Sorry, your Google User ID was not found in i-sparkle.</source>
+      <trans-unit id="3665842432164304082" datatype="html">
+        <source> Sorry, your Google User ID was not found in i-sparkle. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/register/register-home/register-home.component.html</context>
-          <context context-type="linenumber">4,7</context>
+          <context context-type="linenumber">7,11</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8512823531063978735" datatype="html">
         <source> Sorry, your Microsoft User ID was not found in i-sparkle. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/register/register-home/register-home.component.html</context>
-          <context context-type="linenumber">8,11</context>
+          <context context-type="linenumber">12,15</context>
         </context-group>
       </trans-unit>
       <trans-unit id="761315869318959889" datatype="html">
         <source>Create i-sparkle Account</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/register/register-home/register-home.component.html</context>
-          <context context-type="linenumber">11,12</context>
+          <context context-type="linenumber">15,17</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4776532462912240787" datatype="html">
         <source>Students can view and complete i-sparkle lessons offered by teachers.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/register/register-home/register-home.component.html</context>
-          <context context-type="linenumber">20,24</context>
+          <context context-type="linenumber">26,30</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2013645705907565598" datatype="html">
         <source>Teachers can select, author, and run i-sparkle lessons with their students.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/register/register-home/register-home.component.html</context>
-          <context context-type="linenumber">30,35</context>
+          <context context-type="linenumber">36,41</context>
         </context-group>
       </trans-unit>
       <trans-unit id="17609075233154711" datatype="html">
@@ -8234,11 +8206,11 @@
         <source>Account Info</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/student/account/edit/edit.component.html</context>
-          <context context-type="linenumber">8,11</context>
+          <context context-type="linenumber">8,10</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/teacher/account/edit/edit.component.html</context>
-          <context context-type="linenumber">8,11</context>
+          <context context-type="linenumber">8,10</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1961752564154729968" datatype="html">
@@ -8450,7 +8422,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/teacher/teacher-run-list/teacher-run-list.component.html</context>
-          <context context-type="linenumber">30,31</context>
+          <context context-type="linenumber">28,29</context>
         </context-group>
       </trans-unit>
       <trans-unit id="879316655056393993" datatype="html">
@@ -8468,7 +8440,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/teacher/teacher-run-list/teacher-run-list.component.html</context>
-          <context context-type="linenumber">51,52</context>
+          <context context-type="linenumber">49,50</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6304501283923506354" datatype="html">
@@ -9964,56 +9936,56 @@
         <source>Archived classroom units:</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/teacher/teacher-run-list/teacher-run-list.component.html</context>
-          <context context-type="linenumber">34,37</context>
+          <context context-type="linenumber">32,35</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5878630079614198044" datatype="html">
         <source>Active classroom units:</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/teacher/teacher-run-list/teacher-run-list.component.html</context>
-          <context context-type="linenumber">37,41</context>
+          <context context-type="linenumber">35,39</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5776373051344283744" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ completedTotal() }}"/> completed</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/teacher/teacher-run-list/teacher-run-list.component.html</context>
-          <context context-type="linenumber">45,46</context>
+          <context context-type="linenumber">43,44</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5780646452197477641" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ activeTotal() }}"/> running</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/teacher/teacher-run-list/teacher-run-list.component.html</context>
-          <context context-type="linenumber">48</context>
+          <context context-type="linenumber">46</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6559246822757089203" datatype="html">
         <source>Clear filters</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/teacher/teacher-run-list/teacher-run-list.component.html</context>
-          <context context-type="linenumber">64,70</context>
+          <context context-type="linenumber">62,68</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1982489905860150132" datatype="html">
         <source>Hey there! Looks like you don&apos;t have any active classroom units.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/teacher/teacher-run-list/teacher-run-list.component.html</context>
-          <context context-type="linenumber">73,74</context>
+          <context context-type="linenumber">71,72</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6402636120131741188" datatype="html">
         <source>Browse the &quot;Unit Library&quot; to find titles to use with your students.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/teacher/teacher-run-list/teacher-run-list.component.html</context>
-          <context context-type="linenumber">74,77</context>
+          <context context-type="linenumber">72,75</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3564540094782180159" datatype="html">
         <source>Looks like you don&apos;t have any archived classroom units.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/teacher/teacher-run-list/teacher-run-list.component.html</context>
-          <context context-type="linenumber">79,83</context>
+          <context context-type="linenumber">77,81</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3078200923461832092" datatype="html">
