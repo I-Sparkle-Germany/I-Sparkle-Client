@@ -27,14 +27,7 @@
         i18n
         >Researchers</a
       >
-      <button
-        mat-flat-button
-        class="header-link mat-body-1"
-        routerLink=""
-        routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }"
-        [matMenuTriggerFor]="iSparkleMenu"
-      >
+      <button mat-flat-button class="header-link mat-body-1" [matMenuTriggerFor]="iSparkleMenu">
         <span class="menu-link flex items-center">
           <span i18n>i-sparkle</span> <mat-icon>arrow_drop_down</mat-icon>
         </span>

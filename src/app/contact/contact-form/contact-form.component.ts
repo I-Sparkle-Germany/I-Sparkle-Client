@@ -24,6 +24,7 @@ import { MatInput } from '@angular/material/input';
 import { MatSelect } from '@angular/material/select';
 import { MatOption } from '@angular/material/autocomplete';
 import { MatProgressBar } from '@angular/material/progress-bar';
+import { StandaloneLogoComponent } from '../../common/standalone-logo/standalone-logo.comonent';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -41,7 +42,8 @@ import { MatProgressBar } from '@angular/material/progress-bar';
     MatSelect,
     MatOption,
     MatProgressBar,
-    RecaptchaV3Module
+    RecaptchaV3Module,
+    StandaloneLogoComponent
   ],
   selector: 'app-contact-form',
   styles: `

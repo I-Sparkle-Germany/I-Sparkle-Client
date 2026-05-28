@@ -12,7 +12,7 @@ import { Router, RouterModule } from '@angular/router';
     `
   ],
   template: `
-    <div [ngClass]="{ 'main app-background content': !isTeacherApp(), teacher: isTeacherApp() }">
+    <div [ngClass]="{ 'main content': !isTeacherApp(), teacher: isTeacherApp() }">
       <router-outlet></router-outlet>
     </div>
   `

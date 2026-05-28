@@ -1,6 +1,7 @@
 <div class="standalone">
   <mat-card class="standalone__content mat-elevation-z0">
     <mat-card-content>
+      <standalone-logo />
       @if (complete) {
         <div class="center">
           <p class="mat-subtitle-2" i18n>Thank you for contacting i-sparkle!</p>
@@ -130,7 +131,6 @@
               [disabled]="!contactFormGroup.valid || isSendingRequest"
               class="button--progress w-full"
             >
-              >>>>>> upstream/develop >
               @if (isSendingRequest) {
                 <mat-progress-bar mode="indeterminate" />
               }
