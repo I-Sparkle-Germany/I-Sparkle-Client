@@ -1,5 +1,5 @@
 @if (showTranslationInput()) {
-  <mat-form-field class="translatable">
+  <mat-form-field class="translatable translatable-form-field">
     <mat-label>{{ label }} ({{ currentLanguage().language }})</mat-label>
     <input
       class="enable-in-translation"
@@ -11,13 +11,21 @@
     @if (hint) {
       <mat-hint>{{ hint }}</mat-hint>
     }
-    <mat-hint class="source-language selected-bg-bg">
-      <strong><mat-icon>translate</mat-icon> {{ defaultLanguage.language }}:</strong>
-      {{ content[key] }}
+    <mat-hint class="translation-tools mt-1 mb-2">
+      <div class="source-language selected-bg-bg">
+        <strong><mat-icon>translate</mat-icon> {{ defaultLanguage.language }}:</strong>
+        {{ content[key] }}
+      </div>
+      @if (content[key] && isTranslationServiceEnabled()) {
+        <span class="translation-link">
+          <mat-icon class="primary align-middle">auto_awesome</mat-icon>
+          <a href="#" role="button" (click)="translateText($event)" i18n>Translate with AI</a>
+        </span>
+      }
     </mat-hint>
   </mat-form-field>
 } @else {
-  <mat-form-field>
+  <mat-form-field class="translatable-form-field">
     <mat-label>{{ label }}</mat-label>
     <input
       matInput

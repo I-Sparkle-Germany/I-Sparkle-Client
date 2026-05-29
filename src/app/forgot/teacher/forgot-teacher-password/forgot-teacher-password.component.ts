@@ -10,28 +10,22 @@ import {
 } from '@angular/forms';
 import { TeacherService } from '../../../teacher/teacher.service';
 import { finalize } from 'rxjs/operators';
-import { ReCaptchaV3Service } from 'ng-recaptcha-2';
+import { RecaptchaV3Module, ReCaptchaV3Service } from 'ng-recaptcha-2';
 import { ConfigService } from '../../../services/config.service';
 import { MatDivider } from '@angular/material/divider';
 import { MatProgressBar } from '@angular/material/progress-bar';
 import { MatButton } from '@angular/material/button';
 import { MatInput } from '@angular/material/input';
 import { MatFormField, MatLabel, MatError } from '@angular/material/form-field';
-import { NgIf } from '@angular/common';
-import { FlexModule } from '@angular/flex-layout/flex';
 import { MatCard, MatCardContent } from '@angular/material/card';
 import { StandaloneLogoComponent } from '../../../common/standalone-logo/standalone-logo.comonent';
 
 @Component({
-  templateUrl: './forgot-teacher-password.component.html',
-  styleUrl: './forgot-teacher-password.component.scss',
   imports: [
     MatCard,
     MatCardContent,
     FormsModule,
-    FlexModule,
     ReactiveFormsModule,
-    NgIf,
     RouterLink,
     MatFormField,
     MatLabel,
@@ -40,8 +34,10 @@ import { StandaloneLogoComponent } from '../../../common/standalone-logo/standal
     MatButton,
     MatProgressBar,
     MatDivider,
+    RecaptchaV3Module,
     StandaloneLogoComponent
-  ]
+  ],
+  templateUrl: './forgot-teacher-password.component.html'
 })
 export class ForgotTeacherPasswordComponent {
   protected forgotTeacherPasswordFormGroup: FormGroup = this.fb.group({

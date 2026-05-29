@@ -13,13 +13,36 @@ import { ComponentStudent } from '../../component-student.component';
 import { ComponentService } from '../../componentService';
 import { ComponentStateRequest } from '../../ComponentStateRequest';
 import { DiscussionService } from '../discussionService';
+import { ComponentHeaderComponent } from '../../../directives/component-header/component-header.component';
+import { ComponentAnnotationsComponent } from '../../../directives/componentAnnotations/component-annotations.component';
+import { MatCard } from '@angular/material/card';
+import { NgClass } from '@angular/common';
+import { MatFormField } from '@angular/material/form-field';
+import { FormsModule } from '@angular/forms';
+import { MatInput } from '@angular/material/input';
+import { CdkTextareaAutosize } from '@angular/cdk/text-field';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { ClassResponse } from '../class-response/class-response.component';
 
 @Component({
-    selector: 'discussion-student',
-    templateUrl: 'discussion-student.component.html',
-    styleUrls: ['discussion-student.component.scss'],
-    encapsulation: ViewEncapsulation.None,
-    standalone: false
+  encapsulation: ViewEncapsulation.None,
+  imports: [
+    CdkTextareaAutosize,
+    ClassResponse,
+    ComponentAnnotationsComponent,
+    ComponentHeaderComponent,
+    FormsModule,
+    MatButton,
+    MatCard,
+    MatFormField,
+    MatIcon,
+    MatInput,
+    NgClass
+  ],
+  selector: 'discussion-student',
+  styleUrl: 'discussion-student.component.scss',
+  templateUrl: 'discussion-student.component.html'
 })
 export class DiscussionStudent extends ComponentStudent {
   classResponses: any[] = [];
@@ -27,42 +50,54 @@ export class DiscussionStudent extends ComponentStudent {
   newResponse: string = '';
   responsesMap: any = {};
   retrievedClassmateResponses: boolean = false;
+  studentMode: boolean = true;
   studentResponse: string = '';
   topLevelResponses: any = {};
 
   constructor(
-    protected AnnotationService: AnnotationService,
-    protected ComponentService: ComponentService,
-    protected ConfigService: ConfigService,
+    protected annotationService: AnnotationService,
+    protected componentService: ComponentService,
+    protected configService: ConfigService,
     protected dialog: MatDialog,
-    private DiscussionService: DiscussionService,
-    protected NodeService: NodeService,
-    protected NotebookService: NotebookService,
-    private NotificationService: NotificationService,
-    protected StudentAssetService: StudentAssetService,
-    protected StudentDataService: StudentDataService
+    protected discussionService: DiscussionService,
+    protected nodeService: NodeService,
+    protected notebookService: NotebookService,
+    private notificationService: NotificationService,
+    protected studentAssetService: StudentAssetService,
+    protected dataService: StudentDataService
   ) {
     super(
-      AnnotationService,
-      ComponentService,
-      ConfigService,
+      annotationService,
+      componentService,
+      configService,
       dialog,
-      NodeService,
-      NotebookService,
-      StudentAssetService,
-      StudentDataService
+      nodeService,
+      notebookService,
+      studentAssetService,
+      dataService
     );
   }
 
   ngOnInit(): void {
     super.ngOnInit();
+    this.renderDiscussion();
+    this.subscriptions.add(
+      this.annotationService.annotationReceived$.subscribe((annotation) => {
+        // handle inappropriate flag annotations in real-time by re-rendering the discussion
+        if (this.isForThisComponent(annotation) && annotation.type === 'inappropriateFlag') {
+          this.renderDiscussion();
+        }
+      })
+    );
+  }
 
-    if (this.ConfigService.isPreview()) {
+  protected renderDiscussion(): void {
+    if (this.configService.isPreview()) {
       let componentStates = [];
       if (this.component.hasConnectedComponent()) {
         for (const connectedComponent of this.componentContent.connectedComponents) {
           componentStates = componentStates.concat(
-            this.StudentDataService.getComponentStatesByNodeIdAndComponentId(
+            this.dataService.getComponentStatesByNodeIdAndComponentId(
               connectedComponent.nodeId,
               connectedComponent.componentId
             )
@@ -70,14 +105,11 @@ export class DiscussionStudent extends ComponentStudent {
         }
         if (this.isConnectedComponentImportWorkMode()) {
           componentStates = componentStates.concat(
-            this.StudentDataService.getComponentStatesByNodeIdAndComponentId(
-              this.nodeId,
-              this.componentId
-            )
+            this.dataService.getComponentStatesByNodeIdAndComponentId(this.nodeId, this.componentId)
           );
         }
       } else {
-        componentStates = this.StudentDataService.getComponentStatesByNodeIdAndComponentId(
+        componentStates = this.dataService.getComponentStatesByNodeIdAndComponentId(
           this.nodeId,
           this.componentId
         );
@@ -104,7 +136,7 @@ export class DiscussionStudent extends ComponentStudent {
           const componentState = this.componentState;
           if (componentState != null) {
             if (
-              this.DiscussionService.componentStateHasStudentWork(
+              this.discussionService.componentStateHasStudentWork(
                 componentState,
                 this.componentContent
               )
@@ -120,10 +152,6 @@ export class DiscussionStudent extends ComponentStudent {
     this.disableComponentIfNecessary();
     this.registerStudentWorkReceivedListener();
     this.broadcastDoneRenderingComponent();
-  }
-
-  ngOnDestroy(): void {
-    super.ngOnDestroy();
   }
 
   isConnectedComponentShowWorkMode() {
@@ -161,7 +189,7 @@ export class DiscussionStudent extends ComponentStudent {
       this.studentResponse = this.newResponse;
       this.isSubmit = true;
     }
-    this.StudentDataService.broadcastComponentSubmitTriggered({
+    this.dataService.broadcastComponentSubmitTriggered({
       nodeId: this.nodeId,
       componentId: this.componentId
     });
@@ -195,7 +223,7 @@ export class DiscussionStudent extends ComponentStudent {
         const notificationType = 'DiscussionReply';
         const nodeId = componentState.nodeId;
         const componentId = componentState.componentId;
-        const usernamesArray = this.ConfigService.getUsernamesByWorkgroupId(fromWorkgroupId);
+        const usernamesArray = this.configService.getUsernamesByWorkgroupId(fromWorkgroupId);
         const usernames = usernamesArray
           .map((obj) => {
             return obj.name;
@@ -239,9 +267,9 @@ export class DiscussionStudent extends ComponentStudent {
     const originalPostComponentState = this.responsesMap[componentStateIdReplyingTo];
     const toWorkgroupId = originalPostComponentState.workgroupId;
     if (toWorkgroupId != null && toWorkgroupId !== fromWorkgroupId) {
-      const notification = this.NotificationService.createNewNotification(
-        this.ConfigService.getRunId(),
-        this.ConfigService.getPeriodId(),
+      const notification = this.notificationService.createNewNotification(
+        this.configService.getRunId(),
+        this.getPeriodId(),
         notificationType,
         nodeId,
         componentId,
@@ -249,7 +277,7 @@ export class DiscussionStudent extends ComponentStudent {
         toWorkgroupId,
         notificationMessage
       );
-      this.NotificationService.saveNotificationToServer(notification);
+      this.notificationService.saveNotificationToServer(notification);
       workgroupsNotifiedSoFar.push(toWorkgroupId);
     }
   }
@@ -273,9 +301,9 @@ export class DiscussionStudent extends ComponentStudent {
           toWorkgroupId !== fromWorkgroupId &&
           workgroupsNotifiedSoFar.indexOf(toWorkgroupId) === -1
         ) {
-          const notification = this.NotificationService.createNewNotification(
-            this.ConfigService.getRunId(),
-            this.ConfigService.getPeriodId(),
+          const notification = this.notificationService.createNewNotification(
+            this.configService.getRunId(),
+            this.getPeriodId(),
             notificationType,
             nodeId,
             componentId,
@@ -283,7 +311,7 @@ export class DiscussionStudent extends ComponentStudent {
             toWorkgroupId,
             notificationMessage
           );
-          this.NotificationService.saveNotificationToServer(notification);
+          this.notificationService.saveNotificationToServer(notification);
           workgroupsNotifiedSoFar.push(toWorkgroupId);
         }
       }
@@ -296,7 +324,7 @@ export class DiscussionStudent extends ComponentStudent {
 
   registerStudentWorkReceivedListener() {
     this.subscriptions.add(
-      this.StudentDataService.studentWorkReceived$.subscribe((componentState) => {
+      this.dataService.studentWorkReceived$.subscribe((componentState) => {
         if (
           (this.isWorkFromThisComponent(componentState) ||
             this.isFromConnectedComponent(componentState)) &&
@@ -314,28 +342,23 @@ export class DiscussionStudent extends ComponentStudent {
   }
 
   getClassmateResponsesFromComponents(components: any[] = []): void {
-    const runId = this.ConfigService.getRunId();
-    const periodId = this.ConfigService.getPeriodId();
-    this.DiscussionService.getClassmateResponsesFromComponents(
-      runId,
-      periodId,
-      components
-    ).subscribe((response: any) => {
-      this.setClassResponses(response.studentWork, response.annotations);
-    });
+    const runId = this.configService.getRunId();
+    const periodId = this.getPeriodId();
+    this.discussionService
+      .getClassmateResponsesFromComponents(runId, periodId, components)
+      .subscribe((response: any) =>
+        this.setClassResponses(response.studentWork, response.annotations)
+      );
   }
 
   getClassmateResponses(): void {
-    const runId = this.ConfigService.getRunId();
-    const periodId = this.ConfigService.getPeriodId();
-    this.DiscussionService.getClassmateResponses(
-      runId,
-      periodId,
-      this.nodeId,
-      this.componentId
-    ).subscribe((response: any) => {
-      this.setClassResponses(response.studentWork, response.annotations);
-    });
+    const runId = this.configService.getRunId();
+    const periodId = this.getPeriodId();
+    this.discussionService
+      .getClassmateResponses(runId, periodId, this.nodeId, this.componentId)
+      .subscribe((response: any) =>
+        this.setClassResponses(response.studentWork, response.annotations)
+      );
   }
 
   submitButtonClicked() {
@@ -370,7 +393,7 @@ export class DiscussionStudent extends ComponentStudent {
     componentState.componentId = this.componentId;
     componentState.isSubmit = this.isSubmit;
     if (
-      (this.ConfigService.isPreview() && !this.componentStateIdReplyingTo) ||
+      (this.configService.isPreview() && !this.componentStateIdReplyingTo) ||
       this.mode === 'authoring'
     ) {
       componentState.id = generateRandomKey();
@@ -379,15 +402,15 @@ export class DiscussionStudent extends ComponentStudent {
       componentState.studentData.isSubmit = this.isSubmit;
       this.isSubmit = false;
       if (this.mode === 'authoring') {
-        if (this.StudentDataService.studentData == null) {
-          this.StudentDataService.studentData = {
+        if (this.dataService.studentData == null) {
+          this.dataService.studentData = {
             componentStates: [],
             events: [],
             annotations: []
           };
         }
-        this.StudentDataService.studentData.componentStates.push(componentState);
-        const componentStates = this.StudentDataService.getComponentStatesByNodeIdAndComponentId(
+        this.dataService.studentData.componentStates.push(componentState);
+        const componentStates = this.dataService.getComponentStatesByNodeIdAndComponentId(
           this.nodeId,
           this.componentId
         );
@@ -431,19 +454,24 @@ export class DiscussionStudent extends ComponentStudent {
     return this.componentContent.showSubmitButton;
   }
 
-  isClassmateResponsesGated() {
+  protected isClassmateResponsesGated(): boolean {
     return this.componentContent.gateClassmateResponses;
   }
 
+  protected isAnonymizeResponses(): boolean {
+    return this.componentContent.anonymizeResponses;
+  }
+
   setClassResponses(componentStates: any[], annotations: any[] = []): void {
-    const isStudentMode = true;
-    this.classResponses = this.DiscussionService.getClassResponses(
+    this.classResponses = this.discussionService.getClassResponses(
       componentStates,
       annotations,
-      isStudentMode
+      this.workgroupId,
+      this.studentMode,
+      this.isAnonymizeResponses()
     );
-    this.responsesMap = this.DiscussionService.getResponsesMap(this.classResponses);
-    this.topLevelResponses = this.DiscussionService.getLevel1Responses(
+    this.responsesMap = this.discussionService.getResponsesMap(this.classResponses);
+    this.topLevelResponses = this.discussionService.getLevel1Responses(
       this.classResponses,
       this.componentId,
       this.workgroupId
@@ -453,11 +481,15 @@ export class DiscussionStudent extends ComponentStudent {
 
   addClassResponse(componentState: any): void {
     if (componentState.studentData.isSubmit) {
-      this.DiscussionService.setUsernames(componentState);
+      this.discussionService.setUsernames(
+        componentState,
+        this.workgroupId,
+        this.isAnonymizeResponses()
+      );
       componentState.replies = [];
       this.classResponses.push(componentState);
       this.addResponseToResponsesMap(this.responsesMap, componentState);
-      this.topLevelResponses = this.DiscussionService.getLevel1Responses(
+      this.topLevelResponses = this.discussionService.getLevel1Responses(
         this.classResponses,
         this.componentId,
         this.workgroupId
@@ -480,5 +512,9 @@ export class DiscussionStudent extends ComponentStudent {
 
   shouldCreateComponentState(request: ComponentStateRequest): boolean {
     return this.isDirty && request.isSubmit;
+  }
+
+  protected getPeriodId(): number {
+    return this.configService.getPeriodId();
   }
 }

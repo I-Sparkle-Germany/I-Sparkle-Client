@@ -5,8 +5,7 @@ import { MatCardModule } from '@angular/material/card';
 import { StandaloneLogoComponent } from '../../../common/standalone-logo/standalone-logo.comonent';
 
 @Component({
-  templateUrl: './forgot-teacher-username-complete.component.html',
-  styleUrl: './forgot-teacher-username-complete.component.scss',
-  imports: [MatAnchor, MatButtonModule, MatCardModule, RouterLink, StandaloneLogoComponent]
+  imports: [MatCardModule, MatAnchor, MatButtonModule, RouterLink, StandaloneLogoComponent],
+  templateUrl: './forgot-teacher-username-complete.component.html'
 })
 export class ForgotTeacherUsernameCompleteComponent {}

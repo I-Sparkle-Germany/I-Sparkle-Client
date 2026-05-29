@@ -1,5 +1,3 @@
-'use strict';
-
 import { Component, Input, OnInit } from '@angular/core';
 import { getAvatarColorForWorkgroupId } from '../../../common/workgroup/workgroup';
 import { ConfigService } from '../../../services/configService';
@@ -11,9 +9,7 @@ import { Language } from '../../../../../app/domain/language';
 import { Subscription } from 'rxjs';
 import { TeacherDataService } from '../../../services/teacherDataService';
 import { NotifyAuthorService } from '../../../services/notifyAuthorService';
-import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatButtonModule } from '@angular/material/button';
 import { ProjectLanguageChooserComponent } from '../../../../../app/common/project-language-chooser/project-language-chooser.component';
@@ -21,19 +17,17 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatToolbarModule } from '@angular/material/toolbar';
 
 @Component({
-    imports: [
-        CommonModule,
-        FlexLayoutModule,
-        MatButtonModule,
-        MatIconModule,
-        MatMenuModule,
-        MatToolbarModule,
-        MatTooltipModule,
-        ProjectLanguageChooserComponent
-    ],
-    selector: 'at-top-bar',
-    styleUrl: './top-bar.component.scss',
-    templateUrl: './top-bar.component.html'
+  imports: [
+    MatButtonModule,
+    MatIconModule,
+    MatMenuModule,
+    MatToolbarModule,
+    MatTooltipModule,
+    ProjectLanguageChooserComponent
+  ],
+  selector: 'at-top-bar',
+  styleUrl: './top-bar.component.scss',
+  templateUrl: './top-bar.component.html'
 })
 export class TopBarComponent implements OnInit {
   protected avatarColor: any;
@@ -43,7 +37,7 @@ export class TopBarComponent implements OnInit {
   @Input() projectId: number;
   protected projectInfo: string;
   protected projectLocale: ProjectLocale;
-  @Input() projectTitle: string;
+  protected projectTitle: string;
   @Input() runId: number;
   @Input() runCode: string;
   private subscriptions = new Subscription();
@@ -68,13 +62,20 @@ export class TopBarComponent implements OnInit {
     this.userInfo = this.configService.getMyUserInfo();
     this.contextPath = this.configService.getContextPath();
     this.subscriptions.add(
-      this.projectService.projectSaved$.subscribe(() => this.updateTranslationModel())
+      this.projectService.projectSaved$.subscribe(() => {
+        this.updateTranslationModel();
+        this.setTitle();
+      })
     );
   }
 
   private updateTranslationModel(): void {
     this.projectLocale = this.projectService.getLocale();
     this.hasTranslations = this.projectLocale.hasTranslations();
+  }
+
+  private setTitle(): void {
+    this.projectTitle = this.projectService.getProjectTitle();
   }
 
   ngOnDestroy(): void {
@@ -88,6 +89,7 @@ export class TopBarComponent implements OnInit {
     } else {
       this.hasTranslations = false;
     }
+    this.setTitle();
   }
 
   private getProjectInfo(): string {

@@ -47,10 +47,7 @@ const materialModules = [
     PasswordModule,
     RegisterRoutingModule,
     ReactiveFormsModule,
-    StandaloneLogoComponent,
-    materialModules
-  ],
-  declarations: [
+    materialModules,
     RegisterComponent,
     RegisterHomeComponent,
     RegisterTeacherComponent,
@@ -60,7 +57,8 @@ const materialModules = [
     RegisterStudentCompleteComponent,
     RegisterStudentComponent,
     RegisterGoogleUserAlreadyExistsComponent,
-    RegisterMicrosoftUserAlreadyExistsComponent
+    RegisterMicrosoftUserAlreadyExistsComponent,
+    StandaloneLogoComponent
   ],
   exports: [RegisterComponent, StandaloneLogoComponent]
 })

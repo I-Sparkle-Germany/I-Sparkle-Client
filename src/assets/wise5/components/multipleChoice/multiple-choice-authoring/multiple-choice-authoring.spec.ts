@@ -1,37 +1,30 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { MultipleChoiceAuthoring } from './multiple-choice-authoring.component';
-import { StudentTeacherCommonServicesModule } from '../../../../../app/student-teacher-common-services.module';
-import { ProjectAssetService } from '../../../../../app/services/projectAssetService';
-import { TeacherProjectService } from '../../../services/teacherProjectService';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
-import { MultipleChoiceAuthoringHarness } from './multiple-choice-authoring.harness';
-import { TeacherNodeService } from '../../../services/teacherNodeService';
-import { ComponentAuthoringModule } from '../../component-authoring.module';
-import { ProjectLocale } from '../../../../../app/domain/projectLocale';
-import { ProjectService } from '../../../services/projectService';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ProjectLocale } from '../../../../../app/domain/projectLocale';
+import { ProjectAssetService } from '../../../../../app/services/projectAssetService';
+import { StudentTeacherCommonServicesModule } from '../../../../../app/student-teacher-common-services.module';
+import { ProjectService } from '../../../services/projectService';
+import { TeacherNodeService } from '../../../services/teacherNodeService';
+import { TeacherProjectService } from '../../../services/teacherProjectService';
+import { TeacherProjectTranslationService } from '../../../services/teacherProjectTranslationService';
+import { MultipleChoiceAuthoring } from './multiple-choice-authoring.component';
+import { MultipleChoiceAuthoringHarness } from './multiple-choice-authoring.harness';
 
 let component: MultipleChoiceAuthoring;
 let fixture: ComponentFixture<MultipleChoiceAuthoring>;
 let multipleChoiceAuthoringHarness: MultipleChoiceAuthoringHarness;
 let projectService: ProjectService;
 let teacherProjectService: TeacherProjectService;
-
 describe('MultipleChoiceAuthoringComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [],
-      imports: [
-        BrowserAnimationsModule,
-        ComponentAuthoringModule,
-        MultipleChoiceAuthoring,
-        StudentTeacherCommonServicesModule
-      ],
+      imports: [MultipleChoiceAuthoring, StudentTeacherCommonServicesModule],
       providers: [
         ProjectAssetService,
         TeacherNodeService,
         TeacherProjectService,
+        TeacherProjectTranslationService,
         provideHttpClient(withInterceptorsFromDi())
       ]
     });
@@ -127,7 +120,7 @@ function moveChoice() {
     });
     describe('move choice up is clicked on the second choice', () => {
       it('moves the choice up', async () => {
-        await (await multipleChoiceAuthoringHarness.getMoveChoiceUpButton(1)).click();
+        await (await multipleChoiceAuthoringHarness.getMoveChoiceUpButton(0)).click();
         expectChoiceOrder(['choice2', 'choice1']);
       });
     });

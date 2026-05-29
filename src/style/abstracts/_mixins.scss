@@ -69,7 +69,7 @@
     border-radius: variables.$button-border-radius;
   }
 
-  .mdc-button {
+  .mdc-button, .mat-mdc-button:has(.material-icons, mat-icon, [matButtonIcon]) {
     padding: 0 16px;
   }
 
@@ -148,8 +148,8 @@
   }
 
   .mat-mdc-progress-bar {
-    --mdc-linear-progress-active-indicator-height: 12px;
-    --mdc-linear-progress-track-height: 12px;
+    --mat-progress-bar-track-height: 12px;
+    --mat-progress-bar-active-indicator-height: 12px;
   }
 
   .mat-mdc-option, .mat-mdc-optgroup-label {

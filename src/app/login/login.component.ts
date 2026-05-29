@@ -1,13 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { RouterLink, RouterOutlet } from '@angular/router';
+import { StandaloneLogoComponent } from '../common/standalone-logo/standalone-logo.comonent';
 
 @Component({
-    selector: 'app-login',
-    templateUrl: './login.component.html',
-    styleUrls: ['./login.component.scss'],
-    standalone: false
+  imports: [RouterLink, RouterOutlet, StandaloneLogoComponent],
+  selector: 'app-login',
+  styleUrl: './login.component.scss',
+  templateUrl: './login.component.html'
 })
-export class LoginComponent implements OnInit {
-  constructor() {}
-
-  ngOnInit() {}
-}
+export class LoginComponent {}

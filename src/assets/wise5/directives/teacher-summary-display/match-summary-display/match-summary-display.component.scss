@@ -1,21 +1,29 @@
-mat-icon {
-    padding-top: 4px;
+@reference "tailwindcss";
+
+:host {
+  --mat-button-toggle-divider-color: transparent;
+  --mat-button-toggle-height: 32px;
+  .mat-button-toggle-group-appearance-standard, .mat-button-toggle-appearance-standard {
+    @apply rounded-md;
+  }
 }
 
-.bucket {
-    border: solid black 6px;
-    width: 35%;
-    display: inline-block;
-    padding: 20px;
-    margin: 20px;
+h3,
+.mat-subtitle-1 {
+  margin-bottom: 8px;
+  margin-top: 0;
 }
 
-.match-item {
-    border: solid black 4px;
-    padding: 10px;
-    margin: 5px;
+.choice-card, .bucket-card {
+  @apply p-2 mb-2 rounded-md;
 }
 
-.right-align {
-    float: right;
+.choice-row, .bucket-row {
+  @apply flex gap-1 px-2 py-1 mt-1 rounded-md bg-white border border-neutral-200 text-sm items-start justify-between;
+}
+
+ul {
+  list-style-type: none;
+  margin-block-start: 0;
+  padding-inline-start: 0;
 }

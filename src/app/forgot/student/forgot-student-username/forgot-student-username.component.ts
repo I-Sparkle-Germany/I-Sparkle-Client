@@ -18,9 +18,7 @@ import { MatSelect } from '@angular/material/select';
 import { MatInput } from '@angular/material/input';
 import { MatFormField, MatLabel, MatError } from '@angular/material/form-field';
 import { MatButton } from '@angular/material/button';
-import { ExtendedModule } from '@angular/flex-layout/extended';
-import { NgIf, NgClass, NgFor } from '@angular/common';
-import { FlexModule } from '@angular/flex-layout/flex';
+import { NgClass } from '@angular/common';
 import { MatCard, MatCardContent } from '@angular/material/card';
 import { StandaloneLogoComponent } from '../../../common/standalone-logo/standalone-logo.comonent';
 
@@ -31,12 +29,8 @@ import { StandaloneLogoComponent } from '../../../common/standalone-logo/standal
     MatCard,
     MatCardContent,
     FormsModule,
-    FlexModule,
     ReactiveFormsModule,
-    NgIf,
     NgClass,
-    ExtendedModule,
-    NgFor,
     MatButton,
     MatFormField,
     MatLabel,

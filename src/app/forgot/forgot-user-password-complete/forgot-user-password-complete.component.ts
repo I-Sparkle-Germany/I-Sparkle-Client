@@ -5,8 +5,8 @@ import { MatCard, MatCardContent } from '@angular/material/card';
 import { StandaloneLogoComponent } from '../../common/standalone-logo/standalone-logo.comonent';
 
 @Component({
-  templateUrl: './forgot-user-password-complete.component.html',
-  imports: [MatCard, MatCardContent, MatButton, StandaloneLogoComponent]
+  imports: [MatCard, MatCardContent, MatButton, StandaloneLogoComponent],
+  templateUrl: './forgot-user-password-complete.component.html'
 })
 export class ForgotUserPasswordCompleteComponent {
   @Input() username: string;

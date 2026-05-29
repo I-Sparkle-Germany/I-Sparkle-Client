@@ -14,14 +14,12 @@ import { MainMenuComponent } from '../common/main-menu/main-menu.component';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { TopBarComponent } from './components/top-bar/top-bar.component';
 import { SideMenuComponent } from '../common/side-menu/side-menu.component';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @Component({
   imports: [
     AuthoringToolBarComponent,
     CommonModule,
-    FlexLayoutModule,
     MainMenuComponent,
     MatSidenavModule,
     RouterModule,
@@ -36,7 +34,6 @@ export class AuthoringToolComponent {
   protected isMenuOpen: boolean = false;
   protected logoPath: string;
   protected projectId: number;
-  protected projectTitle: string;
   protected runId: number;
   protected runCode: string;
   protected showToolbar: boolean = true;
@@ -99,13 +96,6 @@ export class AuthoringToolComponent {
         route: ['unit', this.projectId, 'notebook'],
         name: $localize`Notebook Settings`,
         icon: 'book',
-        type: 'primary',
-        active: true
-      },
-      {
-        route: ['unit', this.projectId, 'milestones'],
-        name: $localize`Milestones`,
-        icon: 'flag',
         type: 'primary',
         active: true
       },
@@ -288,11 +278,6 @@ export class AuthoringToolComponent {
       this.projectId = this.configService.getProjectId();
       this.runId = this.configService.getRunId();
       this.runCode = this.configService.getRunCode();
-    }
-    if (this.projectId) {
-      this.projectTitle = this.projectService.getProjectTitle();
-    } else {
-      this.projectTitle = null;
     }
     this.notificationService.hideJSONValidMessage();
     this.projectService.uiChanged();

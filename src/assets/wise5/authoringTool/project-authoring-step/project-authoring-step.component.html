@@ -1,30 +1,43 @@
 <div
   id="{{ step.id }}"
-  fxLayoutAlign="start center"
-  fxLayoutGap="8px"
-  class="step"
-  [ngClass]="{ 'branch-path-step': isNodeInAnyBranchPath(step.id) }"
+  class="step flex justify-start items-center gap-2 grow"
   [ngStyle]="{ 'background-color': getStepBackgroundColor(step.id) }"
   (click)="setCurrentNode(step.id)"
   (keyup.enter)="setCurrentNode(step.id)"
   role="button"
   tabindex="0"
+  cdkDrag
+  [cdkDragDisabled]="branchPoint"
+  [cdkDragData]="{ type: 'step', id: step.id }"
+  (cdkDragStarted)="drag(true)"
+  (cdkDragEnded)="drag(false)"
   aria-label="Edit step"
   i18n-aria-label
 >
-  <mat-checkbox
-    color="primary"
-    (change)="selectNode($event.checked)"
-    (click)="$event.stopPropagation()"
-    [disabled]="nodeTypeSelected() === 'lesson'"
-    aria-label="Select step"
-    i18n-aria-label
-  />
+  @if (batchEditMode) {
+    <mat-checkbox
+      color="primary"
+      (change)="selectNode($event.checked)"
+      (click)="$event.stopPropagation()"
+      [disabled]="nodeTypeSelected() === 'lesson'"
+      aria-label="Select step"
+      i18n-aria-label
+    />
+  } @else if (!branchPoint) {
+    <mat-icon
+      cdkDragHandle
+      class="cursor-move"
+      (click)="$event.stopPropagation()"
+      title="Drag to reorder"
+      i18n-title
+      >drag_indicator</mat-icon
+    >
+  }
   <strong>
     <node-icon-and-title [nodeId]="step.id" [showPosition]="showPosition" />
   </strong>
-  <div fxLayoutAlign="start center" fxLayoutGap="8px">
-    @if (isBranchPoint(step.id)) {
+  <div class="flex justify-start items-center gap-2">
+    @if (branchPoint) {
       <button
         mat-icon-button
         (click)="goToEditBranch(step.id); $event.stopPropagation()"
@@ -34,49 +47,51 @@
         matTooltipPosition="right"
         i18n-matTooltip
       >
-        <mat-icon class="rotate-180">call_split</mat-icon>
+        <mat-icon class="flip-vertical">call_split</mat-icon>
       </button>
     }
-    <button
-      *ngIf="nodeHasConstraint(step.id)"
-      mat-icon-button
-      (click)="constraintIconClicked(step.id); $event.stopPropagation()"
-      matTooltip="{{ getNumberOfConstraintsOnNode(step.id) }} Constraint(s) {{
-        getConstraintDescriptions(step.id)
-      }}"
-      matTooltipPosition="right"
-      i18n-matTooltip
-    >
-      <mat-icon>block</mat-icon>
-    </button>
-    <mat-icon
-      *ngIf="nodeHasRubric(step.id)"
-      tabindex="0"
-      matTooltip="Has rubric/teaching tips"
-      matTooltipPosition="above"
-      i18n-matTooltip
-      >message</mat-icon
-    >
+    @if (nodeHasConstraint(step.id)) {
+      <button
+        mat-icon-button
+        (click)="constraintIconClicked(step.id); $event.stopPropagation()"
+        matTooltip="{{ getNumberOfConstraintsOnNode(step.id) }} Constraint(s) {{
+          getConstraintDescriptions(step.id)
+        }}"
+        matTooltipPosition="right"
+        i18n-matTooltip
+      >
+        <mat-icon>block</mat-icon>
+      </button>
+    }
+    @if (nodeHasRubric(step.id)) {
+      <mat-icon
+        tabindex="0"
+        matTooltip="Has rubric/teaching tips"
+        matTooltipPosition="above"
+        i18n-matTooltip
+        >message</mat-icon
+      >
+    }
   </div>
   <div
-    fxFlex
-    class="tooltip-helper"
+    class="tooltip-helper flex grow"
     matTooltip="Edit step"
     matTooltipPosition="above"
     i18n-matTooltip
   ></div>
-  <!-- <div class="dynamic-step-buttons"> -->
-  <div fxLayoutAlign="start center">
-    <button
-      class="step-action"
-      mat-icon-button
-      (click)="move(); $event.stopPropagation()"
-      matTooltip="Move step"
-      matTooltipPosition="above"
-      i18n-matTooltip
-    >
-      <mat-icon>redo</mat-icon>
-    </button>
+  <div class="flex justify-start items-center">
+    @if (!branchPoint) {
+      <button
+        class="step-action"
+        mat-icon-button
+        (click)="move(); $event.stopPropagation()"
+        matTooltip="Move step"
+        matTooltipPosition="above"
+        i18n-matTooltip
+      >
+        <mat-icon>redo</mat-icon>
+      </button>
+    }
     <button
       class="step-action"
       mat-icon-button
@@ -98,5 +113,5 @@
       <mat-icon>delete</mat-icon>
     </button>
   </div>
-  <!-- </div> -->
+  <div class="drag-placeholder" *cdkDragPlaceholder></div>
 </div>

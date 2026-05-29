@@ -1,24 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { TeacherProjectService } from '../../../services/teacherProjectService';
-import { ActivatedRoute } from '@angular/router';
+import { TranslatableRichTextEditorComponent } from '../../components/translatable-rich-text-editor/translatable-rich-text-editor.component';
 
 @Component({
-    selector: 'edit-node-rubric',
-    templateUrl: 'edit-node-rubric.component.html',
-    standalone: false
+  imports: [TranslatableRichTextEditorComponent],
+  selector: 'edit-node-rubric',
+  template: `<translatable-rich-text-editor
+    [content]="node"
+    key="rubric"
+    (defaultLanguageTextChanged)="saveProject()"
+  />`
 })
-export class EditNodeRubricComponent implements OnInit {
-  protected node: any;
+export class EditNodeRubricComponent {
+  private projectService = inject(TeacherProjectService);
 
-  constructor(private projectService: TeacherProjectService, private route: ActivatedRoute) {}
+  @Input() node: any;
 
-  ngOnInit(): void {
-    this.route.parent.parent.params.subscribe((params) => {
-      this.node = this.projectService.getNodeById(params.nodeId);
-    });
-  }
-
-  protected rubricChanged(): void {
+  protected saveProject(): void {
     this.projectService.saveProject();
   }
 }

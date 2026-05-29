@@ -1,6 +1,6 @@
 import { ComponentContent } from './ComponentContent';
 import { TransitionLogic } from './TransitionLogic';
-import { copy } from './object/object';
+import { copy, extend } from './object/object';
 import { generateRandomKey } from './string/string';
 
 export class Node {
@@ -23,7 +23,7 @@ export class Node {
     return this.icon;
   }
 
-  setIcon(): void {
+  private setIcon(): void {
     const defaultIcon = {
       color: '#757575',
       type: 'font',
@@ -33,7 +33,7 @@ export class Node {
     };
     let icon;
     if (this.icons != null && this.icons.default != null) {
-      icon = $.extend(true, defaultIcon, this.icons.default);
+      icon = extend({}, defaultIcon, this.icons.default);
     } else {
       icon = defaultIcon;
     }
@@ -55,6 +55,10 @@ export class Node {
     return this.components.map((component) => {
       return { nodeId: this.id, componentId: component.id };
     });
+  }
+
+  getComponents(): any[] {
+    return this.components;
   }
 
   getComponent(componentId: string): any {
@@ -234,4 +238,19 @@ export class Node {
   getComponentPosition(componentId: string): number {
     return this.components.findIndex((component) => component.id === componentId);
   }
+}
+
+export function ensureDefaultIcon(nodes: Node[]): void {
+  nodes
+    .filter((node: Node) => !node.icon)
+    .forEach(
+      (node: Node) =>
+        (node.icon = {
+          color: '#00B0FF',
+          type: 'font',
+          fontSet: 'material-icons',
+          fontName: node.type === 'node' ? 'school' : 'dashboard',
+          imgSrc: ''
+        })
+    );
 }
